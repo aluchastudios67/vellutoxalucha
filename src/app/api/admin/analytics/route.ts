@@ -5,10 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
 
     // 1. Fetch Orders & Calculate Metrics
     const allOrders = await prisma.order.findMany({

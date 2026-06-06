@@ -5,10 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-    }
 
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status') || '';

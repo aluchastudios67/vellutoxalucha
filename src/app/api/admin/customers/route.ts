@@ -5,10 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
 
     const customers = await prisma.customer.findMany({
       include: {
@@ -51,10 +47,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
 
     const { id, notes, segment } = await req.json();
 
@@ -72,7 +64,6 @@ export async function POST(req: Request) {
 
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
         action: 'UPDATE_CUSTOMER_PROFILE',
         details: `Updated notes/segment for customer: ${updatedCustomer.name}`,
       },

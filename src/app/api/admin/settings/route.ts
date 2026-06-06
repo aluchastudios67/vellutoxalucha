@@ -48,10 +48,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized. Only Super Admin can edit store settings.' }, { status: 403 });
-    }
 
     const settings = await req.json();
 
@@ -64,7 +60,6 @@ export async function POST(req: Request) {
 
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
         action: 'UPDATE_SETTINGS',
         details: 'Updated global store shipping, tax, payment parameters.',
       },

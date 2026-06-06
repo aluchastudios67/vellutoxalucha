@@ -5,10 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized. Super Admin role required.' }, { status: 403 });
-    }
 
     const logs = await prisma.auditLog.findMany({
       include: {

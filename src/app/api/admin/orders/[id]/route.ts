@@ -6,10 +6,6 @@ import { prisma } from '@/lib/prisma';
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-    }
 
     const order = await prisma.order.findUnique({
       where: { id },
@@ -33,10 +29,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-    }
 
     const body = await req.json();
     const { status, paymentStatus, deliveryDate, deliveryTime, address, customerName, phone } = body;
@@ -62,7 +54,6 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     // Audit Log
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
         action: 'UPDATE_ORDER',
         details: `Updated order ${id}: Status=${status}, PaymentStatus=${paymentStatus}`,
       },

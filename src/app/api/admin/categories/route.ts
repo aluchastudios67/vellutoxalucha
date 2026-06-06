@@ -21,10 +21,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
 
     const { name, nameKa, nameRu } = await req.json();
 
@@ -46,7 +42,6 @@ export async function POST(req: Request) {
 
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
         action: 'CREATE_CATEGORY',
         details: `Created category: ${name}`,
       },

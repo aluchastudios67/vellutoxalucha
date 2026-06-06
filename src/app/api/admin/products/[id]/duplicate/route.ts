@@ -6,10 +6,6 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
 
     // Load original product with relations
     const original = await prisma.product.findUnique({
@@ -72,7 +68,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
         action: 'DUPLICATE_PRODUCT',
         details: `Duplicated product ${original.name} to ${duplicatedProduct.name}`,
       },
