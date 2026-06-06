@@ -1,0 +1,517 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #fdf8f3;
+    --foreground: #1a1208;
+    --primary: #1a1208;
+    --primary-foreground: #fdf8f3;
+    --secondary: #f0e8df;
+    --secondary-foreground: #1a1208;
+    --accent: #c8947a;
+    --accent-foreground: #fdf8f3;
+    --muted: #e8e0d5;
+    --muted-foreground: #7a6e65;
+    --card: #ffffff;
+    --card-foreground: #1a1208;
+    --border: #ddd4c8;
+    --input: #e8e0d5;
+    --ring: #c8947a;
+    --radius: 0.5rem;
+    --font-sans: 'DM Sans', sans-serif;
+    --font-display: 'Fraunces', serif;
+    --sage: #8a9e7a;
+    --blush: #e8c4b8;
+    --rose-dark: #b87a6a;
+}
+
+@layer base {
+    * {
+        box-sizing: border-box;
+        border-color: var(--border);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        margin: 0;
+    }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: var(--font-display);
+    }
+
+    .text-hero {
+        font-size: clamp(4rem, 12vw, 9rem);
+        line-height: 0.92;
+        letter-spacing: -0.02em;
+    }
+
+    .text-section-title {
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    .text-card-title {
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        letter-spacing: -0.01em;
+    }
+
+    .bg-background {
+        background-color: var(--background);
+    }
+
+    .bg-primary {
+        background-color: var(--primary);
+    }
+
+    .bg-accent {
+        background-color: var(--accent);
+    }
+
+    .bg-secondary {
+        background-color: var(--secondary);
+    }
+
+    .bg-muted {
+        background-color: var(--muted);
+    }
+
+    .bg-card {
+        background-color: var(--card);
+    }
+
+    .bg-blush {
+        background-color: var(--blush);
+    }
+
+    .bg-sage {
+        background-color: var(--sage);
+    }
+
+    .text-primary {
+        color: var(--primary);
+    }
+
+    .text-accent {
+        color: var(--accent);
+    }
+
+    .text-muted-foreground {
+        color: var(--muted-foreground);
+    }
+
+    .text-foreground {
+        color: var(--foreground);
+    }
+
+    .text-primary-foreground {
+        color: var(--primary-foreground);
+    }
+
+    .text-accent-foreground {
+        color: var(--accent-foreground);
+    }
+
+    .text-sage {
+        color: var(--sage);
+    }
+
+    .text-blush {
+        color: var(--blush);
+    }
+
+    .border-border {
+        border-color: var(--border);
+    }
+
+    .border-accent {
+        border-color: var(--accent);
+    }
+
+    .border-primary {
+        border-color: var(--primary);
+    }
+
+    .border-muted {
+        border-color: var(--muted);
+    }
+
+    .ring-accent {
+        --tw-ring-color: var(--accent);
+    }
+
+    /* Grain texture overlay */
+    .grain-overlay {
+        position: relative;
+    }
+
+    .grain-overlay::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.035;
+    }
+
+    /* Scroll-triggered fade-up */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(2rem);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Stagger delays */
+    .stagger-1 {
+        transition-delay: 0.1s;
+    }
+
+    .stagger-2 {
+        transition-delay: 0.2s;
+    }
+
+    .stagger-3 {
+        transition-delay: 0.3s;
+    }
+
+    .stagger-4 {
+        transition-delay: 0.45s;
+    }
+
+    .stagger-5 {
+        transition-delay: 0.6s;
+    }
+
+    .stagger-6 {
+        transition-delay: 0.75s;
+    }
+
+    /* Text mask reveal */
+    .text-mask-wrapper {
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .text-mask-inner {
+        display: block;
+        transform: translateY(110%);
+        opacity: 0;
+        transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 1.3s ease;
+    }
+
+    .text-mask-inner.revealed {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    /* Ken Burns */
+    .ken-burns {
+        transform: scale(1);
+        transition: transform 12s ease-out;
+    }
+
+    .ken-burns.active {
+        transform: scale(1.1);
+    }
+
+    /* Glassmorphism card */
+    .glass-card {
+        background: rgba(253, 248, 243, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(200, 148, 122, 0.18);
+    }
+
+    /* Bouquet card hover glow */
+    .bouquet-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.5s ease;
+    }
+
+    .bouquet-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 60px rgba(200, 148, 122, 0.22),
+            0 8px 20px rgba(26, 18, 8, 0.08);
+    }
+
+    .bouquet-card .card-img {
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bouquet-card:hover .card-img {
+        transform: scale(1.07);
+    }
+
+    .bouquet-card .quick-view-btn {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .bouquet-card:hover .quick-view-btn {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Gallery hover */
+    .gallery-item .gallery-overlay {
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    .gallery-item img {
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-item:hover img {
+        transform: scale(1.05);
+    }
+
+    /* Pill button */
+    .pill-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        letter-spacing: 0.04em;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pill-btn-primary {
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+        border: 1px solid var(--primary);
+    }
+
+    .pill-btn-primary:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(200, 148, 122, 0.35);
+    }
+
+    .pill-btn-outline {
+        background-color: transparent;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+
+    .pill-btn-outline:hover {
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+        transform: translateY(-2px);
+    }
+
+    /* Section divider */
+    .section-label {
+        font-size: 0.6875rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted-foreground);
+        font-family: var(--font-sans);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--background);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 2px;
+    }
+
+    /* Floating petals canvas */
+    #petals-canvas {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    /* Nav transition */
+    .nav-solid {
+        background-color: rgba(253, 248, 243, 0.95) !important;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 1px 0 var(--border);
+    }
+
+    /* Cursor petal */
+    .cursor-petal {
+        position: fixed;
+        width: 32px;
+        height: 32px;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: multiply;
+        transition: transform 0.15s ease;
+    }
+
+    /* Info panel */
+    .info-panel {
+        border-top: 1px solid var(--border);
+        transition: background-color 0.3s ease;
+    }
+
+    .info-panel:hover {
+        background-color: var(--secondary);
+    }
+
+    /* Social pill hover */
+    .social-pill {
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .social-pill:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(26, 18, 8, 0.12);
+    }
+
+    /* ── Bloom Custom Cursor ────────────────────────────────────── */
+    @media (hover: hover) and (pointer: fine) {
+        /* Custom Cursor Container styling */
+        .bloom-cursor {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            margin-left: -25px;
+            margin-top: -25px;
+            pointer-events: none;
+            z-index: 99999; /* Place it above everything */
+            will-change: transform;
+            
+            /* Variable bindings */
+            --spread: calc(var(--cursor-speed, 0) * 18px);
+            --scale: calc(var(--cursor-speed, 0) * 0.8);
+            --opacity: calc(var(--cursor-speed, 0) * 1);
+        }
+
+        /* Custom Cursor Arrow */
+        .bloom-cursor__pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: var(--rose-dark);
+            transform-origin: 0 0;
+            transform: scale(1);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(184, 122, 106, 0.4));
+        }
+
+        /* Radial Petals Container */
+        .bloom-cursor__petals {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Individual Petal */
+        .bloom-cursor__petal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 13px;
+            background-color: var(--accent);
+            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%; /* teardrop petal shape */
+            opacity: var(--opacity);
+            transform-origin: center bottom;
+            /* Translate upwards (which is outward in rotation space) and scale */
+            transform: translate(-50%, -100%) rotate(var(--angle)) translateY(calc(-1 * var(--spread))) scale(var(--scale));
+            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, background-color 0.3s ease;
+        }
+
+        /* Hover State over interactive elements */
+        .bloom-cursor.is-hovering {
+            --spread: 16px !important;
+            --scale: 1.1 !important;
+            --opacity: 0.9 !important;
+        }
+
+        .bloom-cursor.is-hovering .bloom-cursor__pointer {
+            transform: scale(0.8);
+        }
+
+        .bloom-cursor.is-hovering .bloom-cursor__petal {
+            background-color: var(--rose-dark);
+        }
+
+        /* Slowly rotate the petals container when hovering for premium feel */
+        .bloom-cursor.is-hovering .bloom-cursor__petals {
+            animation: rotateBloomFlower 12s linear infinite;
+        }
+
+        /* Rose Petal Trail Particles */
+        .bloom-cursor-trail-petal {
+            position: fixed;
+            width: 8px;
+            height: 12px;
+            background-color: var(--rose-dark);
+            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%; /* organic teardrop shape */
+            pointer-events: none;
+            z-index: 99998;
+            opacity: 0.85;
+            transition: transform 1s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1s cubic-bezier(0.1, 0.8, 0.3, 1);
+            will-change: transform, opacity;
+        }
+    }
+}
+
+@keyframes rotateBloomFlower {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
