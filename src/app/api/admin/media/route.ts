@@ -81,6 +81,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
+      id: `media-${Date.now()}`,
       name: cleanName,
       url: `/assets/images/${cleanName}`,
       size: Math.round(file.size / 1024),
