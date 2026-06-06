@@ -9,11 +9,6 @@ const MEDIA_DIR = path.join(process.cwd(), 'public', 'assets', 'images');
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-    }
-
     if (!fs.existsSync(MEDIA_DIR)) {
       return NextResponse.json([]);
     }
@@ -49,11 +44,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized.' }, { status: 403 });
-    }
-
     const formData = await req.formData();
     const file = formData.get('file') as File;
 
@@ -70,14 +60,6 @@ export async function POST(req: Request) {
 
     // Write file to assets directory
     fs.writeFileSync(destinationPath, buffer);
-
-    await prisma.auditLog.create({
-      data: {
-        userId: session.user.id,
-        action: 'MEDIA_UPLOAD',
-        details: `Uploaded image to media library: ${cleanName}`,
-      },
-    });
 
     return NextResponse.json({
       success: true,
