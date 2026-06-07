@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Categories change very infrequently — cache for 1 hour
-export const revalidate = 3600;
+// Always dynamic — queries the live database on each request
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

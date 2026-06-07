@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 // Revalidate at most every 2 minutes at the CDN level
-export const revalidate = 120;
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {

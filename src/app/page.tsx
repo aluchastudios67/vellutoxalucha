@@ -11,6 +11,10 @@ import LocationStrip from '@/app/components/LocationStrip';
 import InstagramGallery from '@/app/components/InstagramGallery';
 import Footer from '@/components/Footer';
 
+// Force SSR — CollectionsSection fetches live product data from the database
+export const dynamic = 'force-dynamic';
+
+
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-white text-neutral-900 font-sans selection:bg-amber-400 selection:text-neutral-950">

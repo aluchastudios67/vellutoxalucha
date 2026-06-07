@@ -1,42 +1,50 @@
 // Server Component — no 'use client' directive
-// Data is fetched at request time directly from Prisma, eliminating the
-// client-side loading skeleton and extra HTTP round-trips.
+// Data is fetched at request time directly from Prisma.
+// Gracefully returns empty data if database is not available (e.g. build time).
 
 import { prisma } from '@/lib/prisma';
 import CollectionsClient from './CollectionsClient';
 
-async function getCollectionsData() {
-  const [categories, products] = await Promise.all([
-    prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    }),
-    prisma.product.findMany({
-      where: { status: 'ACTIVE' },
-      select: {
-        id: true,
-        name: true,
-        nameKa: true,
-        nameRu: true,
-        price: true,
-        tag: true,
-        description: true,
-        descriptionKa: true,
-        descriptionRu: true,
-        category: {
-          select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
-        },
-        images: {
-          select: { url: true, isFeatured: true },
-        },
-        variants: {
-          select: { size: true, color: true, stock: true },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    }),
-  ]);
+// Force server-side rendering — never pre-render at build time
+export const dynamic = 'force-dynamic';
 
-  return { categories, products };
+async function getCollectionsData() {
+  try {
+    const [categories, products] = await Promise.all([
+      prisma.category.findMany({
+        orderBy: { name: 'asc' },
+      }),
+      prisma.product.findMany({
+        where: { status: 'ACTIVE' },
+        select: {
+          id: true,
+          name: true,
+          nameKa: true,
+          nameRu: true,
+          price: true,
+          tag: true,
+          description: true,
+          descriptionKa: true,
+          descriptionRu: true,
+          category: {
+            select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
+          },
+          images: {
+            select: { url: true, isFeatured: true },
+          },
+          variants: {
+            select: { size: true, color: true, stock: true },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    return { categories, products };
+  } catch {
+    // Database not available at build time — return empty state
+    return { categories: [], products: [] };
+  }
 }
 
 export default async function CollectionsSection() {
