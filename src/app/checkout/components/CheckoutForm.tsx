@@ -35,7 +35,10 @@ export default function CheckoutForm() {
     let itemsText = '';
     cart.forEach((item, index) => {
       const itemName = language === 'GE' && item.nameKa ? item.nameKa : item.name;
-      itemsText += `${index + 1}. ${itemName} x${item.qty} - ${item.price * item.qty} GEL\n`;
+      const variantDesc = (item.size || item.color)
+        ? ` (${[item.color, item.size ? `Size ${item.size}` : null].filter(Boolean).join(' / ')})`
+        : '';
+      itemsText += `${index + 1}. ${itemName}${variantDesc} x${item.qty} - ${item.price * item.qty} GEL\n`;
     });
 
     const tHeader = language === 'GE' ? '🌸 *ახალი შეკვეთა Velluto-დან* 🌸' : language === 'RU' ? '🌸 *Новый заказ из Velluto* 🌸' : '🌸 *New Order from Velluto* 🌸';

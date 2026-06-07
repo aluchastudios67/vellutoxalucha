@@ -82,6 +82,13 @@ export default function MiniCart() {
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <h4 className="font-medium text-neutral-900 text-sm">{getItemName(item)}</h4>
+                    {(item.color || item.size) && (
+                      <p className="text-xs text-neutral-400 font-light mt-1">
+                        {item.color && <span>{item.color}</span>}
+                        {item.color && item.size && <span className="mx-1.5">•</span>}
+                        {item.size && <span>Size {item.size}</span>}
+                      </p>
+                    )}
                   </div>
                   
                   <div className="flex items-center justify-between">

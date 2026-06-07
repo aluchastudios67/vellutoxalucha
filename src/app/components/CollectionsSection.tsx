@@ -25,11 +25,11 @@ async function getCollectionsData() {
         category: {
           select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
         },
-        // Only the featured image — avoids loading every image per product
         images: {
-          where: { isFeatured: true },
-          take: 1,
           select: { url: true, isFeatured: true },
+        },
+        variants: {
+          select: { size: true, color: true, stock: true },
         },
       },
       orderBy: { createdAt: 'desc' },
