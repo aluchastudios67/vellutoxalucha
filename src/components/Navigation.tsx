@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import Icon from '@/components/ui/AppIcon';
@@ -11,19 +12,27 @@ export default function Navigation() {
   const { language, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isHome = pathname === '/';
+  const showWhiteHeader = !isHome || isScrolled;
 
   useEffect(() => {
+    if (!isHome) {
+      setIsScrolled(true);
+      return;
+    }
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHome]);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        showWhiteHeader
           ? 'bg-white/95 backdrop-blur-md shadow-sm py-4'
           : 'bg-transparent py-6'
       }`}
@@ -35,7 +44,7 @@ export default function Navigation() {
             src="/assets/images/app_logo.png"
             alt="Velluto"
             className={`h-36 w-auto object-contain -my-10 transition-all duration-300 ${
-              isScrolled ? '' : 'invert'
+              showWhiteHeader ? '' : 'invert'
             }`}
           />
         </Link>
@@ -43,41 +52,41 @@ export default function Navigation() {
         {/* Desktop Links - White when over dark hero, dark grey when scrolled */}
         <nav
           className={`hidden md:flex items-center gap-8 text-sm font-medium tracking-wide uppercase transition-colors duration-300 ${
-            isScrolled ? 'text-neutral-600' : 'text-neutral-100'
+            showWhiteHeader ? 'text-neutral-600' : 'text-neutral-100'
           }`}
         >
-          <a
-            href="#collections"
+          <Link
+            href="/collections"
             className={`transition-colors duration-300 ${
-              isScrolled ? 'hover:text-neutral-950' : 'hover:text-white'
+              showWhiteHeader ? 'hover:text-neutral-950' : 'hover:text-white'
             }`}
           >
             {t('collections')}
-          </a>
-          <a
-            href="#about-us"
+          </Link>
+          <Link
+            href="/#about-us"
             className={`transition-colors duration-300 ${
-              isScrolled ? 'hover:text-neutral-950' : 'hover:text-white'
+              showWhiteHeader ? 'hover:text-neutral-950' : 'hover:text-white'
             }`}
           >
             {t('our_story')}
-          </a>
-          <a
-            href="#shop-the-look"
+          </Link>
+          <Link
+            href="/#shop-the-look"
             className={`transition-colors duration-300 ${
-              isScrolled ? 'hover:text-neutral-950' : 'hover:text-white'
+              showWhiteHeader ? 'hover:text-neutral-950' : 'hover:text-white'
             }`}
           >
             {t('shop_the_look')}
-          </a>
-          <a
-            href="#location"
+          </Link>
+          <Link
+            href="/#location"
             className={`transition-colors duration-300 ${
-              isScrolled ? 'hover:text-neutral-950' : 'hover:text-white'
+              showWhiteHeader ? 'hover:text-neutral-950' : 'hover:text-white'
             }`}
           >
             {t('visit_us')}
-          </a>
+          </Link>
         </nav>
 
         {/* Header Actions */}
@@ -90,10 +99,10 @@ export default function Navigation() {
                 onClick={() => setLanguage(lang)}
                 className={`px-1.5 py-0.5 rounded transition-all duration-300 ${
                   language === lang
-                    ? isScrolled
+                    ? showWhiteHeader
                       ? 'bg-neutral-900 text-white'
                       : 'bg-white text-neutral-900 shadow-sm'
-                    : isScrolled
+                    : showWhiteHeader
                       ? 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
                       : 'text-neutral-300 hover:text-white hover:bg-white/10'
                 }`}
@@ -116,7 +125,7 @@ export default function Navigation() {
           <button
             onClick={() => setIsCartOpen(true)}
             className={`relative p-2.5 rounded-full transition-all duration-200 ${
-              isScrolled
+              showWhiteHeader
                 ? 'text-neutral-800 hover:text-neutral-950 hover:bg-neutral-100/80'
                 : 'text-white hover:text-white hover:bg-white/10'
             }`}
@@ -134,7 +143,7 @@ export default function Navigation() {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className={`md:hidden p-2 rounded-full transition-all ${
-              isScrolled
+              showWhiteHeader
                 ? 'text-neutral-800 hover:bg-neutral-100'
                 : 'text-white hover:bg-white/10'
             }`}
@@ -149,34 +158,34 @@ export default function Navigation() {
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-x-0 top-[72px] bg-white border-b border-neutral-100 shadow-lg p-6 animate-slide-down">
           <nav className="flex flex-col gap-4 text-base font-semibold text-neutral-800">
-            <a
-              href="#new-arrivals"
+            <Link
+              href="/collections"
               onClick={() => setIsMobileMenuOpen(false)}
               className="hover:text-neutral-950 transition-colors"
             >
               {t('collections')}
-            </a>
-            <a
-              href="#about-us"
+            </Link>
+            <Link
+              href="/#about-us"
               onClick={() => setIsMobileMenuOpen(false)}
               className="hover:text-neutral-950 transition-colors"
             >
               {t('our_story')}
-            </a>
-            <a
-              href="#shop-the-look"
+            </Link>
+            <Link
+              href="/#shop-the-look"
               onClick={() => setIsMobileMenuOpen(false)}
               className="hover:text-neutral-950 transition-colors"
             >
               {t('shop_the_look')}
-            </a>
-            <a
-              href="#location"
+            </Link>
+            <Link
+              href="/#location"
               onClick={() => setIsMobileMenuOpen(false)}
               className="hover:text-neutral-950 transition-colors"
             >
               {t('visit_us')}
-            </a>
+            </Link>
             <a
               href="tel:+995599123456"
               className="inline-flex items-center gap-2 justify-center bg-neutral-950 text-white py-3 rounded-xl mt-2 hover:bg-neutral-900 transition-colors"

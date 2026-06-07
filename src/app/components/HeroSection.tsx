@@ -18,35 +18,11 @@ const HERO_SLIDES = [
   },
 ];
 
-
-const CINEMATIC_STYLE = `
-  @keyframes velluto-cinematic-in {
-    0%   { opacity: 0; transform: scale(0.92); letter-spacing: 0.35em; }
-    60%  { opacity: 1; }
-    100% { opacity: 1; transform: scale(1); letter-spacing: inherit; }
-  }
-  .velluto-logo-cinematic {
-    animation: velluto-cinematic-in 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 0.4s;
-    opacity: 0;
-  }
-`;
-
 export default function HeroSection() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [prevSlide, setPrevSlide] = useState<number | null>(null);
   const [transitioning, setTransitioning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const existing = document.getElementById('velluto-cinematic-style');
-    if (!existing) {
-      const style = document.createElement('style');
-      style.id = 'velluto-cinematic-style';
-      style.textContent = CINEMATIC_STYLE;
-      document.head.appendChild(style);
-    }
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,7 +46,7 @@ export default function HeroSection() {
   return (
     <section className="relative w-full h-screen overflow-hidden bg-neutral-950">
 
-      {/* Background Slides */}
+      {/* Background Slides — all pre-rendered, toggled via opacity for GPU compositing */}
       {HERO_SLIDES.map((slide, i) => {
         const isActive = i === activeSlide;
         const isPrev = i === prevSlide;
@@ -81,7 +57,7 @@ export default function HeroSection() {
             style={{
               zIndex: isActive ? 2 : isPrev ? 1 : 0,
               opacity: isActive ? 1 : 0,
-              transition: isActive ? 'opacity 1500ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+              transition: isActive ? 'opacity 1400ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
               willChange: 'opacity',
             }}
           >
@@ -116,18 +92,10 @@ export default function HeroSection() {
         }}
       />
 
-      {/* ── Centered Logo — Cinematic Fade + Scale ── */}
+      {/* ── Centered Logo ── */}
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none">
         <div className="velluto-logo-cinematic flex flex-col items-center gap-5">
-
-          {/* Logo — cropped to letters only (hides the V shape above) */}
-          {/* Logo */}
-          <div
-            style={{
-              width: '550px',
-              position: 'relative',
-            }}
-          >
+          <div style={{ width: 'min(550px, 80vw)', position: 'relative' }}>
             <Image
               src="/assets/images/logowithbg.png"
               alt="Velluto"
@@ -144,24 +112,15 @@ export default function HeroSection() {
             />
           </div>
 
-          {/* Thin rule under the logo */}
-          <div
-            style={{
-              width: '48px',
-              height: '1px',
-              background: 'rgba(255,255,255,0.35)',
-            }}
-          />
+          <div style={{ width: 48, height: 1, background: 'rgba(255,255,255,0.35)' }} />
 
-          {/* Subtle tagline */}
           <span
             style={{
               color: 'rgba(255,255,255,0.55)',
-              fontSize: '10px',
+              fontSize: 10,
               fontWeight: 600,
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
-              fontFamily: 'inherit',
             }}
           >
             New Collection

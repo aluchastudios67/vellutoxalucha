@@ -515,3 +515,28 @@
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
+
+@keyframes velluto-cinematic-in {
+    0%   { opacity: 0; transform: scale(0.92); letter-spacing: 0.35em; }
+    60%  { opacity: 1; }
+    100% { opacity: 1; transform: scale(1); letter-spacing: inherit; }
+}
+
+.velluto-logo-cinematic {
+    animation: velluto-cinematic-in 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+/* Thin custom scrollbar across the whole site */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d1d1 transparent;
+}
+
+/* Smooth page transitions */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
