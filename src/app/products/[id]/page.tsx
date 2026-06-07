@@ -6,6 +6,9 @@ import Footer from '@/components/Footer';
 import ProductDetailsClient from './ProductDetailsClient';
 import { prisma } from '@/lib/prisma';
 
+// Always SSR — product data fetched on each request
+export const dynamic = 'force-dynamic';
+
 interface ProductPageProps {
   params: Promise<{
     id: string;

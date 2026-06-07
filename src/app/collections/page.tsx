@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 import CollectionsClient from '@/app/components/CollectionsClient';
 import { prisma } from '@/lib/prisma';
 
+// Always SSR — queries live database on every request
+export const dynamic = 'force-dynamic';
+
 async function getCollectionsData() {
   const [categories, products] = await Promise.all([
     prisma.category.findMany({
