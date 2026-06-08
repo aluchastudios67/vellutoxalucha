@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       buffer = await sharp(buffer)
         .resize({ width: 2000, height: 2000, fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 80, mozjpeg: true })
-        .toBuffer();
+        .toBuffer() as any;
         
       mimeType = 'image/jpeg';
       cleanName = cleanName.replace(ext, '.jpg'); // Change extension if we converted to JPEG

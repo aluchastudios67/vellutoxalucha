@@ -80,6 +80,19 @@ export default function NewProduct() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [variants, setVariants] = useState<VariantInput[]>([]);
 
+const CLIENT_FALLBACK_CATEGORIES = [
+  { id: "53ca6f72-110b-40a2-8afb-656564fba44a", name: "Rings" },
+  { id: "43a1484f-be9e-467f-a567-20bee0a4afd6", name: "Necklaces" },
+  { id: "c3fa539d-fdc3-48f4-9c8d-e59e36127f63", name: "Bracelets" },
+  { id: "bf5361cf-faa7-4820-a06b-d43dc572f5a7", name: "Earrings" },
+  { id: "d79be4df-5706-42bc-98ec-214607a9dd53", name: "Dresses" },
+  { id: "a9b0628d-1b78-49fa-8261-0dd883b3d518", name: "Suits & Co-ords" },
+  { id: "00794e01-5c9a-48cd-9b59-2137295c8aa4", name: "Knitwear" },
+  { id: "9d5242da-0d24-42ca-a494-037f995d39f1", name: "Tops & Blouses" },
+  { id: "3a56516c-1787-4928-aed3-084fecde684e", name: "Outerwear" },
+  { id: "eae856de-5a4c-4dbf-a5c3-873471ce5c48", name: "Accessories" }
+];
+
   useEffect(() => {
     const loadFormOptions = async () => {
       try {
@@ -92,14 +105,17 @@ export default function NewProduct() {
               setCategories(catData);
               setFormData((prev) => ({ ...prev, categoryId: catData[0].id }));
             } else {
-              setCategoriesError(true);
+              setCategories(CLIENT_FALLBACK_CATEGORIES);
+              setFormData((prev) => ({ ...prev, categoryId: CLIENT_FALLBACK_CATEGORIES[0].id }));
             }
           } else {
-            setCategoriesError(true);
+            setCategories(CLIENT_FALLBACK_CATEGORIES);
+            setFormData((prev) => ({ ...prev, categoryId: CLIENT_FALLBACK_CATEGORIES[0].id }));
           }
         } catch (catErr) {
-          console.error('Failed to load categories', catErr);
-          setCategoriesError(true);
+          console.error('Failed to load categories, using client fallback', catErr);
+          setCategories(CLIENT_FALLBACK_CATEGORIES);
+          setFormData((prev) => ({ ...prev, categoryId: CLIENT_FALLBACK_CATEGORIES[0].id }));
         }
 
         // Fetch media independently so it doesn't block categories
