@@ -36,7 +36,7 @@ export default function Navigation() {
         showWhiteHeader ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="relative max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Brand Logo - Inverted when transparent header over dark hero background */}
         <Link href="/" className="flex items-center gap-2 group">
           <Image
@@ -53,7 +53,7 @@ export default function Navigation() {
 
         {/* Desktop Links - White when over dark hero, dark grey when scrolled */}
         <nav
-          className={`hidden md:flex items-center gap-8 text-sm font-medium tracking-wide uppercase transition-colors duration-300 ${
+          className={`hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-sm font-medium tracking-wide uppercase transition-colors duration-300 ${
             showWhiteHeader ? 'text-neutral-600' : 'text-neutral-100'
           }`}
         >
