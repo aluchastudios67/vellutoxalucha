@@ -9,6 +9,7 @@ export default function StoreSettings() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [pendingBanners, setPendingBanners] = useState<{ file: File; previewUrl: string }[]>([]);
 
   const loadSettings = async () => {
     try {
@@ -46,33 +47,17 @@ export default function StoreSettings() {
     }
   };
 
-  const handleHeroImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHeroImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-
-    setIsUploading(true);
-    try {
-      const res = await fetch('/api/admin/media', {
-        method: 'POST',
-        body: formData,
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setSettings({
-          ...settings,
-          heroImages: [...(settings.heroImages || []), data.url],
-        });
-      } else {
-        alert('Failed to upload image.');
-      }
-    } catch (err) {
-      alert('Error uploading image.');
-    } finally {
-      setIsUploading(false);
-      e.target.value = '';
-    }
+    const selectedFiles = Array.from(e.target.files);
+    
+    const newPending = selectedFiles.map(file => ({
+      file,
+      previewUrl: URL.createObjectURL(file)
+    }));
+    
+    setPendingBanners(prev => [...prev, ...newPending]);
+    e.target.value = '';
   };
 
   const removeHeroImage = (index: number) => {
@@ -84,25 +69,69 @@ export default function StoreSettings() {
     });
   };
 
+  const removePendingHeroImage = (index: number) => {
+    setPendingBanners(prev => {
+      const item = prev[index];
+      if (item) {
+        URL.revokeObjectURL(item.previewUrl);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
+      // 1. Upload pending hero images first
+      const newUrls: string[] = [];
+      if (pendingBanners.length > 0) {
+        for (const item of pendingBanners) {
+          const formData = new FormData();
+          formData.append('file', item.file);
+          
+          const res = await fetch('/api/admin/media', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!res.ok) {
+            const uploadErr = await res.json();
+            throw new Error(uploadErr.error || `Failed to upload image: ${item.file.name}`);
+          }
+          
+          const data = await res.json();
+          newUrls.push(data.url);
+        }
+      }
+      
+      // 2. Merge existing and newly uploaded images
+      const finalHeroImages = [...(settings.heroImages || []), ...newUrls];
+      const updatedSettings = {
+        ...settings,
+        heroImages: finalHeroImages,
+      };
+      
+      // 3. Post final merged settings to save to the database
       const res = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(updatedSettings),
       });
 
       if (res.ok) {
         alert('Global store configurations saved successfully.');
+        // Clean up preview URLs
+        pendingBanners.forEach(item => URL.revokeObjectURL(item.previewUrl));
+        setPendingBanners([]);
         loadSettings();
       } else {
         const err = await res.json();
-        alert(err.error || 'Failed to update store settings.');
+        throw new Error(err.error || 'Failed to update store settings.');
       }
-    } catch (e) {
-      alert('Error connecting to settings API.');
+    } catch (err: any) {
+      alert(err.message || 'Error saving settings.');
     } finally {
       setIsSubmitting(false);
     }
@@ -284,7 +313,7 @@ export default function StoreSettings() {
               <div className="flex flex-wrap gap-4">
                 {(settings.heroImages || []).map((url: string, idx: number) => (
                   <div
-                    key={idx}
+                    key={`existing-${idx}`}
                     className="relative w-24 h-32 bg-neutral-100 dark:bg-neutral-800 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700"
                   >
                     <img src={url} alt={`Hero ${idx}`} className="w-full h-full object-cover" />
@@ -297,8 +326,28 @@ export default function StoreSettings() {
                     </button>
                   </div>
                 ))}
+
+                {pendingBanners.map((item, idx) => (
+                  <div
+                    key={`pending-${idx}`}
+                    className="relative w-24 h-32 bg-neutral-100 dark:bg-neutral-800 rounded-lg overflow-hidden border border-neutral-200 dark:border-blue-500 border-2 border-dashed"
+                  >
+                    <img src={item.previewUrl} alt={`Pending Hero ${idx}`} className="w-full h-full object-cover opacity-70" />
+                    <span className="absolute bottom-1 left-1 bg-blue-500 text-[8px] text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                      Draft
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removePendingHeroImage(idx)}
+                      className="absolute top-1 right-1 bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center shadow hover:bg-neutral-100"
+                    >
+                      <Icon name="XMarkIcon" size={12} />
+                    </button>
+                  </div>
+                ))}
+
                 <label className="w-24 h-32 flex flex-col items-center justify-center gap-2 bg-neutral-50 dark:bg-neutral-900 border-2 border-dashed border-neutral-200 dark:border-neutral-700 rounded-lg cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
-                  {isUploading ? (
+                  {isSubmitting ? (
                     <div className="w-4 h-4 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <>
@@ -312,7 +361,8 @@ export default function StoreSettings() {
                     type="file"
                     accept="image/*"
                     onChange={handleHeroImageUpload}
-                    disabled={isUploading}
+                    multiple
+                    disabled={isSubmitting}
                     className="hidden"
                   />
                 </label>
