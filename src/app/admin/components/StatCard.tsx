@@ -18,7 +18,7 @@ export default function StatCard({
   change,
   changeType = 'positive',
   iconName,
-  trendData
+  trendData,
 }: StatCardProps) {
   const isPos = changeType === 'positive';
   const isNeg = changeType === 'negative';
@@ -47,8 +47,8 @@ export default function StatCard({
                 isPos
                   ? 'bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-400'
                   : isNeg
-                  ? 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400'
-                  : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400'
+                    ? 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400'
+                    : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400'
               }`}
             >
               {isPos ? '↑' : isNeg ? '↓' : '•'} {change}
@@ -65,8 +65,16 @@ export default function StatCard({
             <svg className="w-full h-full" viewBox="0 0 100 30">
               <defs>
                 <linearGradient id={`sparkline-grad-${title}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={isPos ? '#22c55e' : isNeg ? '#ef4444' : '#737373'} stopOpacity="0.2" />
-                  <stop offset="100%" stopColor={isPos ? '#22c55e' : isNeg ? '#ef4444' : '#737373'} stopOpacity="0" />
+                  <stop
+                    offset="0%"
+                    stopColor={isPos ? '#22c55e' : isNeg ? '#ef4444' : '#737373'}
+                    stopOpacity="0.2"
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={isPos ? '#22c55e' : isNeg ? '#ef4444' : '#737373'}
+                    stopOpacity="0"
+                  />
                 </linearGradient>
               </defs>
               {/* Area */}

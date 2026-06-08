@@ -45,7 +45,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full h-screen overflow-hidden bg-neutral-950">
-
       {/* Background Slides — all pre-rendered, toggled via opacity for GPU compositing */}
       {HERO_SLIDES.map((slide, i) => {
         const isActive = i === activeSlide;
@@ -107,35 +106,17 @@ export default function HeroSection() {
               style={{
                 width: '100%',
                 height: 'auto',
-                filter: 'invert(1) drop-shadow(0px 2px 10px rgba(0,0,0,0.75)) drop-shadow(0px 1px 3px rgba(0,0,0,0.6))',
+                filter: 'invert(1) drop-shadow(0px 1px 4px rgba(0,0,0,0.3))',
               }}
             />
           </div>
-
-          <div style={{ width: 48, height: 1, background: 'rgba(255,255,255,0.35)' }} />
-
-          <span
-            style={{
-              color: 'rgba(255,255,255,0.55)',
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-            }}
-          >
-            New Collection
-          </span>
         </div>
       </div>
 
       {/* Slide indicators */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
         {HERO_SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => advanceTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-          >
+          <button key={i} onClick={() => advanceTo(i)} aria-label={`Go to slide ${i + 1}`}>
             <span
               className={`block rounded-full transition-all duration-700 ease-out ${
                 activeSlide === i
@@ -146,7 +127,6 @@ export default function HeroSection() {
           </button>
         ))}
       </div>
-
     </section>
   );
 }

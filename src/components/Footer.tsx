@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="space-y-4">
           <Link href="/" className="inline-block">
             <img
-              src="/assets/images/app_logo.png"
+              src="/assets/images/logowithbg.png"
               alt="Velluto"
               className="h-36 w-auto object-contain invert -my-10"
             />
@@ -47,7 +47,9 @@ export default function Footer() {
 
         {/* Links Navigation */}
         <div className="space-y-4">
-          <h4 className="text-white font-semibold text-sm uppercase tracking-wider">{t('collections')}</h4>
+          <h4 className="text-white font-semibold text-sm uppercase tracking-wider">
+            {t('collections')}
+          </h4>
           <ul className="space-y-2 text-sm">
             <li>
               <a href="#new-arrivals" className="hover:text-white transition-colors">
@@ -74,7 +76,9 @@ export default function Footer() {
 
         {/* Contact details */}
         <div className="space-y-4">
-          <h4 className="text-white font-semibold text-sm uppercase tracking-wider">{t('visit_us')}</h4>
+          <h4 className="text-white font-semibold text-sm uppercase tracking-wider">
+            {t('visit_us')}
+          </h4>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-3">
               <Icon name="MapPinIcon" size={16} className="text-neutral-500" />
@@ -101,7 +105,9 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-neutral-900 text-center text-xs text-neutral-600">
-        <p>© {new Date().getFullYear()} Velluto. {t('footer_copyright')}</p>
+        <p>
+          © {new Date().getFullYear()} Velluto. {t('footer_copyright')}
+        </p>
       </div>
     </footer>
   );

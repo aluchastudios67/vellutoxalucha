@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 
 interface SidebarItem {
@@ -38,7 +39,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(null);
+  const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(
+    null
+  );
 
   useEffect(() => {
     // Auth guard
@@ -49,10 +52,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
       const userStr = localStorage.getItem('velluto_admin_user');
       if (userStr) {
-        try { setAdminUser(JSON.parse(userStr)); } catch {}
+        try {
+          setAdminUser(JSON.parse(userStr));
+        } catch {
+          // Ignore json parsing error
+        }
       }
       // Dark mode
-      const isDark = document.documentElement.classList.contains('dark') ||
+      const isDark =
+        document.documentElement.classList.contains('dark') ||
         localStorage.getItem('theme') === 'dark';
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -115,11 +123,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="h-20 flex items-center justify-between px-6 border-b border-neutral-800 dark:border-neutral-900">
           {isSidebarOpen ? (
             <div className="flex items-center gap-2">
-              <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs">V</span>
-              <span className="font-display font-bold text-sm tracking-[0.2em] uppercase">Velluto</span>
+              <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs">
+                V
+              </span>
+              <span className="font-display font-bold text-sm tracking-[0.2em] uppercase">
+                Velluto
+              </span>
             </div>
           ) : (
-            <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs mx-auto">V</span>
+            <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs mx-auto">
+              V
+            </span>
           )}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -169,10 +183,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <aside className="relative w-64 bg-neutral-900 text-white flex flex-col z-10">
             <div className="h-20 flex items-center justify-between px-6 border-b border-neutral-800">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs">V</span>
-                <span className="font-display font-bold text-sm tracking-[0.2em] uppercase">Velluto</span>
+                <span className="w-7 h-7 bg-white text-neutral-950 rounded flex items-center justify-center font-bold tracking-wider text-xs">
+                  V
+                </span>
+                <span className="font-display font-bold text-sm tracking-[0.2em] uppercase">
+                  Velluto
+                </span>
               </div>
-              <button onClick={() => setIsMobileOpen(false)} className="text-neutral-400 hover:text-white">
+              <button
+                onClick={() => setIsMobileOpen(false)}
+                className="text-neutral-400 hover:text-white"
+              >
                 <Icon name="XMarkIcon" size={20} />
               </button>
             </div>
@@ -222,9 +243,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               >
                 <Icon name="Bars3Icon" size={20} />
               </button>
-              <div className="hidden sm:flex items-center gap-2">
-                {getBreadcrumbs()}
-              </div>
+              <div className="hidden sm:flex items-center gap-2">{getBreadcrumbs()}</div>
             </div>
 
             {/* Quick Actions */}
@@ -271,8 +290,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <div className="fixed inset-0 z-40" onClick={() => setIsProfileOpen(false)} />
                     <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl py-2 z-50">
                       <div className="px-4 py-2 border-b border-neutral-100 dark:border-neutral-800">
-                        <p className="text-xs font-semibold text-neutral-900 dark:text-white">{adminUser?.name || 'Super Admin'}</p>
-                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 truncate mt-0.5">{adminUser?.email || 'admin@velluto.com'}</p>
+                        <p className="text-xs font-semibold text-neutral-900 dark:text-white">
+                          {adminUser?.name || 'Super Admin'}
+                        </p>
+                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
+                          {adminUser?.email || 'admin@velluto.com'}
+                        </p>
                       </div>
                       <div className="py-1">
                         <a
@@ -282,13 +305,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           <Icon name="Cog6ToothIcon" size={14} />
                           Store Settings
                         </a>
-                        <a
+                        <Link
                           href="/"
                           className="flex items-center gap-2.5 px-4 py-2 text-xs text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white transition-colors"
                         >
                           <Icon name="HomeIcon" size={14} />
                           View Storefront
-                        </a>
+                        </Link>
                       </div>
                       <div className="border-t border-neutral-100 dark:border-neutral-800 py-1">
                         <button
@@ -308,9 +331,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Content Pane */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

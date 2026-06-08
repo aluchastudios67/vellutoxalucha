@@ -32,16 +32,14 @@ export default function Navigation() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        showWhiteHeader
-          ? 'bg-white/95 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-6'
+        showWhiteHeader ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Brand Logo - Inverted when transparent header over dark hero background */}
         <Link href="/" className="flex items-center gap-2 group">
           <img
-            src="/assets/images/app_logo.png"
+            src="/assets/images/logowithbg.png"
             alt="Velluto"
             className={`h-36 w-auto object-contain -my-10 transition-all duration-300 ${
               showWhiteHeader ? '' : 'invert'

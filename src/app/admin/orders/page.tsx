@@ -13,7 +13,14 @@ interface Order {
   deliveryDate: string;
   deliveryTime: string;
   paymentMethod: string;
-  status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED';
+  status:
+    | 'PENDING'
+    | 'CONFIRMED'
+    | 'PROCESSING'
+    | 'SHIPPED'
+    | 'DELIVERED'
+    | 'CANCELLED'
+    | 'REFUNDED';
   paymentStatus: 'UNPAID' | 'PAID' | 'REFUNDED';
   total: number;
   createdAt: string;
@@ -51,7 +58,18 @@ export default function OrdersLog() {
       return;
     }
 
-    const headers = ['Order ID', 'Customer Name', 'Phone', 'Address', 'Delivery Date', 'Delivery Time', 'Payment Method', 'Status', 'Payment Status', 'Total'];
+    const headers = [
+      'Order ID',
+      'Customer Name',
+      'Phone',
+      'Address',
+      'Delivery Date',
+      'Delivery Time',
+      'Payment Method',
+      'Status',
+      'Payment Status',
+      'Total',
+    ];
     const rows = orders.map((o) => [
       o.id,
       o.customerName,
@@ -82,7 +100,10 @@ export default function OrdersLog() {
     {
       header: 'Order ID',
       accessor: (o: Order) => (
-        <a href={`/admin/orders/${o.id}`} className="font-bold hover:underline text-neutral-900 dark:text-white">
+        <a
+          href={`/admin/orders/${o.id}`}
+          className="font-bold hover:underline text-neutral-900 dark:text-white"
+        >
           {o.id}
         </a>
       ),
@@ -105,7 +126,7 @@ export default function OrdersLog() {
       header: 'Ordered Items',
       accessor: (o: Order) => (
         <div className="max-w-xs truncate font-light text-neutral-500 dark:text-neutral-400">
-          {o.items.map(item => `${item.productName} (x${item.qty})`).join(', ')}
+          {o.items.map((item) => `${item.productName} (x${item.qty})`).join(', ')}
         </div>
       ),
     },
@@ -138,8 +159,8 @@ export default function OrdersLog() {
             o.paymentStatus === 'PAID'
               ? 'bg-green-50 text-green-600 dark:bg-green-950/20 dark:text-green-400'
               : o.paymentStatus === 'REFUNDED'
-              ? 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
-              : 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
+                ? 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
+                : 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
           }`}
         >
           {o.paymentStatus}
@@ -156,10 +177,10 @@ export default function OrdersLog() {
             o.status === 'PENDING'
               ? 'bg-orange-50 text-orange-600 dark:bg-orange-950/20 dark:text-orange-400'
               : o.status === 'PROCESSING' || o.status === 'CONFIRMED'
-              ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400'
-              : o.status === 'DELIVERED'
-              ? 'bg-green-50 text-green-600 dark:bg-green-950/20 dark:text-green-400'
-              : 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400'
+                : o.status === 'DELIVERED'
+                  ? 'bg-green-50 text-green-600 dark:bg-green-950/20 dark:text-green-400'
+                  : 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
           }`}
         >
           {o.status}
@@ -170,7 +191,9 @@ export default function OrdersLog() {
     },
     {
       header: 'Total Price',
-      accessor: (o: Order) => <span className="font-bold text-neutral-900 dark:text-white">{o.total} GEL</span>,
+      accessor: (o: Order) => (
+        <span className="font-bold text-neutral-900 dark:text-white">{o.total} GEL</span>
+      ),
       sortable: true,
       sortKey: 'total',
       className: 'text-right font-semibold',
@@ -182,7 +205,9 @@ export default function OrdersLog() {
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Orders Log...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Orders Log...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -220,12 +245,15 @@ export default function OrdersLog() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        
         {/* Header Title */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Orders Log</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">Track sales status, payments, and export transaction tables</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Orders Log
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              Track sales status, payments, and export transaction tables
+            </p>
           </div>
           <button
             onClick={handleExportCSV}
@@ -245,7 +273,6 @@ export default function OrdersLog() {
           filterComponent={filters}
           emptyMessage="No orders matched the filter criteria."
         />
-
       </div>
     </AdminLayout>
   );

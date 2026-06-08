@@ -21,7 +21,7 @@ interface Customer {
 export default function CustomersManagement() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Edit customer state
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [notes, setNotes] = useState('');
@@ -65,7 +65,7 @@ export default function CustomersManagement() {
         body: JSON.stringify({
           id: editingCustomer.id,
           notes,
-          segment
+          segment,
         }),
       });
 
@@ -86,7 +86,9 @@ export default function CustomersManagement() {
   const columns = [
     {
       header: 'Customer Name',
-      accessor: (c: Customer) => <span className="font-semibold text-neutral-900 dark:text-white">{c.name}</span>,
+      accessor: (c: Customer) => (
+        <span className="font-semibold text-neutral-900 dark:text-white">{c.name}</span>
+      ),
       sortable: true,
       sortKey: 'name',
     },
@@ -103,7 +105,9 @@ export default function CustomersManagement() {
     },
     {
       header: 'Delivery Address',
-      accessor: (c: Customer) => <span className="font-light text-neutral-500 dark:text-neutral-400">{c.address}</span>,
+      accessor: (c: Customer) => (
+        <span className="font-light text-neutral-500 dark:text-neutral-400">{c.address}</span>
+      ),
     },
     {
       header: 'Segment',
@@ -113,8 +117,8 @@ export default function CustomersManagement() {
             c.segment === 'VIP'
               ? 'bg-purple-50 text-purple-600 dark:bg-purple-950/20 dark:text-purple-400'
               : c.segment === 'Regular'
-              ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400'
-              : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400'
+                : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
           }`}
         >
           {c.segment}
@@ -132,7 +136,11 @@ export default function CustomersManagement() {
     },
     {
       header: 'Total Spent',
-      accessor: (c: Customer) => <span className="font-bold text-neutral-900 dark:text-white">{c.totalSpent.toLocaleString()} GEL</span>,
+      accessor: (c: Customer) => (
+        <span className="font-bold text-neutral-900 dark:text-white">
+          {c.totalSpent.toLocaleString()} GEL
+        </span>
+      ),
       sortable: true,
       sortKey: 'totalSpent',
       className: 'text-right font-semibold',
@@ -144,7 +152,9 @@ export default function CustomersManagement() {
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Client Database...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Client Database...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -153,12 +163,15 @@ export default function CustomersManagement() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        
         {/* Header Title */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Customer Database</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">View client purchase history, segmentation, and add notes</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Customer Database
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              View client purchase history, segmentation, and add notes
+            </p>
           </div>
         </div>
 
@@ -178,12 +191,15 @@ export default function CustomersManagement() {
             <div className="fixed inset-0" onClick={() => setEditingCustomer(null)} />
             <div className="relative w-full max-w-md bg-white dark:bg-neutral-900 h-full p-6 flex flex-col justify-between shadow-2xl z-10 animate-slide-in">
               <div className="space-y-6">
-                
                 {/* Header */}
                 <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-4">
                   <div>
-                    <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Edit Customer Profile</h3>
-                    <p className="text-[10px] text-neutral-400 uppercase mt-0.5 font-semibold">Metadata editor</p>
+                    <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                      Edit Customer Profile
+                    </h3>
+                    <p className="text-[10px] text-neutral-400 uppercase mt-0.5 font-semibold">
+                      Metadata editor
+                    </p>
                   </div>
                   <button
                     onClick={() => setEditingCustomer(null)}
@@ -197,26 +213,36 @@ export default function CustomersManagement() {
                 <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-150 dark:border-neutral-800/80 space-y-2 text-xs">
                   <p className="flex justify-between">
                     <span className="text-neutral-400">Client Name:</span>
-                    <strong className="text-neutral-900 dark:text-white">{editingCustomer.name}</strong>
+                    <strong className="text-neutral-900 dark:text-white">
+                      {editingCustomer.name}
+                    </strong>
                   </p>
                   <p className="flex justify-between">
                     <span className="text-neutral-400">Phone Number:</span>
-                    <strong className="text-neutral-900 dark:text-white">{editingCustomer.phone}</strong>
+                    <strong className="text-neutral-900 dark:text-white">
+                      {editingCustomer.phone}
+                    </strong>
                   </p>
                   <p className="flex justify-between">
                     <span className="text-neutral-400">Orders Placed:</span>
-                    <strong className="text-neutral-900 dark:text-white">{editingCustomer.ordersCount}</strong>
+                    <strong className="text-neutral-900 dark:text-white">
+                      {editingCustomer.ordersCount}
+                    </strong>
                   </p>
                   <p className="flex justify-between">
                     <span className="text-neutral-400">Total Spent:</span>
-                    <strong className="text-neutral-900 dark:text-white">{editingCustomer.totalSpent.toLocaleString()} GEL</strong>
+                    <strong className="text-neutral-900 dark:text-white">
+                      {editingCustomer.totalSpent.toLocaleString()} GEL
+                    </strong>
                   </p>
                 </div>
 
                 <form onSubmit={handleUpdateCustomer} className="space-y-4">
                   {/* Segment selection */}
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Customer Segment</label>
+                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      Customer Segment
+                    </label>
                     <select
                       value={segment}
                       onChange={(e) => setSegment(e.target.value as Customer['segment'])}
@@ -230,12 +256,14 @@ export default function CustomersManagement() {
 
                   {/* Customer Comments/Notes */}
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Special Comments / Sizing Details</label>
+                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      Special Comments / Sizing Details
+                    </label>
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={5}
-                      placeholder="e.g. Ring size 16.5, likes yellow gold rings, preferred courier..."
+                      placeholder="e.g. Blazer size M, prefers wool blends, preferred courier..."
                       className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none resize-none"
                     />
                   </div>
@@ -257,12 +285,10 @@ export default function CustomersManagement() {
                     </button>
                   </div>
                 </form>
-
               </div>
             </div>
           </div>
         )}
-
       </div>
     </AdminLayout>
   );

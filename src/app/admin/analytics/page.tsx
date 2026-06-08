@@ -16,7 +16,7 @@ import {
   Legend,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from 'recharts';
 
 interface AnalyticsData {
@@ -28,7 +28,12 @@ interface AnalyticsData {
   };
   monthlySalesChart: { name: string; revenue: number; orders: number }[];
   bestSellers: { name: string; qty: number; revenue: number }[];
-  trafficOverview: { visitors: number; pageViews: number; conversionRate: number; bounceRate: number };
+  trafficOverview: {
+    visitors: number;
+    pageViews: number;
+    conversionRate: number;
+    bounceRate: number;
+  };
 }
 
 const CATEGORY_COLORS = ['#171717', '#404040', '#737373', '#a3a3a3'];
@@ -84,7 +89,10 @@ export default function BusinessAnalytics() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Velluto_Business_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute(
+      'download',
+      `Velluto_Business_Report_${new Date().toISOString().slice(0, 10)}.csv`
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -95,7 +103,9 @@ export default function BusinessAnalytics() {
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Business Analytics...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Business Analytics...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -103,10 +113,9 @@ export default function BusinessAnalytics() {
 
   // Categories Chart Mock Aggregation
   const categorySalesData = [
-    { name: 'Rings', value: 4500 },
-    { name: 'Necklaces', value: 2800 },
-    { name: 'Bracelets', value: 1800 },
-    { name: 'Earrings', value: 1200 },
+    { name: 'Dresses', value: 4500 },
+    { name: 'Suits', value: 2800 },
+    { name: 'Knitwear', value: 2200 },
   ];
 
   // Traffic Source Mock data
@@ -128,12 +137,15 @@ export default function BusinessAnalytics() {
   return (
     <AdminLayout>
       <div className="space-y-10">
-        
         {/* Header Title & Date Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center border-b border-neutral-100 dark:border-neutral-800 pb-5 gap-4">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Business Analytics</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">Store traffic statistics, best sellers, and conversion parameters</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Business Analytics
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              Store traffic statistics, best sellers, and conversion parameters
+            </p>
           </div>
           <div className="flex gap-2.5 items-center justify-end">
             <select
@@ -157,18 +169,24 @@ export default function BusinessAnalytics() {
 
         {/* 2-Column charts row */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
           {/* Monthly Revenue Chart */}
           <div className="lg:col-span-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Revenue Generation & Order Volume</h3>
-              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">Compare monthly orders vs revenue</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Revenue Generation & Order Volume
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">
+                Compare monthly orders vs revenue
+              </p>
             </div>
-            
+
             <div className="h-80 w-full">
               {isMounted ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data.monthlySalesChart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <AreaChart
+                    data={data.monthlySalesChart}
+                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  >
                     <defs>
                       <linearGradient id="colorSalesRev" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor={chartStroke} stopOpacity={0.2} />
@@ -176,8 +194,17 @@ export default function BusinessAnalytics() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-                    <XAxis dataKey="name" tickLine={false} tick={{ fontSize: 10, fill: '#888888' }} axisLine={false} />
-                    <YAxis tickLine={false} tick={{ fontSize: 10, fill: '#888888' }} axisLine={false} />
+                    <XAxis
+                      dataKey="name"
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: '#888888' }}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: '#888888' }}
+                      axisLine={false}
+                    />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: darkModeActive() ? '#171717' : '#ffffff',
@@ -186,7 +213,14 @@ export default function BusinessAnalytics() {
                         fontSize: '11px',
                       }}
                     />
-                    <Area type="monotone" dataKey="revenue" stroke={chartStroke} strokeWidth={2} fillOpacity={1} fill="url(#colorSalesRev)" />
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke={chartStroke}
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#colorSalesRev)"
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -198,8 +232,12 @@ export default function BusinessAnalytics() {
           {/* Categories Pie Chart */}
           <div className="lg:col-span-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Sales by Category</h3>
-              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">Revenue distribution per category</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Sales by Category
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">
+                Revenue distribution per category
+              </p>
             </div>
 
             <div className="h-60 w-full flex items-center justify-center">
@@ -216,7 +254,10 @@ export default function BusinessAnalytics() {
                       dataKey="value"
                     >
                       {categorySalesData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -230,42 +271,57 @@ export default function BusinessAnalytics() {
             <div className="grid grid-cols-2 gap-2 text-xs pt-4 border-t border-neutral-100 dark:border-neutral-800">
               {categorySalesData.map((entry, idx) => (
                 <div key={idx} className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[idx] }} />
-                  <span className="text-neutral-500 dark:text-neutral-400 truncate max-w-[80px]">{entry.name}</span>
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: CATEGORY_COLORS[idx] }}
+                  />
+                  <span className="text-neutral-500 dark:text-neutral-400 truncate max-w-[80px]">
+                    {entry.name}
+                  </span>
                   <span className="font-bold ml-auto">{entry.value} GEL</span>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
 
         {/* Traffic Sources & Conversion rates metrics */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
           {/* Traffic Overview card */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-6">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Storefront Traffic</h3>
-              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">Mocked visitors and browser views overview</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Storefront Traffic
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
+                Mocked visitors and browser views overview
+              </p>
             </div>
 
             <div className="grid grid-cols-2 gap-6 text-center">
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
                 <p className="text-[10px] uppercase font-bold text-neutral-400">Total Visitors</p>
-                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">{data.trafficOverview.visitors}</h4>
+                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
+                  {data.trafficOverview.visitors}
+                </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
                 <p className="text-[10px] uppercase font-bold text-neutral-400">Page Views</p>
-                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">{data.trafficOverview.pageViews}</h4>
+                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
+                  {data.trafficOverview.pageViews}
+                </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
                 <p className="text-[10px] uppercase font-bold text-neutral-400">Conversion Rate</p>
-                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">{data.trafficOverview.conversionRate}%</h4>
+                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
+                  {data.trafficOverview.conversionRate}%
+                </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
                 <p className="text-[10px] uppercase font-bold text-neutral-400">Bounce Rate</p>
-                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">{data.trafficOverview.bounceRate}%</h4>
+                <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
+                  {data.trafficOverview.bounceRate}%
+                </h4>
               </div>
             </div>
           </div>
@@ -273,16 +329,28 @@ export default function BusinessAnalytics() {
           {/* Traffic Sources breakdown */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-6">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Channel Performance</h3>
-              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">Incoming traffic channels breakdown</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Channel Performance
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
+                Incoming traffic channels breakdown
+              </p>
             </div>
 
             <div className="h-64 w-full">
               {isMounted ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={trafficSources} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <BarChart
+                    data={trafficSources}
+                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-                    <XAxis dataKey="name" tick={{ fontSize: 9 }} tickLine={false} axisLine={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 9 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
                     <YAxis tick={{ fontSize: 9 }} tickLine={false} axisLine={false} />
                     <Tooltip />
                     <Bar dataKey="visitors" fill={chartStroke} radius={[6, 6, 0, 0]} />
@@ -293,9 +361,7 @@ export default function BusinessAnalytics() {
               )}
             </div>
           </div>
-
         </section>
-
       </div>
     </AdminLayout>
   );

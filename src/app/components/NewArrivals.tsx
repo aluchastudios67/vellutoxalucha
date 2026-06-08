@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import Icon from '@/components/ui/AppIcon';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -19,64 +20,35 @@ interface Product {
 
 const DEFAULT_PRODUCTS: Product[] = [
   {
-    id: 'velluto-1',
-    name: 'Bordeaux Blazer Set',
-    nameKa: 'ბორდო ბლეიზერის სეტი',
-    nameRu: 'Бордовый блейзер сет',
-    price: 390,
-    img: '/assets/images/SnapInsta.to_504425330_18067191356475333_7061950038494519014_n.jpg',
-    tag: 'New',
-    rating: 5
+    id: 'item-1',
+    name: 'Aurelia Sun-Drenched Yellow Dress',
+    nameKa: 'ოქროსფერი კაბა აურელია',
+    nameRu: 'Желтое платье Aurelia',
+    price: 490,
+    img: '/assets/item 1/DSC06881.jpeg',
+    tag: 'New Collection',
+    rating: 5,
   },
   {
-    id: 'velluto-2',
-    name: 'Ash Linen 3-Piece Suit',
-    nameKa: 'ნაცრისფერი სამნაწილიანი კოსტუმი',
-    nameRu: 'Серый льняной костюм тройка',
-    price: 690,
-    img: '/assets/images/SnapInsta.to_505890033_18067191329475333_1202540640618067158_n.jpg',
-    tag: 'Popular',
-    rating: 5
+    id: 'item-2',
+    name: 'Elysian Drape Blazer Suit',
+    nameKa: 'ორეული ელიზიანი',
+    nameRu: 'Костюм блейзер Elysian',
+    price: 470,
+    img: '/assets/item 2/IMG_8337.jpeg',
+    tag: 'Best Seller',
+    rating: 5,
   },
   {
-    id: 'velluto-3',
-    name: 'Citrine Puff Mini Dress',
-    nameKa: 'ყვითელი მინი კაბა',
-    nameRu: 'Мини-платье Citrine',
-    price: 520,
-    img: '/assets/images/SnapInsta.to_511492285_17883773805313946_5802540714295682398_n.jpg',
-    tag: 'Exclusive',
-    rating: 5
+    id: 'item-3',
+    name: 'Seraphina Knitwear Lounge Set',
+    nameKa: 'ნაქსოვი ორეული სერაფინა',
+    nameRu: 'Трикотажный костюм Seraphina',
+    price: 480,
+    img: '/assets/item 3/IMG_0701.jpeg',
+    tag: 'Trending',
+    rating: 5,
   },
-  {
-    id: 'velluto-4',
-    name: 'Citrine Open-Back Dress',
-    nameKa: 'ყვითელი კაბა ღია ზურგით',
-    nameRu: 'Платье Citrine с открытой спиной',
-    price: 520,
-    img: '/assets/images/SnapInsta.to_513722015_17883773814313946_4635551935292356186_n.jpg',
-    tag: 'Limited',
-    rating: 5
-  },
-  {
-    id: 'velluto-5',
-    name: 'Forest Jewel Blazer',
-    nameKa: 'მწვანე ბიჟუტერიის ბლეიზერი',
-    nameRu: 'Блейзер Forest Jewel',
-    price: 420,
-    img: '/assets/images/SnapInsta.to_571222514_17897423925313946_8859102415012714442_n.jpg',
-    rating: 5
-  },
-  {
-    id: 'velluto-6',
-    name: 'Pearl Sequin Mini Dress',
-    nameKa: 'მარგალიტის ბზინვარე კაბა',
-    nameRu: 'Платье с пайетками Pearl',
-    price: 580,
-    img: '/assets/images/SnapInsta.to_582104208_17902823109313946_7703722575297763764_n.jpg',
-    tag: 'New',
-    rating: 4
-  }
 ];
 
 export default function NewArrivals() {
@@ -88,7 +60,7 @@ export default function NewArrivals() {
   useEffect(() => {
     // Fetch real products from the DB API (uses CDN cache — fast)
     fetch('/api/products')
-      .then((res) => res.ok ? res.json() : null)
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           // Map DB shape to the local Product shape NewArrivals expects
@@ -135,19 +107,17 @@ export default function NewArrivals() {
         {/* Product Grid */}
         <div ref={revealRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {products.map((prod) => (
-            <article
-              key={prod.id}
-              className="group relative flex flex-col justify-between"
-            >
+            <article key={prod.id} className="group relative flex flex-col justify-between">
               {/* Product Image */}
               <div className="aspect-[3/4] bg-neutral-50 rounded-2xl overflow-hidden relative shadow-sm group-hover:shadow-md transition-all duration-300">
-                <img
+                <Image
                   src={prod.img}
                   alt={getProdName(prod)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                
+
                 {prod.tag && (
                   <span className="absolute top-4 left-4 bg-neutral-950 text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">
                     {prod.tag}
@@ -170,14 +140,25 @@ export default function NewArrivals() {
                     <span key={i}>★</span>
                   ))}
                   {Array.from({ length: 5 - prod.rating }).map((_, i) => (
-                    <span key={i} className="text-neutral-200">★</span>
+                    <span key={i} className="text-neutral-200">
+                      ★
+                    </span>
                   ))}
                 </div>
 
                 {/* Action button */}
                 <div className="pt-4">
                   <button
-                    onClick={() => addToCart({ id: prod.id, name: prod.name, nameKa: prod.nameKa, nameRu: prod.nameRu, price: prod.price, img: prod.img })}
+                    onClick={() =>
+                      addToCart({
+                        id: prod.id,
+                        name: prod.name,
+                        nameKa: prod.nameKa,
+                        nameRu: prod.nameRu,
+                        price: prod.price,
+                        img: prod.img,
+                      })
+                    }
                     className="w-full inline-flex items-center justify-center gap-2 border border-neutral-950 text-neutral-950 font-semibold py-2.5 rounded-full hover:bg-neutral-950 hover:text-white transition-all duration-300 text-xs uppercase tracking-wider"
                   >
                     <Icon name="PlusIcon" size={14} />

@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-
     const logs = await prisma.auditLog.findMany({
       include: {
         user: {
@@ -13,8 +12,8 @@ export async function GET() {
             name: true,
             email: true,
             role: true,
-          }
-        }
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
       take: 100,

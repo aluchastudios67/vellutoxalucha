@@ -58,136 +58,67 @@ async function main() {
   console.log('Admin users seeded.');
 
   // 4. Create Categories
-  const rings = await prisma.category.create({
-    data: { name: 'Rings', nameKa: 'ბეჭდები', nameRu: 'Кольца', slug: 'rings' },
-  });
-
-  const necklaces = await prisma.category.create({
-    data: { name: 'Necklaces', nameKa: 'ყელსაბამები', nameRu: 'Колье', slug: 'necklaces' },
-  });
-
-  const bracelets = await prisma.category.create({
-    data: { name: 'Bracelets', nameKa: 'სამაჯურები', nameRu: 'Браслеты', slug: 'bracelets' },
-  });
-
-  const earrings = await prisma.category.create({
-    data: { name: 'Earrings', nameKa: 'საყურეები', nameRu: 'Серьги', slug: 'earrings' },
+  const dresses = await prisma.category.create({
+    data: { name: 'Dresses', nameKa: 'კაბები', nameRu: 'Платья', slug: 'dresses' },
   });
 
   console.log('Categories seeded.');
 
   // 5. Create Products
-  const p1 = await prisma.product.create({
+  const item1 = await prisma.product.create({
     data: {
-      id: 'velluto-1',
-      name: 'Aura Gold Ring',
-      nameKa: 'ოქროს ბეჭედი აურა',
-      nameRu: 'Золотое кольцо Аура',
-      description: 'An elegant 18k yellow gold signet ring featuring hand-engraved geometric lines and micro-facets.',
-      descriptionKa: 'დახვეწილი 18-კარატიანი ყვითელი ოქროს ბეჭედი გეომეტრიული ფასეტებით.',
-      descriptionRu: 'Элегантное печатное кольцо из 18-каратного желтого золота с ручной гравировкой.',
-      price: 250,
-      sku: 'VEL-RING-AURA-01',
-      inventory: 12,
+      id: 'item-1',
+      name: "Aurelia Sun-Drenched Yellow Dress",
+      nameKa: "ოქროსფერი კაბა აურელია",
+      nameRu: "Желтое платье Aurelia",
+      description: "A luxurious flowing yellow dress designed with a premium soft linen blend, offering a relaxed yet refined silhouette for sunny days.",
+      descriptionKa: "ულამაზესი ყვითელი კაბა, შექმნილი პრემიუმ კლასის სელისგან.",
+      descriptionRu: "Роскошное летящее желтое платье из премиального льна.",
+      price: 490,
+      sku: 'VEL-DRESS-AURELIA',
+      inventory: 100,
       status: 'ACTIVE',
-      tag: 'New',
+      tag: 'New Collection',
       rating: 5,
-      categoryId: rings.id,
-      seoTitle: 'Aura Gold Ring - Velluto Jewelry',
-      seoDescription: 'Shop Aura Gold Ring, handcrafted 18k yellow gold signet ring from Velluto.',
+      categoryId: dresses.id,
     },
   });
 
-  const p2 = await prisma.product.create({
+  const item2 = await prisma.product.create({
     data: {
-      id: 'velluto-2',
-      name: 'Elegance Diamond Necklace',
-      nameKa: 'ბრილიანტის ყელსაბამი',
-      nameRu: 'Бриллиантовое колье Элегантность',
-      description: 'Stunning VS1 diamond halo necklace suspended on an ultra-fine 18k white gold link chain.',
-      descriptionKa: 'ბრილიანტის თვალისმომჭრელი ყელსაბამი 18-კარატიანი თეთრი ოქროს ფაქიზი ჯაჭვით.',
-      descriptionRu: 'Потрясающее колье с бриллиантом VS1 на тонкой цепочке из белого золота 18 карат.',
-      price: 680,
-      sku: 'VEL-NECK-ELEG-02',
-      inventory: 5,
+      id: 'item-2',
+      name: "Elysian Drape Blazer Suit",
+      nameKa: "ორეული ელიზიანი",
+      nameRu: "Костюм блейзер Elysian",
+      description: "An structured high-end tailoring blazer suit with dynamic drape features, curated for a striking and professional statement style.",
+      descriptionKa: "კლასიკური დახვეწილი პიჯაკის ორეული, იდეალური ოფიციალური შეხვედრებისთვის.",
+      descriptionRu: "Элегантный блейзер-костюм свободного кроя из тонкой вискозы.",
+      price: 470,
+      sku: 'VEL-SUIT-ELYSIAN',
+      inventory: 80,
       status: 'ACTIVE',
-      tag: 'Popular',
+      tag: 'Best Seller',
       rating: 5,
-      categoryId: necklaces.id,
+      categoryId: dresses.id,
     },
   });
 
-  const p3 = await prisma.product.create({
+  const item3 = await prisma.product.create({
     data: {
-      id: 'velluto-3',
-      name: 'Velluto Link Bracelet',
-      nameKa: 'ოქროს სამაჯური',
-      nameRu: 'Золотой браслет Velluto',
-      description: 'Solid gold interlocking links structured to reflect light at every movement.',
-      descriptionKa: 'ოქროს მასიური სამაჯური ურთიერთდაკავშირებული რგოლებით, რომელიც იმეორებს ხელის მოძრაობას.',
-      descriptionRu: 'Массивный браслет из золота с переплетающимися звеньями.',
-      price: 450,
-      sku: 'VEL-BRAC-LINK-03',
-      inventory: 8,
+      id: 'item-3',
+      name: "Seraphina Knitwear Lounge Set",
+      nameKa: "ნაქსოვი ორეული სერაფინა",
+      nameRu: "Трикотажный костюм Seraphina",
+      description: "A premium comfort knitwear lounge co-ord set designed to transition seamlessly from upscale lounging to casual day outs.",
+      descriptionKa: "ნაქსოვი კომფორტული ორეული ყოველდღიური სტილისთვის.",
+      descriptionRu: "Уютный трикотажный комплект свободного кроя для дома и прогулок.",
+      price: 480,
+      sku: 'VEL-KNIT-SERAPHINA',
+      inventory: 80,
       status: 'ACTIVE',
-      rating: 4,
-      categoryId: bracelets.id,
-    },
-  });
-
-  const p4 = await prisma.product.create({
-    data: {
-      id: 'velluto-4',
-      name: 'Gleam Diamond Earrings',
-      nameKa: 'ბრილიანტის საყურეები',
-      nameRu: 'Бриллиантовые серьги Сияние',
-      description: 'Elegant architectural diamond studs securely claw-set in solid 18k white gold.',
-      descriptionKa: 'ბრილიანტის ელეგანტური საყურეები 18-კარატიან თეთრ ოქროში ჩასმული.',
-      descriptionRu: 'Серьги-гвоздики с бриллиантами в оправе из белого золота 18 карат.',
-      price: 520,
-      sku: 'VEL-EAR-GLEAM-04',
-      inventory: 3,
-      status: 'ACTIVE',
-      tag: 'Limited',
+      tag: 'Trending',
       rating: 5,
-      categoryId: earrings.id,
-    },
-  });
-
-  const p5 = await prisma.product.create({
-    data: {
-      id: 'velluto-5',
-      name: 'Solitaire Diamond Ring',
-      nameKa: 'სოლიტერის ბეჭედი',
-      nameRu: 'Кольцо с бриллиантом Солитер',
-      description: 'Classic single-stone solitaire engagement ring showcasing a brilliant round-cut VS1 diamond.',
-      descriptionKa: 'კლასიკური ნიშნობის ბეჭედი ბრილიანტის თვლით 18-კარატიან ყვითელ ოქროში.',
-      descriptionRu: 'Классическое помолвочное кольцо с круглым бриллиантом VS1.',
-      price: 850,
-      sku: 'VEL-RING-SOLI-05',
-      inventory: 15,
-      status: 'ACTIVE',
-      tag: 'Exclusive',
-      rating: 5,
-      categoryId: rings.id,
-    },
-  });
-
-  const p6 = await prisma.product.create({
-    data: {
-      id: 'velluto-6',
-      name: 'Classic Gold Band',
-      nameKa: 'კლასიკური ოქროს რგოლი',
-      nameRu: 'Классическое обручальное кольцо',
-      description: 'Highly polished traditional dome wedding band crafted in solid 18k yellow gold.',
-      descriptionKa: 'კლასიკური ტრადიციული ოქროს ბეჭედი ყოველდღიური ტარებისთვის.',
-      descriptionRu: 'Классическое обручальное кольцо из полированного желтого золота 18 карат.',
-      price: 190,
-      sku: 'VEL-RING-BAND-06',
-      inventory: 30,
-      status: 'ACTIVE',
-      rating: 4,
-      categoryId: rings.id,
+      categoryId: dresses.id,
     },
   });
 
@@ -196,25 +127,80 @@ async function main() {
   // 6. Create Product Variants
   await prisma.productVariant.createMany({
     data: [
-      { productId: 'velluto-1', sku: 'VEL-RING-AURA-01-S16', size: '16', stock: 4, metal: 'Yellow Gold 18k' },
-      { productId: 'velluto-1', sku: 'VEL-RING-AURA-01-S17', size: '17', stock: 5, metal: 'Yellow Gold 18k' },
-      { productId: 'velluto-1', sku: 'VEL-RING-AURA-01-S18', size: '18', stock: 3, metal: 'Yellow Gold 18k' },
-      { productId: 'velluto-2', sku: 'VEL-NECK-ELEG-02-STD', size: '45cm', stock: 5, metal: 'White Gold 18k' },
-      { productId: 'velluto-5', sku: 'VEL-RING-SOLI-05-S16', size: '16', stock: 5, metal: 'Yellow Gold 18k' },
-      { productId: 'velluto-5', sku: 'VEL-RING-SOLI-05-S17', size: '17', stock: 7, metal: 'Yellow Gold 18k' },
-      { productId: 'velluto-5', sku: 'VEL-RING-SOLI-05-W17', size: '17', stock: 3, metal: 'White Gold 18k', priceAdjustment: 50.0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-XS-ONYX', size: 'XS', color: 'Midnight Onyx', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-XS-COCOA', size: 'XS', color: 'Tuscan Cocoa', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-XS-MILK', size: 'XS', color: 'Alabaster Milk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-XS-PINK', size: 'XS', color: 'Rose Quartz', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-XS-AZURE', size: 'XS', color: 'Ethereal Azure', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-S-ONYX', size: 'S', color: 'Midnight Onyx', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-S-COCOA', size: 'S', color: 'Tuscan Cocoa', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-S-MILK', size: 'S', color: 'Alabaster Milk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-S-PINK', size: 'S', color: 'Rose Quartz', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-S-AZURE', size: 'S', color: 'Ethereal Azure', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-M-ONYX', size: 'M', color: 'Midnight Onyx', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-M-COCOA', size: 'M', color: 'Tuscan Cocoa', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-M-MILK', size: 'M', color: 'Alabaster Milk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-M-PINK', size: 'M', color: 'Rose Quartz', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-M-AZURE', size: 'M', color: 'Ethereal Azure', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-L-ONYX', size: 'L', color: 'Midnight Onyx', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-L-COCOA', size: 'L', color: 'Tuscan Cocoa', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-L-MILK', size: 'L', color: 'Alabaster Milk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-L-PINK', size: 'L', color: 'Rose Quartz', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-1', sku: 'VEL-DR-AUR-L-AZURE', size: 'L', color: 'Ethereal Azure', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-S-IVORY', size: 'S', color: 'Ivory Silk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-S-SAGE', size: 'S', color: 'Sage Garden', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-S-ROSE', size: 'S', color: 'Dusty Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-S-NAVY', size: 'S', color: 'Classic Navy', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-M-IVORY', size: 'M', color: 'Ivory Silk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-M-SAGE', size: 'M', color: 'Sage Garden', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-M-ROSE', size: 'M', color: 'Dusty Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-M-NAVY', size: 'M', color: 'Classic Navy', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-L-IVORY', size: 'L', color: 'Ivory Silk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-L-SAGE', size: 'L', color: 'Sage Garden', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-L-ROSE', size: 'L', color: 'Dusty Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-L-NAVY', size: 'L', color: 'Classic Navy', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-XL-IVORY', size: 'XL', color: 'Ivory Silk', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-XL-SAGE', size: 'XL', color: 'Sage Garden', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-XL-ROSE', size: 'XL', color: 'Dusty Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-2', sku: 'VEL-SUIT-ELY-XL-NAVY', size: 'XL', color: 'Classic Navy', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-S-NOIR', size: 'S', color: 'Midnight Noir', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-S-WHITE', size: 'S', color: 'Alabaster White', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-S-PDRSE', size: 'S', color: 'Powder Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-S-SBLUE', size: 'S', color: 'Soft Horizon', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-M-NOIR', size: 'M', color: 'Midnight Noir', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-M-WHITE', size: 'M', color: 'Alabaster White', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-M-PDRSE', size: 'M', color: 'Powder Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-M-SBLUE', size: 'M', color: 'Soft Horizon', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-L-NOIR', size: 'L', color: 'Midnight Noir', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-L-WHITE', size: 'L', color: 'Alabaster White', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-L-PDRSE', size: 'L', color: 'Powder Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-L-SBLUE', size: 'L', color: 'Soft Horizon', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-XL-NOIR', size: 'XL', color: 'Midnight Noir', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-XL-WHITE', size: 'XL', color: 'Alabaster White', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-XL-PDRSE', size: 'XL', color: 'Powder Rose', stock: 10, priceAdjustment: 0 },
+      { productId: 'item-3', sku: 'VEL-KNIT-SER-XL-SBLUE', size: 'XL', color: 'Soft Horizon', stock: 10, priceAdjustment: 0 },
     ],
   });
 
   // 7. Create Product Images
   await prisma.productImage.createMany({
     data: [
-      { productId: 'velluto-1', url: '/assets/images/SnapInsta.to_504425330_18067191356475333_7061950038494519014_n.jpg', isFeatured: true },
-      { productId: 'velluto-2', url: '/assets/images/SnapInsta.to_505890033_18067191329475333_1202540640618067158_n.jpg', isFeatured: true },
-      { productId: 'velluto-3', url: '/assets/images/SnapInsta.to_511492285_17883773805313946_5802540714295682398_n.jpg', isFeatured: true },
-      { productId: 'velluto-4', url: '/assets/images/SnapInsta.to_513722015_17883773814313946_4635551935292356186_n.jpg', isFeatured: true },
-      { productId: 'velluto-5', url: '/assets/images/SnapInsta.to_571222514_17897423925313946_8859102415012714442_n.jpg', isFeatured: true },
-      { productId: 'velluto-6', url: '/assets/images/SnapInsta.to_582104208_17902823109313946_7703722575297763764_n.jpg', isFeatured: true },
+      { productId: 'item-1', url: '/assets/item 1/DSC06881.jpeg', isFeatured: true },
+      { productId: 'item-1', url: '/assets/item 1/DSC06948.9.jpeg', isFeatured: false },
+      { productId: 'item-1', url: '/assets/item 1/DSC06962.jpeg', isFeatured: false },
+      { productId: 'item-1', url: '/assets/item 1/DSC06980.jpeg', isFeatured: false },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8337.jpeg', isFeatured: true },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8338.jpeg', isFeatured: false },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8339.jpeg', isFeatured: false },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8340.jpeg', isFeatured: false },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8341.jpeg', isFeatured: false },
+      { productId: 'item-2', url: '/assets/item 2/IMG_8346.jpeg', isFeatured: false },
+      { productId: 'item-3', url: '/assets/item 3/IMG_0701.jpeg', isFeatured: true },
+      { productId: 'item-3', url: '/assets/item 3/IMG_0702.jpeg', isFeatured: false },
+      { productId: 'item-3', url: '/assets/item 3/IMG_5005.jpeg', isFeatured: false },
+      { productId: 'item-3', url: '/assets/item 3/IMG_9938.jpeg', isFeatured: false },
+      { productId: 'item-3', url: '/assets/item 3/IMG_9955.jpeg', isFeatured: false },
+      { productId: 'item-3', url: '/assets/item 3/IMG_9958.jpeg', isFeatured: false },
     ],
   });
 
@@ -269,15 +255,15 @@ async function main() {
       notes: 'Please wrap as a gift.',
       status: 'PENDING',
       paymentStatus: 'PAID',
-      total: 1100.0,
+      total: 960.0,
       customerId: cust1.id,
     },
   });
 
   await prisma.orderItem.createMany({
     data: [
-      { orderId: order1.id, productId: 'velluto-1', productName: 'Aura Gold Ring', productPrice: 250.0, qty: 1, variantSelected: 'Size 17' },
-      { orderId: order1.id, productId: 'velluto-5', productName: 'Solitaire Diamond Ring', productPrice: 850.0, qty: 1, variantSelected: 'Size 17' },
+      { orderId: order1.id, productId: 'item-1', productName: 'Aurelia Sun-Drenched Yellow Dress', productPrice: 490.0, qty: 1, variantSelected: 'Size S / Tuscan Cocoa' },
+      { orderId: order1.id, productId: 'item-2', productName: 'Elysian Drape Blazer Suit', productPrice: 470.0, qty: 1, variantSelected: 'Size S / Ivory Silk' },
     ],
   });
 
@@ -292,13 +278,13 @@ async function main() {
       paymentMethod: 'Cash',
       status: 'PROCESSING',
       paymentStatus: 'UNPAID',
-      total: 520.0,
+      total: 480.0,
       customerId: cust2.id,
     },
   });
 
   await prisma.orderItem.create({
-    data: { orderId: order2.id, productId: 'velluto-4', productName: 'Gleam Diamond Earrings', productPrice: 520.0, qty: 1 },
+    data: { orderId: order2.id, productId: 'item-3', productName: 'Seraphina Knitwear Lounge Set', productPrice: 480.0, qty: 1, variantSelected: 'Size S / Midnight Noir' },
   });
 
   console.log('Orders and order items seeded.');
@@ -307,7 +293,7 @@ async function main() {
   await prisma.notification.createMany({
     data: [
       { title: 'New Order Placed', message: 'Order ORD-100204 has been submitted by Nino Bakradze.', type: 'ORDER' },
-      { title: 'Low Stock Alert', message: 'Gleam Diamond Earrings (velluto-4) is down to 3 items in stock.', type: 'INVENTORY' },
+      { title: 'Low Stock Alert', message: 'Aurelia Sun-Drenched Yellow Dress (item-1) is down to 3 items in stock.', type: 'INVENTORY' },
     ],
   });
 

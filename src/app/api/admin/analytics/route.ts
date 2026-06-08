@@ -45,8 +45,20 @@ export async function GET() {
       select: { total: true, createdAt: true },
     });
 
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     // Build a map keyed by "YYYY-M" for the last 6 months
     const chartMap = new Map<string, { name: string; revenue: number; orders: number }>();
@@ -80,8 +92,7 @@ export async function GET() {
       metrics: {
         totalRevenue,
         totalOrdersCount,
-        averageOrderValue:
-          totalOrdersCount > 0 ? Math.round(totalRevenue / totalOrdersCount) : 0,
+        averageOrderValue: totalOrdersCount > 0 ? Math.round(totalRevenue / totalOrdersCount) : 0,
         lowStockCount: lowStockAlerts.length,
       },
       monthlySalesChart,
@@ -99,9 +110,6 @@ export async function GET() {
     return response;
   } catch (e) {
     console.error('[analytics] Failed to fetch analytics:', e);
-    return NextResponse.json(
-      { error: 'Failed to fetch analytics statistics.' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch analytics statistics.' }, { status: 500 });
   }
 }

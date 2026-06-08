@@ -115,9 +115,7 @@ export default function DataTable<T extends { id: string | number }>({
           )}
           {filterComponent}
         </div>
-        <div className="flex gap-2 items-center justify-end">
-          {actions}
-        </div>
+        <div className="flex gap-2 items-center justify-end">{actions}</div>
       </div>
 
       {/* Main Table */}
@@ -132,7 +130,9 @@ export default function DataTable<T extends { id: string | number }>({
                   <th
                     key={idx}
                     className={`px-6 py-4 font-bold select-none ${col.className || ''} ${
-                      isSortable ? 'cursor-pointer hover:text-neutral-800 dark:hover:text-neutral-200' : ''
+                      isSortable
+                        ? 'cursor-pointer hover:text-neutral-800 dark:hover:text-neutral-200'
+                        : ''
                     }`}
                     onClick={isSortable ? () => handleSort(sortKey) : undefined}
                   >
@@ -150,7 +150,10 @@ export default function DataTable<T extends { id: string | number }>({
           <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800/80">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-12 text-center text-xs text-neutral-400 dark:text-neutral-500 italic">
+                <td
+                  colSpan={columns.length}
+                  className="px-6 py-12 text-center text-xs text-neutral-400 dark:text-neutral-500 italic"
+                >
                   {emptyMessage}
                 </td>
               </tr>
@@ -160,7 +163,9 @@ export default function DataTable<T extends { id: string | number }>({
                   key={row.id}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
                   className={`text-xs text-neutral-700 dark:text-neutral-300 transition-colors ${
-                    onRowClick ? 'cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/30' : ''
+                    onRowClick
+                      ? 'cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/30'
+                      : ''
                   }`}
                 >
                   {columns.map((col, cIdx) => {

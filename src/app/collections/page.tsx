@@ -56,7 +56,6 @@ export default async function CollectionsPage() {
       {/* Collections Content */}
       <main className="pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-6">
-          
           {/* Header */}
           <div className="text-center mb-16 space-y-3">
             <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-400">
@@ -66,13 +65,13 @@ export default async function CollectionsPage() {
               Our Collections
             </h1>
             <p className="text-neutral-400 font-light text-sm sm:text-base max-w-xl mx-auto">
-              Explore our handcrafted collections of fine jewelry and premium clothing, tailored for timeless elegance.
+              Explore our handcrafted collections of premium garments and tailored clothing,
+              designed for timeless elegance.
             </p>
           </div>
 
           {/* Interactive grid and filters */}
           <CollectionsClient products={products as any} categories={categories} />
-
         </div>
       </main>
 

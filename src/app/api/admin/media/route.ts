@@ -24,7 +24,7 @@ export async function GET() {
         const filePath = path.join(MEDIA_DIR, file);
         const stats = fs.statSync(filePath);
         const ext = path.extname(file).toLowerCase();
-        
+
         return {
           id: `media-${idx}`,
           name: file,

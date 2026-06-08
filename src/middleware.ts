@@ -8,7 +8,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/admin/((?!login|forgot-password|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/admin/((?!login|forgot-password|_next/static|_next/image|favicon.ico).*)'],
 };

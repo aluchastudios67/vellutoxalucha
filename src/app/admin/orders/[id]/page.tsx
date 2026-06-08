@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
 
@@ -36,7 +37,14 @@ interface Order {
   deliveryTime: string;
   paymentMethod: string;
   notes?: string;
-  status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED';
+  status:
+    | 'PENDING'
+    | 'CONFIRMED'
+    | 'PROCESSING'
+    | 'SHIPPED'
+    | 'DELIVERED'
+    | 'CANCELLED'
+    | 'REFUNDED';
   paymentStatus: 'UNPAID' | 'PAID' | 'REFUNDED';
   total: number;
   createdAt: string;
@@ -114,7 +122,9 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Order Profile...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Order Profile...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -132,11 +142,12 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
   return (
     <AdminLayout>
       <div className="space-y-10 print:bg-white print:text-black">
-        
         {/* Header Title & Printable Invoice Actions */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5 print:hidden">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Order Details</h2>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Order Details
+            </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
               Manage client delivery profiles, status transitions, and issue invoices
             </p>
@@ -149,30 +160,35 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
               <Icon name="DocumentTextIcon" size={14} />
               View Invoice
             </button>
-            <a
+            <Link
               href="/admin/orders"
               className="border border-neutral-300 dark:border-neutral-800 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 hover:border-neutral-950 dark:hover:border-white transition-colors"
             >
               Back to List
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* Dynamic Details 2-Column */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 print:hidden">
-          
           {/* Left Panel: Items ordered & billing specs */}
           <div className="lg:col-span-8 space-y-6">
-            
             {/* Products catalog list */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">Ordered Items</h3>
-              
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
+                Ordered Items
+              </h3>
+
               <div className="divide-y divide-neutral-100 dark:divide-neutral-800/80">
                 {order.items.map((item) => (
-                  <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
+                  <div
+                    key={item.id}
+                    className="py-4 first:pt-0 last:pb-0 flex items-center justify-between"
+                  >
                     <div>
-                      <p className="font-semibold text-neutral-950 dark:text-white text-sm">{item.productName}</p>
+                      <p className="font-semibold text-neutral-950 dark:text-white text-sm">
+                        {item.productName}
+                      </p>
                       {item.variantSelected && (
                         <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-light mt-0.5">
                           Selected options: {item.variantSelected}
@@ -180,8 +196,12 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-neutral-900 dark:text-white text-xs">{item.productPrice} GEL</p>
-                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">Quantity: x{item.qty}</p>
+                      <p className="font-bold text-neutral-900 dark:text-white text-xs">
+                        {item.productPrice} GEL
+                      </p>
+                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">
+                        Quantity: x{item.qty}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -212,23 +232,27 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
 
             {/* Gift notes or special instructions */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">Gift Note / Notes</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
+                Gift Note / Notes
+              </h3>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-150 dark:border-neutral-800 italic text-xs text-neutral-600 dark:text-neutral-300 font-light leading-relaxed">
                 {order.notes ? `"${order.notes}"` : 'No custom note requests added to this order.'}
               </div>
             </div>
-
           </div>
 
           {/* Right Panel: Status controls & customer details */}
           <div className="lg:col-span-4 space-y-6">
-            
             {/* Status Manager widget */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">Log Status Actions</h3>
-              
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
+                Log Status Actions
+              </h3>
+
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Order Status</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Order Status
+                </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as Order['status'])}
@@ -245,7 +269,9 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Payment Status</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Payment Status
+                </label>
                 <select
                   value={paymentStatus}
                   onChange={(e) => setPaymentStatus(e.target.value as Order['paymentStatus'])}
@@ -270,40 +296,54 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
 
             {/* Customer specs card */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">Client Profile</h3>
-              
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
+                Client Profile
+              </h3>
+
               <div className="space-y-3 text-xs">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">Name</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">{order.customerName}</span>
+                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
+                    Name
+                  </span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">
+                    {order.customerName}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">Phone</span>
+                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
+                    Phone
+                  </span>
                   <span className="font-semibold text-neutral-900 dark:text-white hover:underline">
                     <a href={`tel:${order.phone}`}>{order.phone}</a>
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">Delivery Address</span>
-                  <span className="text-neutral-600 dark:text-neutral-400 font-light">{order.address}</span>
+                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
+                    Delivery Address
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400 font-light">
+                    {order.address}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">Delivery Schedule</span>
+                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
+                    Delivery Schedule
+                  </span>
                   <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                     {order.deliveryDate} @ {order.deliveryTime}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">Payment Option</span>
+                  <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
+                    Payment Option
+                  </span>
                   <span className="font-bold uppercase bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded text-[10px] text-neutral-600 dark:text-neutral-300 w-max">
                     {order.paymentMethod}
                   </span>
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
 
         {/* Invoice Modal Overlay (Full Printable layout when active) */}
@@ -311,9 +351,8 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
           <div className="fixed inset-0 bg-neutral-950/65 flex items-center justify-center z-50 print:relative print:inset-auto print:bg-white print:p-0">
             {/* Modal click overlay blocker */}
             <div className="fixed inset-0 print:hidden" onClick={() => setIsInvoiceOpen(false)} />
-            
+
             <div className="bg-white text-neutral-950 w-full max-w-3xl rounded-3xl p-10 relative z-10 shadow-2xl overflow-y-auto max-h-[90vh] print:shadow-none print:p-0 print:max-h-full print:rounded-none">
-              
               {/* Modal close & print controls */}
               <div className="absolute top-6 right-6 flex gap-2 print:hidden">
                 <button
@@ -332,30 +371,39 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
 
               {/* Luxury Invoice Design */}
               <div className="space-y-8 print:p-5">
-                
                 {/* Brand Banner */}
                 <div className="flex justify-between items-start border-b-2 border-neutral-900 pb-6">
                   <div>
-                    <h1 className="font-display text-3xl font-bold tracking-[0.25em] uppercase text-neutral-900">Velluto</h1>
-                    <p className="text-[9px] uppercase tracking-widest text-neutral-400 mt-1">Luxury Jewelry & Fine Accessories Store</p>
+                    <h1 className="font-display text-3xl font-bold tracking-[0.25em] uppercase text-neutral-900">
+                      Velluto
+                    </h1>
+                    <p className="text-[9px] uppercase tracking-widest text-neutral-400 mt-1">
+                      Luxury Fashion & Premium Apparel Store
+                    </p>
                   </div>
                   <div className="text-right text-xs">
                     <h2 className="font-bold text-lg uppercase tracking-wider">Invoice</h2>
                     <p className="text-neutral-500 font-mono mt-0.5">#{order.id}</p>
-                    <p className="text-neutral-400 mt-1">{new Date(order.createdAt).toLocaleDateString()}</p>
+                    <p className="text-neutral-400 mt-1">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
                 {/* Billing details block */}
                 <div className="grid grid-cols-2 gap-8 text-xs border-b border-neutral-100 pb-6">
                   <div>
-                    <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">Billed To:</h4>
+                    <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                      Billed To:
+                    </h4>
                     <p className="font-bold text-sm text-neutral-900">{order.customerName}</p>
                     <p className="text-neutral-600 mt-1">Phone: {order.phone}</p>
                     <p className="text-neutral-600 mt-0.5">Address: {order.address}</p>
                   </div>
                   <div className="text-right">
-                    <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">Boutique Details:</h4>
+                    <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                      Boutique Details:
+                    </h4>
                     <p className="font-semibold text-neutral-900">Velluto Tbilisi Showroom</p>
                     <p className="text-neutral-500 mt-1">Email: boutique@velluto.com</p>
                     <p className="text-neutral-500 mt-0.5">Vardisubani, Tbilisi, Georgia</p>
@@ -377,10 +425,14 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                     {order.items.map((item) => (
                       <tr key={item.id}>
                         <td className="py-4 font-semibold text-neutral-900">{item.productName}</td>
-                        <td className="text-neutral-500 font-light italic">{item.variantSelected || '—'}</td>
+                        <td className="text-neutral-500 font-light italic">
+                          {item.variantSelected || '—'}
+                        </td>
                         <td className="text-center">{item.qty}</td>
                         <td className="text-right">{item.productPrice} GEL</td>
-                        <td className="text-right font-semibold">{item.productPrice * item.qty} GEL</td>
+                        <td className="text-right font-semibold">
+                          {item.productPrice * item.qty} GEL
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -413,15 +465,15 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 {/* Footer notes */}
                 <div className="pt-8 border-t border-neutral-100 text-[10px] text-neutral-400 text-center leading-relaxed font-light">
                   <p>Thank you for choosing Velluto. Handcrafted in Tbilisi, Georgia.</p>
-                  <p className="mt-0.5">For inquiries or order size consultations, please contact us at boutique@velluto.com.</p>
+                  <p className="mt-0.5">
+                    For inquiries or order size consultations, please contact us at
+                    boutique@velluto.com.
+                  </p>
                 </div>
-
               </div>
-
             </div>
           </div>
         )}
-
       </div>
     </AdminLayout>
   );

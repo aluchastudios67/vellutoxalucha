@@ -11,20 +11,35 @@ const DEFAULT_CONFIG = {
   hero: {
     title: 'VELLUTO',
     subtitle: 'The Art of Fine Craftsmanship',
-    description: 'Discover curated collections of timeless gold and diamond jewelry designed to complement your elegance.',
+    description:
+      'Discover curated collections of timeless luxury fashion and premium garments designed to complement your elegance.',
   },
   promoBanner: {
     text: 'Complimentary shipping across Tbilisi on all orders above 300 GEL',
     isActive: true,
   },
   testimonials: [
-    { name: 'Sophie M.', role: 'Collector', text: 'Velluto rings possess an architectural weight that I have not found anywhere else. Pure poetry.' },
-    { name: 'David K.', role: 'Artist', text: 'The faceted bracelet catches the light unlike any jewelry piece I own. Sublime design.' }
+    {
+      name: 'Sophie M.',
+      role: 'Client',
+      text: 'Velluto designs possess an architectural structure and elegance that I have not found anywhere else. Pure poetry.',
+    },
+    {
+      name: 'David K.',
+      role: 'Artist',
+      text: 'The drape blazer suit fits like a second skin and feels incredibly premium. Sublime craftsmanship.',
+    },
   ],
   faqs: [
-    { q: 'Where are your pieces crafted?', a: 'All Velluto jewelry is handcrafted at our private design workshop in Tbilisi, Georgia.' },
-    { q: 'Do you offer custom engravings?', a: 'Yes, we offer complimentary custom laser or hand engraving on all bands and signet rings.' }
-  ]
+    {
+      q: 'Where are your garments crafted?',
+      a: 'All Velluto garments are handcrafted at our private tailoring workshop in Tbilisi, Georgia.',
+    },
+    {
+      q: 'Do you offer custom sizing?',
+      a: 'Yes, we offer complimentary custom tailoring and sizing adjustments on all suits, blazers, and dresses.',
+    },
+  ],
 };
 
 export async function GET() {
@@ -46,7 +61,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-
     const body = await req.json();
     const { config, newBlogPost } = body;
 
@@ -69,7 +83,10 @@ export async function POST(req: Request) {
       // Get default author (super admin)
       const defaultAuthor = await prisma.user.findFirst({ where: { role: 'SUPER_ADMIN' } });
       if (!defaultAuthor) {
-        return NextResponse.json({ error: 'No admin user found to assign as author.' }, { status: 500 });
+        return NextResponse.json(
+          { error: 'No admin user found to assign as author.' },
+          { status: 500 }
+        );
       }
 
       await prisma.blogPost.create({

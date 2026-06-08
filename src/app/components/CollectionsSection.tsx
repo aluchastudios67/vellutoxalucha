@@ -53,7 +53,6 @@ export default async function CollectionsSection() {
   return (
     <section id="collections" className="py-28 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-6">
-
         {/* Header */}
         <div className="text-center mb-16 space-y-3">
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-400">
@@ -69,7 +68,6 @@ export default async function CollectionsSection() {
 
         {/* Interactive part (filters, hover, cart) handled client-side */}
         <CollectionsClient products={products as any} categories={categories} />
-
       </div>
     </section>
   );

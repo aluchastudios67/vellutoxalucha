@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Icon from '@/components/ui/AppIcon';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useLanguage } from '@/context/LanguageContext';
@@ -14,44 +15,44 @@ interface GalleryImage {
 const GALLERY_IMAGES: GalleryImage[] = [
   {
     src: '/assets/images/466683399_17855518965313946_135400479774660435_n.jpg',
-    alt: 'Velluto premium luxury jewelry detail',
-    span: 'tall'
+    alt: 'Velluto premium luxury apparel detail',
+    span: 'tall',
   },
   {
     src: '/assets/images/467509994_17856082881313946_5041263538202115010_n.jpg',
-    alt: 'Velluto gold rings stack showcase',
-    span: 'normal'
+    alt: 'Velluto premium tailoring showcase',
+    span: 'normal',
   },
   {
     src: '/assets/images/474749660_17864735742313946_7878688106869986165_n.jpg',
-    alt: 'Elegant necklace display by Velluto',
-    span: 'normal'
+    alt: 'Elegant fashion display by Velluto',
+    span: 'normal',
   },
   {
     src: '/assets/images/475000754_17864895795313946_4704149861034976879_n.jpg',
-    alt: 'Luxury bridal rings custom design',
-    span: 'tall'
+    alt: 'Luxury custom design apparel details',
+    span: 'tall',
   },
   {
     src: '/assets/images/475514378_17865712293313946_8496582647092697662_n.jpg',
-    alt: 'Fine handcrafted details of Velluto',
-    span: 'normal'
+    alt: 'Fine handcrafted details of Velluto garments',
+    span: 'normal',
   },
   {
     src: '/assets/images/475805997_17865665238313946_5498269175980725608_n.jpg',
-    alt: 'Minimal luxury gold collection items',
-    span: 'normal'
+    alt: 'Minimal luxury statement collection items',
+    span: 'normal',
   },
   {
     src: '/assets/images/475890770_17865694551313946_716347146579670514_n.jpg',
-    alt: 'Velluto custom collection earrings',
-    span: 'normal'
+    alt: 'Velluto custom knitwear and lounge pieces',
+    span: 'normal',
   },
   {
     src: '/assets/images/476233110_17865705579313946_6551059994165377979_n.jpg',
     alt: 'Luxury fashion photoshoot featuring Velluto',
-    span: 'normal'
-  }
+    span: 'normal',
+  },
 ];
 
 export default function InstagramGallery() {
@@ -88,7 +89,7 @@ export default function InstagramGallery() {
           className="grid gap-4"
           style={{
             gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gridAutoRows: '220px'
+            gridAutoRows: '220px',
           }}
         >
           {GALLERY_IMAGES.map((img, i) => (
@@ -96,14 +97,15 @@ export default function InstagramGallery() {
               key={i}
               className="group relative rounded-2xl overflow-hidden bg-neutral-100 cursor-pointer shadow-sm"
               style={{
-                gridRow: img.span === 'tall' ? 'span 2' : 'span 1'
+                gridRow: img.span === 'tall' ? 'span 2' : 'span 1',
               }}
             >
-              <img
+              <Image
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-full object-cover transition-transform duration-750 group-hover:scale-105"
-                loading="lazy"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover transition-transform duration-750 group-hover:scale-105"
               />
 
               {/* Hover overlay */}

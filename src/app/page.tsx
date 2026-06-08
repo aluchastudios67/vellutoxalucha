@@ -7,13 +7,12 @@ import EditorialStrip from '@/app/components/EditorialStrip';
 import NewArrivals from '@/app/components/NewArrivals';
 import CollectionsSection from '@/app/components/CollectionsSection';
 import ShopTheLook from '@/app/components/ShopTheLook';
-import LocationStrip from '@/app/components/LocationStrip';
+// import LocationStrip from '@/app/components/LocationStrip';
 import InstagramGallery from '@/app/components/InstagramGallery';
 import Footer from '@/components/Footer';
 
 // Force SSR — CollectionsSection fetches live product data from the database
 export const dynamic = 'force-dynamic';
-
 
 export default function Home() {
   return (
@@ -47,7 +46,7 @@ export default function Home() {
         <InstagramGallery />
 
         {/* Boutique Location and Hours */}
-        <LocationStrip />
+        {/* <LocationStrip /> */}
       </main>
 
       {/* Brand Footer */}

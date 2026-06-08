@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-
     const customers = await prisma.customer.findMany({
       include: {
         orders: {
@@ -13,15 +12,15 @@ export async function GET() {
             total: true,
             createdAt: true,
             status: true,
-          }
-        }
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
 
     // Compute stats per customer
     const formattedCustomers = customers.map((c) => {
-      const successfulOrders = c.orders.filter(o => o.status !== 'CANCELLED');
+      const successfulOrders = c.orders.filter((o) => o.status !== 'CANCELLED');
       const totalSpent = successfulOrders.reduce((sum, o) => sum + o.total, 0);
       const ordersCount = c.orders.length;
 
@@ -47,7 +46,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-
     const { id, notes, segment } = await req.json();
 
     if (!id) {

@@ -68,7 +68,10 @@ export default function MiniCart() {
             </div>
           ) : (
             cart.map((item) => (
-              <div key={item.id} className="flex gap-4 pb-6 border-b border-neutral-100 last:border-0 last:pb-0">
+              <div
+                key={item.id}
+                className="flex gap-4 pb-6 border-b border-neutral-100 last:border-0 last:pb-0"
+              >
                 {/* Product Image */}
                 <div className="w-20 h-24 bg-neutral-50 rounded-lg overflow-hidden relative flex-shrink-0">
                   <img
@@ -90,7 +93,7 @@ export default function MiniCart() {
                       </p>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     {/* Quantity Selector */}
                     <div className="flex items-center border border-neutral-200 rounded-full py-1 px-3">
@@ -133,9 +136,11 @@ export default function MiniCart() {
           <div className="p-6 border-t border-neutral-100 bg-neutral-50 space-y-4">
             <div className="flex items-center justify-between text-neutral-900">
               <span className="text-sm font-medium">{t('cart_subtotal')}:</span>
-              <strong className="text-lg font-bold">{cartTotal} {t('gel')}</strong>
+              <strong className="text-lg font-bold">
+                {cartTotal} {t('gel')}
+              </strong>
             </div>
-            
+
             <button
               onClick={handleCheckoutClick}
               className="w-full bg-neutral-950 hover:bg-neutral-900 text-white font-semibold py-4 rounded-xl transition-all duration-200 shadow-lg shadow-neutral-950/10 tracking-wide uppercase text-sm"

@@ -35,7 +35,6 @@ export default function ForgotPassword() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-neutral-900 border border-neutral-800 py-8 px-4 shadow-2xl rounded-3xl sm:px-10 space-y-6">
-          
           {isSubmitted ? (
             <div className="space-y-4 text-center animate-fade-in">
               <div className="w-12 h-12 bg-neutral-800 text-white rounded-full flex items-center justify-center mx-auto text-xl">
@@ -45,8 +44,10 @@ export default function ForgotPassword() {
                 Reset Request Logged
               </h3>
               <p className="text-xs text-neutral-400 font-light leading-relaxed">
-                An administrator recovery request has been logged for <strong className="text-white font-medium">{email}</strong>. 
-                For local/development mode safety, please consult the database seed or contact your Super Admin to retrieve or override credentials directly.
+                An administrator recovery request has been logged for{' '}
+                <strong className="text-white font-medium">{email}</strong>. For local/development
+                mode safety, please consult the database seed or contact your Super Admin to
+                retrieve or override credentials directly.
               </p>
               <div className="pt-4">
                 <a
@@ -60,11 +61,15 @@ export default function ForgotPassword() {
           ) : (
             <form className="space-y-5" onSubmit={handleSubmit}>
               <p className="text-xs text-neutral-400 font-light leading-relaxed">
-                Enter your registered admin email address below. We will send verification links or log password override details.
+                Enter your registered admin email address below. We will send verification links or
+                log password override details.
               </p>
 
               <div>
-                <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                <label
+                  htmlFor="email"
+                  className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5"
+                >
                   Admin Email Address
                 </label>
                 <input
@@ -99,7 +104,6 @@ export default function ForgotPassword() {
               </div>
             </form>
           )}
-
         </div>
       </div>
     </div>

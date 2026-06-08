@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-
     const coupons = await prisma.coupon.findMany({
       orderBy: { createdAt: 'desc' },
     });
@@ -17,7 +16,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-
     const body = await req.json();
     const { code, discountType, discountValue, expiresAt, isActive, usageLimit } = body;
 
@@ -59,7 +57,6 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-
     const { id, isActive } = await req.json();
 
     const coupon = await prisma.coupon.update({

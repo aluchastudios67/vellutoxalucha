@@ -31,7 +31,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { id } = await params;
 
     const body = await req.json();
-    const { status, paymentStatus, deliveryDate, deliveryTime, address, customerName, phone } = body;
+    const { status, paymentStatus, deliveryDate, deliveryTime, address, customerName, phone } =
+      body;
 
     const currentOrder = await prisma.order.findUnique({ where: { id } });
     if (!currentOrder) {

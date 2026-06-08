@@ -15,11 +15,13 @@ export default function CheckoutForm() {
     date: '',
     time: '',
     message: '',
-    payment: 'Cash'
+    payment: 'Cash',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -35,13 +37,19 @@ export default function CheckoutForm() {
     let itemsText = '';
     cart.forEach((item, index) => {
       const itemName = language === 'GE' && item.nameKa ? item.nameKa : item.name;
-      const variantDesc = (item.size || item.color)
-        ? ` (${[item.color, item.size ? `Size ${item.size}` : null].filter(Boolean).join(' / ')})`
-        : '';
+      const variantDesc =
+        item.size || item.color
+          ? ` (${[item.color, item.size ? `Size ${item.size}` : null].filter(Boolean).join(' / ')})`
+          : '';
       itemsText += `${index + 1}. ${itemName}${variantDesc} x${item.qty} - ${item.price * item.qty} GEL\n`;
     });
 
-    const tHeader = language === 'GE' ? '🌸 *ახალი შეკვეთა Velluto-დან* 🌸' : language === 'RU' ? '🌸 *Новый заказ из Velluto* 🌸' : '🌸 *New Order from Velluto* 🌸';
+    const tHeader =
+      language === 'GE'
+        ? '🌸 *ახალი შეკვეთა Velluto-დან* 🌸'
+        : language === 'RU'
+          ? '🌸 *Новый заказ из Velluto* 🌸'
+          : '🌸 *New Order from Velluto* 🌸';
     const tName = language === 'GE' ? 'სახელი' : language === 'RU' ? 'Имя' : 'Name';
     const tPhone = language === 'GE' ? 'ტელეფონი' : language === 'RU' ? 'Телефон' : 'Phone';
     const tAddress = language === 'GE' ? 'მისამართი' : language === 'RU' ? 'Адрес' : 'Address';
@@ -53,7 +61,7 @@ export default function CheckoutForm() {
     const tTotal = language === 'GE' ? 'სულ ჯამი' : language === 'RU' ? 'Итого' : 'Total';
 
     // Compile Message
-    const messageText = 
+    const messageText =
       `${tHeader}\n\n` +
       `👤 *${tName}:* ${formData.name}\n` +
       `📞 *${tPhone}:* ${formData.phone}\n` +
@@ -85,7 +93,7 @@ export default function CheckoutForm() {
           paymentMethod: formData.payment,
           notes: formData.message,
           items: cart,
-          total: cartTotal
+          total: cartTotal,
         };
         localStorage.setItem('velluto_orders', JSON.stringify([newOrder, ...existingOrders]));
       } catch (err) {
@@ -104,9 +112,20 @@ export default function CheckoutForm() {
   };
 
   if (isSubmitted) {
-    const successTitle = language === 'GE' ? 'შეკვეთა წარმატებით გაიგზავნა!' : language === 'RU' ? 'Заказ успешно отправлен!' : 'Order Placed Successfully!';
-    const successDesc = language === 'GE' ? 'თქვენი შეკვეთა დაფიქსირდა. გთხოვთ გააგრძელოთ WhatsApp ჩატში შეკვეთის დასადასტურებლად.' : language === 'RU' ? 'Ваш заказ оформлен. Пожалуйста, продолжите в чате WhatsApp для подтверждения заказа.' : 'Your order has been recorded. Please continue in the WhatsApp chat to confirm your order.';
-    const goHome = language === 'GE' ? 'მთავარ გვერდზე' : language === 'RU' ? 'На главную' : 'Go to Home';
+    const successTitle =
+      language === 'GE'
+        ? 'შეკვეთა წარმატებით გაიგზავნა!'
+        : language === 'RU'
+          ? 'Заказ успешно отправлен!'
+          : 'Order Placed Successfully!';
+    const successDesc =
+      language === 'GE'
+        ? 'თქვენი შეკვეთა დაფიქსირდა. გთხოვთ გააგრძელოთ WhatsApp ჩატში შეკვეთის დასადასტურებლად.'
+        : language === 'RU'
+          ? 'Ваш заказ оформлен. Пожалуйста, продолжите в чате WhatsApp для подтверждения заказа.'
+          : 'Your order has been recorded. Please continue in the WhatsApp chat to confirm your order.';
+    const goHome =
+      language === 'GE' ? 'მთავარ გვერდზე' : language === 'RU' ? 'На главную' : 'Go to Home';
 
     return (
       <div className="text-center p-8 bg-neutral-50 rounded-3xl border border-neutral-100 space-y-6 max-w-lg mx-auto animate-fade-in">
@@ -114,9 +133,7 @@ export default function CheckoutForm() {
           ✓
         </div>
         <h3 className="font-display text-2xl font-bold text-neutral-900">{successTitle}</h3>
-        <p className="text-sm font-light text-neutral-500 leading-relaxed">
-          {successDesc}
-        </p>
+        <p className="text-sm font-light text-neutral-500 leading-relaxed">{successDesc}</p>
         <button
           onClick={() => {
             if (typeof window !== 'undefined') {
@@ -136,8 +153,15 @@ export default function CheckoutForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
-            {language === 'GE' ? 'სახელი და გვარი *' : language === 'RU' ? 'Имя и фамилия *' : 'Full Name *'}
+          <label
+            htmlFor="name"
+            className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+          >
+            {language === 'GE'
+              ? 'სახელი და გვარი *'
+              : language === 'RU'
+                ? 'Имя и фамилия *'
+                : 'Full Name *'}
           </label>
           <input
             type="text"
@@ -152,8 +176,15 @@ export default function CheckoutForm() {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
-            {language === 'GE' ? 'ტელეფონის ნომერი *' : language === 'RU' ? 'Номер телефона *' : 'Phone Number *'}
+          <label
+            htmlFor="phone"
+            className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+          >
+            {language === 'GE'
+              ? 'ტელეფონის ნომერი *'
+              : language === 'RU'
+                ? 'Номер телефона *'
+                : 'Phone Number *'}
           </label>
           <input
             type="tel"
@@ -168,8 +199,15 @@ export default function CheckoutForm() {
         </div>
 
         <div>
-          <label htmlFor="address" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
-            {language === 'GE' ? 'მიწოდების მისამართი *' : language === 'RU' ? 'Адрес доставки *' : 'Delivery Address *'}
+          <label
+            htmlFor="address"
+            className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+          >
+            {language === 'GE'
+              ? 'მიწოდების მისამართი *'
+              : language === 'RU'
+                ? 'Адрес доставки *'
+                : 'Delivery Address *'}
           </label>
           <input
             type="text"
@@ -185,8 +223,15 @@ export default function CheckoutForm() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="date" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
-              {language === 'GE' ? 'მიწოდების თარიღი *' : language === 'RU' ? 'Дата доставки *' : 'Delivery Date *'}
+            <label
+              htmlFor="date"
+              className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+            >
+              {language === 'GE'
+                ? 'მიწოდების თარიღი *'
+                : language === 'RU'
+                  ? 'Дата доставки *'
+                  : 'Delivery Date *'}
             </label>
             <input
               type="date"
@@ -199,8 +244,15 @@ export default function CheckoutForm() {
             />
           </div>
           <div>
-            <label htmlFor="time" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
-              {language === 'GE' ? 'მიწოდების დრო *' : language === 'RU' ? 'Время доставки *' : 'Delivery Time *'}
+            <label
+              htmlFor="time"
+              className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+            >
+              {language === 'GE'
+                ? 'მიწოდების დრო *'
+                : language === 'RU'
+                  ? 'Время доставки *'
+                  : 'Delivery Time *'}
             </label>
             <input
               type="time"
@@ -215,7 +267,10 @@ export default function CheckoutForm() {
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2">
+          <label
+            htmlFor="message"
+            className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
+          >
             {t('order_notes')} (Optional)
           </label>
           <textarea
@@ -231,15 +286,32 @@ export default function CheckoutForm() {
 
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-3">
-            {language === 'GE' ? 'გადახდის მეთოდი *' : language === 'RU' ? 'Метод оплаты *' : 'Payment Method *'}
+            {language === 'GE'
+              ? 'გადახდის მეთოდი *'
+              : language === 'RU'
+                ? 'Метод оплаты *'
+                : 'Payment Method *'}
           </label>
           <div className="grid grid-cols-3 gap-3">
             {['Cash', 'Card', 'Bank'].map((method) => {
-              const methodLabel = method === 'Cash' 
-                ? (language === 'GE' ? 'ნაღდი' : language === 'RU' ? 'Наличные' : 'Cash')
-                : method === 'Card'
-                ? (language === 'GE' ? 'ბარათი' : language === 'RU' ? 'Карта' : 'Card')
-                : (language === 'GE' ? 'ბანკი' : language === 'RU' ? 'Банк' : 'Bank');
+              const methodLabel =
+                method === 'Cash'
+                  ? language === 'GE'
+                    ? 'ნაღდი'
+                    : language === 'RU'
+                      ? 'Наличные'
+                      : 'Cash'
+                  : method === 'Card'
+                    ? language === 'GE'
+                      ? 'ბარათი'
+                      : language === 'RU'
+                        ? 'Карта'
+                        : 'Card'
+                    : language === 'GE'
+                      ? 'ბანკი'
+                      : language === 'RU'
+                        ? 'Банк'
+                        : 'Bank';
 
               return (
                 <label

@@ -18,7 +18,7 @@ export default function ContentEditor() {
     hero: { title: '', subtitle: '', description: '' },
     promoBanner: { text: '', isActive: true },
     testimonials: [],
-    faqs: []
+    faqs: [],
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -61,8 +61,8 @@ export default function ContentEditor() {
       ...config,
       [section]: {
         ...config[section],
-        [key]: value
-      }
+        [key]: value,
+      },
     });
   };
 
@@ -129,7 +129,9 @@ export default function ContentEditor() {
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Content Editor...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Content Editor...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -138,39 +140,48 @@ export default function ContentEditor() {
   return (
     <AdminLayout>
       <div className="space-y-10">
-        
         {/* Header Title */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Content Editor</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">Modify banner texts, FAQ database, and write blog articles</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Content Editor
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              Modify banner texts, FAQ database, and write blog articles
+            </p>
           </div>
         </div>
 
         {/* 2-Column Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
           {/* Left: General landing config text inputs */}
           <div className="lg:col-span-7 space-y-8">
             <form onSubmit={handleSaveConfig} className="space-y-8">
-              
               {/* Promo Banner Settings */}
               <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
                 <div className="flex justify-between items-center border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400">Top Header Promo Banner</h3>
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                    Top Header Promo Banner
+                  </h3>
                   <label className="flex items-center cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={config.promoBanner?.isActive}
-                      onChange={(e) => handleConfigChange('promoBanner', 'isActive', e.target.checked)}
+                      onChange={(e) =>
+                        handleConfigChange('promoBanner', 'isActive', e.target.checked)
+                      }
                       className="sr-only peer"
                     />
                     <div className="w-9 h-5 bg-neutral-250 dark:bg-neutral-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neutral-900 dark:peer-checked:bg-neutral-300 relative" />
-                    <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Active</span>
+                    <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                      Active
+                    </span>
                   </label>
                 </div>
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Banner Notification Text</label>
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Banner Notification Text
+                  </label>
                   <input
                     type="text"
                     value={config.promoBanner?.text}
@@ -182,11 +193,15 @@ export default function ContentEditor() {
 
               {/* Homepage Hero overlays */}
               <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">Hero Section Branding</h3>
-                
+                <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
+                  Hero Section Branding
+                </h3>
+
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Hero Title</label>
+                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      Hero Title
+                    </label>
                     <input
                       type="text"
                       value={config.hero?.title}
@@ -195,7 +210,9 @@ export default function ContentEditor() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Hero Subtitle</label>
+                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      Hero Subtitle
+                    </label>
                     <input
                       type="text"
                       value={config.hero?.subtitle}
@@ -204,7 +221,9 @@ export default function ContentEditor() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Branding Short Description</label>
+                    <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      Branding Short Description
+                    </label>
                     <textarea
                       value={config.hero?.description}
                       onChange={(e) => handleConfigChange('hero', 'description', e.target.value)}
@@ -225,52 +244,97 @@ export default function ContentEditor() {
                   Save Store Configurations
                 </button>
               </div>
-
             </form>
           </div>
 
           {/* Right: Blogs entry creator */}
           <div className="lg:col-span-5 space-y-8">
-            
             {/* Create Blog Post form */}
-            <form onSubmit={handleSaveBlog} className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">Publish Blog Entry</h3>
-              
+            <form
+              onSubmit={handleSaveBlog}
+              className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
+            >
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
+                Publish Blog Entry
+              </h3>
+
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Blog Title (English) *</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Blog Title (English) *
+                </label>
                 <input
                   type="text"
                   required
                   value={newBlog.title}
-                  onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') })}
-                  placeholder="e.g. Art of Gold Carving"
+                  onChange={(e) =>
+                    setNewBlog({
+                      ...newBlog,
+                      title: e.target.value,
+                      slug: e.target.value
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/(^-|-$)/g, ''),
+                    })
+                  }
+                  placeholder="e.g. Art of Tailoring"
                   className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Title (Georgian)</label>
-                  <input type="text" value={newBlog.titleKa} onChange={(e) => setNewBlog({ ...newBlog, titleKa: e.target.value })} className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none" />
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Title (Georgian)
+                  </label>
+                  <input
+                    type="text"
+                    value={newBlog.titleKa}
+                    onChange={(e) => setNewBlog({ ...newBlog, titleKa: e.target.value })}
+                    className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
+                  />
                 </div>
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Title (Russian)</label>
-                  <input type="text" value={newBlog.titleRu} onChange={(e) => setNewBlog({ ...newBlog, titleRu: e.target.value })} className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none" />
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Title (Russian)
+                  </label>
+                  <input
+                    type="text"
+                    value={newBlog.titleRu}
+                    onChange={(e) => setNewBlog({ ...newBlog, titleRu: e.target.value })}
+                    className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Blog Url Slug *</label>
-                <input type="text" required value={newBlog.slug} onChange={(e) => setNewBlog({ ...newBlog, slug: e.target.value })} className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none font-mono" />
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Blog Url Slug *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newBlog.slug}
+                  onChange={(e) => setNewBlog({ ...newBlog, slug: e.target.value })}
+                  className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none font-mono"
+                />
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Blog Image Cover Path</label>
-                <input type="text" value={newBlog.image} onChange={(e) => setNewBlog({ ...newBlog, image: e.target.value })} className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none font-mono" />
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Blog Image Cover Path
+                </label>
+                <input
+                  type="text"
+                  value={newBlog.image}
+                  onChange={(e) => setNewBlog({ ...newBlog, image: e.target.value })}
+                  className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none font-mono"
+                />
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Blog Body Content (Markdown supported) *</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Blog Body Content (Markdown supported) *
+                </label>
                 <textarea
                   required
                   value={newBlog.content}
@@ -294,29 +358,37 @@ export default function ContentEditor() {
 
             {/* List of active published blogs */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">Active Articles</h3>
-              
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
+                Active Articles
+              </h3>
+
               <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
                 {blogs.length === 0 ? (
-                  <p className="text-xs text-neutral-400 italic py-4 text-center">No articles written yet.</p>
+                  <p className="text-xs text-neutral-400 italic py-4 text-center">
+                    No articles written yet.
+                  </p>
                 ) : (
                   blogs.map((blog) => (
-                    <div key={blog.id} className="flex justify-between items-center p-2 rounded bg-neutral-50 dark:bg-neutral-950 border border-neutral-100 dark:border-neutral-800">
+                    <div
+                      key={blog.id}
+                      className="flex justify-between items-center p-2 rounded bg-neutral-50 dark:bg-neutral-950 border border-neutral-100 dark:border-neutral-800"
+                    >
                       <div>
-                        <p className="text-xs font-semibold text-neutral-950 dark:text-white leading-tight">{blog.title}</p>
+                        <p className="text-xs font-semibold text-neutral-950 dark:text-white leading-tight">
+                          {blog.title}
+                        </p>
                         <p className="text-[9px] text-neutral-400 mt-0.5">/{blog.slug}</p>
                       </div>
-                      <span className="text-[9px] font-bold text-neutral-500 uppercase">{blog.status}</span>
+                      <span className="text-[9px] font-bold text-neutral-500 uppercase">
+                        {blog.status}
+                      </span>
                     </div>
                   ))
                 )}
               </div>
             </div>
-
           </div>
-
         </div>
-
       </div>
     </AdminLayout>
   );

@@ -112,8 +112,8 @@ export default function CollectionsClient({ products, categories }: CollectionsC
           {language === 'GE'
             ? 'პროდუქტები არ მოიძებნა'
             : language === 'RU'
-            ? 'Товары не найдены'
-            : 'No products found in this category yet.'}
+              ? 'Товары не найдены'
+              : 'No products found in this category yet.'}
         </div>
       )}
 
@@ -145,14 +145,20 @@ export default function CollectionsClient({ products, categories }: CollectionsC
                 <div className="absolute inset-0 bg-neutral-950/0 group-hover:bg-neutral-950/30 transition-all duration-500 flex items-end">
                   <div
                     className={`w-full p-4 transition-all duration-500 ${
-                      hoveredId === item.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                      hoveredId === item.id
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-4'
                     }`}
                   >
                     <p className="text-white text-xs font-light leading-relaxed line-clamp-2">
                       {getDesc(item)}
                     </p>
                     <span className="mt-3 w-full py-2.5 bg-white text-neutral-950 text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-neutral-100 transition-colors text-center block">
-                      {language === 'GE' ? 'დეტალები' : language === 'RU' ? 'Подробнее' : 'View Details'}
+                      {language === 'GE'
+                        ? 'დეტალები'
+                        : language === 'RU'
+                          ? 'Подробнее'
+                          : 'View Details'}
                     </span>
                   </div>
                 </div>

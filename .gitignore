@@ -49,3 +49,5 @@ turbo/
 *.db-shm
 *.db-wal
 
+# Temporary / scratch files
+scratch/

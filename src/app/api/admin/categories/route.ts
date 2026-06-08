@@ -8,8 +8,8 @@ export async function GET() {
     const categories = await prisma.category.findMany({
       include: {
         _count: {
-          select: { products: true }
-        }
+          select: { products: true },
+        },
       },
       orderBy: { name: 'asc' },
     });
@@ -21,14 +21,19 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-
     const { name, nameKa, nameRu } = await req.json();
 
     if (!name || !nameKa || !nameRu) {
-      return NextResponse.json({ error: 'Missing required translation parameters.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required translation parameters.' },
+        { status: 400 }
+      );
     }
 
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
 
     // Check duplicate
     const existing = await prisma.category.findUnique({ where: { slug } });

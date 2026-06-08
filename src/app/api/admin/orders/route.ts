@@ -129,8 +129,8 @@ export async function POST(req: Request) {
             tx.product.update({
               where: { id: item.id },
               data: { inventory: { decrement: Number(item.qty) } },
-            }),
-          ),
+            })
+          )
       );
 
       // 6. Create system notification
@@ -148,9 +148,6 @@ export async function POST(req: Request) {
     return NextResponse.json(newOrder);
   } catch (e: any) {
     console.error('[orders POST]', e);
-    return NextResponse.json(
-      { error: e.message || 'Failed to create order.' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: e.message || 'Failed to create order.' }, { status: 500 });
   }
 }

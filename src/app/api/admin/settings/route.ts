@@ -15,23 +15,23 @@ const DEFAULT_SETTINGS = {
   socialLinks: {
     instagram: 'https://www.instagram.com/velluto_____/',
     facebook: 'https://facebook.com/velluto',
-    pinterest: 'https://pinterest.com/velluto'
+    pinterest: 'https://pinterest.com/velluto',
   },
   shipping: {
     tbilisiRate: 0, // free
     regionalRate: 15,
-    minFreeShipping: 300
+    minFreeShipping: 300,
   },
   tax: {
     vatRate: 18, // 18% in Georgia
-    isTaxIncluded: true
+    isTaxIncluded: true,
   },
   payments: {
     bankTransfer: true,
     cashOnDelivery: true,
     cardOnDelivery: true,
-    bankDetails: 'TBC Bank: GE82TB77364525374839'
-  }
+    bankDetails: 'TBC Bank: GE82TB77364525374839',
+  },
 };
 
 export async function GET() {
@@ -48,7 +48,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-
     const settings = await req.json();
 
     const dirPath = path.dirname(SETTINGS_PATH);

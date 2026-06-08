@@ -97,11 +97,23 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
     const uniqueColors = Array.from(new Set(product.variants.map((v) => v.color).filter(Boolean)));
 
     if (uniqueSizes.length > 0 && !selectedSize) {
-      alert(language === 'GE' ? 'გთხოვთ აირჩიოთ ზომა' : language === 'RU' ? 'Пожалуйста, выберите размер' : 'Please select a size');
+      alert(
+        language === 'GE'
+          ? 'გთხოვთ აირჩიოთ ზომა'
+          : language === 'RU'
+            ? 'Пожалуйста, выберите размер'
+            : 'Please select a size'
+      );
       return;
     }
     if (uniqueColors.length > 0 && !selectedColor) {
-      alert(language === 'GE' ? 'გთხოვთ აირჩიოთ ფერი' : language === 'RU' ? 'Пожалуйста, выберите цвет' : 'Please select a color');
+      alert(
+        language === 'GE'
+          ? 'გთხოვთ აირჩიოთ ფერი'
+          : language === 'RU'
+            ? 'Пожалуйста, выберите цвет'
+            : 'Please select a color'
+      );
       return;
     }
 
@@ -115,7 +127,10 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
         nameKa: product.nameKa,
         nameRu: product.nameRu,
         price: product.price,
-        img: product.images?.[activeIdx]?.url || product.images?.[0]?.url || '/assets/images/no_image.png',
+        img:
+          product.images?.[activeIdx]?.url ||
+          product.images?.[0]?.url ||
+          '/assets/images/no_image.png',
         size: selectedSize || undefined,
         color: selectedColor || undefined,
       });
@@ -128,12 +143,15 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
     }, 600);
   };
 
-  const sizes = Array.from(new Set(product.variants.map((v) => v.size).filter((s): s is string => !!s)));
-  const colors = Array.from(new Set(product.variants.map((v) => v.color).filter((c): c is string => !!c)));
+  const sizes = Array.from(
+    new Set(product.variants.map((v) => v.size).filter((s): s is string => !!s))
+  );
+  const colors = Array.from(
+    new Set(product.variants.map((v) => v.color).filter((c): c is string => !!c))
+  );
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 sm:px-8 xl:px-16 pt-6 pb-24">
-
       {/* ── Breadcrumb ── */}
       <nav className="flex items-center gap-2 text-[10px] sm:text-xs font-semibold tracking-[0.18em] uppercase text-neutral-400 mb-10">
         <Link href="/" className="hover:text-neutral-800 transition-colors duration-200">
@@ -144,15 +162,15 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
           {language === 'GE' ? 'კოლექციები' : language === 'RU' ? 'Коллекции' : 'Collections'}
         </Link>
         <span className="opacity-30">—</span>
-        <span className="text-neutral-700 font-bold truncate max-w-[160px] sm:max-w-xs">{getName()}</span>
+        <span className="text-neutral-700 font-bold truncate max-w-[160px] sm:max-w-xs">
+          {getName()}
+        </span>
       </nav>
 
       {/* ── Main Grid ── */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_480px] xl:grid-cols-[1fr_520px] gap-10 xl:gap-20 items-start">
-
         {/* ══════════ LEFT: Image Gallery ══════════ */}
         <div className="flex flex-col sm:flex-row gap-4">
-
           {/* Vertical thumbnail strip */}
           {product.images && product.images.length > 1 && (
             <div className="flex sm:flex-col gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 sm:pt-0 sm:w-[72px] flex-shrink-0">
@@ -201,7 +219,9 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                 </div>
               ))
             ) : (
-              <div className="absolute inset-0 bg-neutral-100 flex items-center justify-center text-neutral-300 text-sm">No image</div>
+              <div className="absolute inset-0 bg-neutral-100 flex items-center justify-center text-neutral-300 text-sm">
+                No image
+              </div>
             )}
 
             {/* Tag badge over image */}
@@ -236,7 +256,6 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
 
         {/* ══════════ RIGHT: Product Info ══════════ */}
         <div className="flex flex-col gap-0 lg:sticky lg:top-28">
-
           {/* Category chip */}
           <div className="flex items-center gap-2 mb-5">
             {product.category && (
@@ -268,9 +287,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
           <div className="h-px bg-gradient-to-r from-neutral-200 via-neutral-100 to-transparent mb-7" />
 
           {/* Description */}
-          <p className="text-[15px] text-neutral-500 font-light leading-[1.8] mb-8">
-            {getDesc()}
-          </p>
+          <p className="text-[15px] text-neutral-500 font-light leading-[1.8] mb-8">{getDesc()}</p>
 
           {/* ── Size Selector ── */}
           {sizes.length > 0 && (
@@ -280,7 +297,9 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   {language === 'GE' ? 'ზომა' : language === 'RU' ? 'Размер' : 'Size'}
                 </span>
                 {selectedSize && (
-                  <span className="text-[11px] font-semibold text-neutral-600 tracking-wide">{selectedSize}</span>
+                  <span className="text-[11px] font-semibold text-neutral-600 tracking-wide">
+                    {selectedSize}
+                  </span>
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
@@ -311,38 +330,54 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   {language === 'GE' ? 'ფერი' : language === 'RU' ? 'Цвет' : 'Color'}
                 </span>
                 {selectedColor && (
-                  <span className="text-[11px] font-semibold text-neutral-600 tracking-wide">{selectedColor}</span>
+                  <span className="text-[11px] font-semibold text-neutral-600 tracking-wide">
+                    {selectedColor}
+                  </span>
                 )}
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2.5">
                 {colors.map((color) => {
                   const hex = COLOR_MAP[color];
-                  const isLight = hex && ['#F5EFE6', '#FFFDF9', '#F8F6F2', '#FFD1DC', '#89CFF0', '#A8D3E6', '#F3B0C3'].includes(hex);
+                  let isLight = false;
+                  if (hex) {
+                    const c = hex.replace('#', '');
+                    const rgb = parseInt(c, 16);
+                    const r = (rgb >> 16) & 0xff;
+                    const g = (rgb >> 8) & 0xff;
+                    const b = (rgb >> 0) & 0xff;
+                    const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                    isLight = luma > 175;
+                  }
+
                   return (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
                       title={color}
-                      className="flex items-center gap-2.5 pl-2 pr-4 h-11 rounded-xl text-[12px] font-semibold tracking-wide transition-all duration-150"
+                      className="flex items-center gap-2.5 pl-3.5 pr-4 h-11 rounded-xl text-[12px] font-bold tracking-wide transition-all duration-200 shadow-sm"
                       style={{
-                        background: selectedColor === color ? '#111' : 'transparent',
-                        color: selectedColor === color ? '#fff' : '#444',
-                        border: selectedColor === color ? '2px solid #111' : '2px solid #e5e5e5',
-                        transform: selectedColor === color ? 'scale(1.03)' : 'scale(1)',
+                        background: hex || 'transparent',
+                        color: isLight ? '#111111' : '#ffffff',
+                        border:
+                          selectedColor === color ? '2px solid #111111' : '2px solid transparent',
+                        outline:
+                          selectedColor === color
+                            ? `2.5px solid ${isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.6)'}`
+                            : 'none',
+                        outlineOffset: '-4px',
+                        transform: selectedColor === color ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow:
+                          selectedColor === color
+                            ? '0 6px 16px rgba(0,0,0,0.15)'
+                            : '0 2px 6px rgba(0,0,0,0.05)',
                       }}
                     >
-                      {hex && (
-                        <span
-                          className="flex-shrink-0 rounded-full"
-                          style={{
-                            width: 18,
-                            height: 18,
-                            background: hex,
-                            border: isLight ? '1.5px solid #ccc' : '1.5px solid transparent',
-                            boxShadow: selectedColor === color ? '0 0 0 2px rgba(255,255,255,0.3) inset' : 'none',
-                          }}
-                        />
-                      )}
+                      <span
+                        className="w-2 h-2 rounded-full"
+                        style={{
+                          background: isLight ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.4)',
+                        }}
+                      />
                       <span>{color}</span>
                     </button>
                   );
@@ -394,32 +429,78 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
               <span
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%)',
+                  background:
+                    'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%)',
                 }}
               />
               {isAdding ? (
                 <span className="flex items-center gap-2">
-                  <svg className="animate-spin" width={16} height={16} viewBox="0 0 24 24" fill="none">
+                  <svg
+                    className="animate-spin"
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
                     <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
-                    <path d="M12 2a10 10 0 0 1 10 10" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                    <path
+                      d="M12 2a10 10 0 0 1 10 10"
+                      stroke="#fff"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
                   </svg>
-                  {language === 'GE' ? 'ემატება...' : language === 'RU' ? 'Добавление...' : 'Adding…'}
+                  {language === 'GE'
+                    ? 'ემატება...'
+                    : language === 'RU'
+                      ? 'Добавление...'
+                      : 'Adding…'}
                 </span>
               ) : addedSuccess ? (
                 <span className="flex items-center gap-2">
                   <svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M5 13l4 4L19 7"
+                      stroke="#fff"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   {language === 'GE' ? 'დაემატა!' : language === 'RU' ? 'Добавлено!' : 'Added!'}
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
                   <svg width={17} height={17} viewBox="0 0 24 24" fill="none">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <line x1="3" y1="6" x2="21" y2="6" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M16 10a4 4 0 01-8 0" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <line
+                      x1="3"
+                      y1="6"
+                      x2="21"
+                      y2="6"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M16 10a4 4 0 01-8 0"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
-                  {language === 'GE' ? 'კალათაში დამატება' : language === 'RU' ? 'В корзину' : 'Add to Cart'}
+                  {language === 'GE'
+                    ? 'კალათაში დამატება'
+                    : language === 'RU'
+                      ? 'В корзину'
+                      : 'Add to Cart'}
                 </span>
               )}
             </button>
@@ -428,17 +509,42 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
           {/* ── Details strip ── */}
           <div className="mt-10 pt-8 border-t border-neutral-100 grid grid-cols-3 gap-4 text-center">
             {[
-              { icon: '✦', label: language === 'GE' ? 'პრემიუმ ხარისხი' : language === 'RU' ? 'Люкс качество' : 'Premium Quality' },
-              { icon: '◎', label: language === 'GE' ? 'უფასო მიწოდება' : language === 'RU' ? 'Бесплатная доставка' : 'Free Delivery' },
-              { icon: '↩', label: language === 'GE' ? '14-დღიანი დაბრუნება' : language === 'RU' ? '14 дней возврат' : '14-Day Returns' },
+              {
+                icon: '✦',
+                label:
+                  language === 'GE'
+                    ? 'პრემიუმ ხარისხი'
+                    : language === 'RU'
+                      ? 'Люкс качество'
+                      : 'Premium Quality',
+              },
+              {
+                icon: '◎',
+                label:
+                  language === 'GE'
+                    ? 'უფასო მიწოდება'
+                    : language === 'RU'
+                      ? 'Бесплатная доставка'
+                      : 'Free Delivery',
+              },
+              {
+                icon: '↩',
+                label:
+                  language === 'GE'
+                    ? '14-დღიანი დაბრუნება'
+                    : language === 'RU'
+                      ? '14 дней возврат'
+                      : '14-Day Returns',
+              },
             ].map((item) => (
               <div key={item.label} className="flex flex-col items-center gap-1.5">
                 <span className="text-[16px] text-neutral-400">{item.icon}</span>
-                <span className="text-[10px] font-semibold tracking-wide text-neutral-400 leading-tight text-center">{item.label}</span>
+                <span className="text-[10px] font-semibold tracking-wide text-neutral-400 leading-tight text-center">
+                  {item.label}
+                </span>
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </div>

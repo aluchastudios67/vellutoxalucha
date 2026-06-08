@@ -54,9 +54,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const existingItem = cart.find((i) => i.id === item.id);
     let newCart;
     if (existingItem) {
-      newCart = cart.map((i) =>
-        i.id === item.id ? { ...i, qty: i.qty + 1 } : i
-      );
+      newCart = cart.map((i) => (i.id === item.id ? { ...i, qty: i.qty + 1 } : i));
     } else {
       newCart = [...cart, { ...item, qty: 1 }];
     }
@@ -72,9 +70,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (existingItem.qty + delta <= 0) {
       newCart = cart.filter((i) => i.id !== id);
     } else {
-      newCart = cart.map((i) =>
-        i.id === id ? { ...i, qty: i.qty + delta } : i
-      );
+      newCart = cart.map((i) => (i.id === id ? { ...i, qty: i.qty + delta } : i));
     }
     saveCart(newCart);
   };

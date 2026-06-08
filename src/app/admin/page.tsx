@@ -8,8 +8,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     const isLoggedIn =
-      typeof window !== 'undefined' &&
-      localStorage.getItem('velluto_admin_auth') === 'true';
+      typeof window !== 'undefined' && localStorage.getItem('velluto_admin_auth') === 'true';
 
     if (isLoggedIn) {
       router.replace('/admin/dashboard');

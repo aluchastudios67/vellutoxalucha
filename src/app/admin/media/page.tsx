@@ -76,7 +76,7 @@ export default function MediaLibrary() {
   };
 
   // Folders compilation
-  const folders = ['All', ...Array.from(new Set(media.map(m => m.folder)))];
+  const folders = ['All', ...Array.from(new Set(media.map((m) => m.folder)))];
 
   const filteredMedia = media.filter((m) => {
     const matchesFolder = activeFolder === 'All' || m.folder === activeFolder;
@@ -87,12 +87,15 @@ export default function MediaLibrary() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        
         {/* Header Title & Upload triggers */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Media Library</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">Store, organize, and copy image links for products and content</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Media Library
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              Store, organize, and copy image links for products and content
+            </p>
           </div>
           <div>
             <input
@@ -115,10 +118,11 @@ export default function MediaLibrary() {
 
         {/* 2-Column Library layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Left: Folders list */}
           <div className="lg:col-span-3 bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Library Directories</h3>
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              Library Directories
+            </h3>
             <div className="flex flex-col gap-1.5">
               {folders.map((folder) => (
                 <button
@@ -135,7 +139,9 @@ export default function MediaLibrary() {
                     <span className="truncate max-w-[120px]">{folder}</span>
                   </div>
                   <span className="text-[10px] opacity-65">
-                    {folder === 'All' ? media.length : media.filter(m => m.folder === folder).length}
+                    {folder === 'All'
+                      ? media.length
+                      : media.filter((m) => m.folder === folder).length}
                   </span>
                 </button>
               ))}
@@ -159,7 +165,9 @@ export default function MediaLibrary() {
             </div>
 
             {isLoading ? (
-              <div className="text-center py-20 text-neutral-400 text-xs italic">Loading Media Vault...</div>
+              <div className="text-center py-20 text-neutral-400 text-xs italic">
+                Loading Media Vault...
+              </div>
             ) : filteredMedia.length === 0 ? (
               <div className="text-center py-20 bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 text-neutral-400 text-xs italic">
                 No media files matched your search.
@@ -177,18 +185,27 @@ export default function MediaLibrary() {
                       {item.mimeType.startsWith('video') ? (
                         <video src={item.url} muted className="w-full h-full object-cover" />
                       ) : (
-                        <img src={item.url} alt={item.name} className="w-full h-full object-cover" />
+                        <img
+                          src={item.url}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
                       )}
                       {/* Copy hover block overlay */}
                       <div className="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2 p-2 text-center">
                         <Icon name="LinkIcon" size={20} />
-                        <span className="text-[9px] uppercase tracking-wider font-bold">Copy Link Path</span>
+                        <span className="text-[9px] uppercase tracking-wider font-bold">
+                          Copy Link Path
+                        </span>
                       </div>
                     </div>
 
                     {/* Metadata */}
                     <div className="p-3 bg-white dark:bg-neutral-900 border-t border-neutral-100 dark:border-neutral-800/80">
-                      <p className="text-[10px] font-semibold text-neutral-900 dark:text-white truncate" title={item.name}>
+                      <p
+                        className="text-[10px] font-semibold text-neutral-900 dark:text-white truncate"
+                        title={item.name}
+                      >
                         {item.name}
                       </p>
                       <p className="text-[8px] text-neutral-400 uppercase mt-0.5 font-medium tracking-wider">
@@ -200,9 +217,7 @@ export default function MediaLibrary() {
               </div>
             )}
           </div>
-
         </div>
-
       </div>
     </AdminLayout>
   );

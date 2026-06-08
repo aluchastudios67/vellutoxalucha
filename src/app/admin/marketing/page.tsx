@@ -110,7 +110,9 @@ export default function MarketingCoupons() {
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">Loading Marketing Center...</p>
+          <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
+            Loading Marketing Center...
+          </p>
         </div>
       </AdminLayout>
     );
@@ -119,28 +121,36 @@ export default function MarketingCoupons() {
   return (
     <AdminLayout>
       <div className="space-y-10">
-        
         {/* Header Title */}
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
-            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Marketing & Discounts</h2>
-            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">Create promotional coupons, define flash discounts, and review usage</p>
+            <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
+              Marketing & Discounts
+            </h2>
+            <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
+              Create promotional coupons, define flash discounts, and review usage
+            </p>
           </div>
         </div>
 
         {/* 2-Column Creator Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Left: Create Coupon form */}
           <div className="lg:col-span-4 bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Create Coupon</h3>
-              <p className="text-[10px] text-neutral-400 uppercase font-semibold mt-1">Define promotional offer parameters</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Create Coupon
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase font-semibold mt-1">
+                Define promotional offer parameters
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Coupon Code *</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Coupon Code *
+                </label>
                 <input
                   type="text"
                   name="code"
@@ -154,7 +164,9 @@ export default function MarketingCoupons() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Discount Type</label>
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Discount Type
+                  </label>
                   <select
                     name="discountType"
                     value={formData.discountType}
@@ -166,7 +178,9 @@ export default function MarketingCoupons() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Discount Value *</label>
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                    Discount Value *
+                  </label>
                   <input
                     type="number"
                     name="discountValue"
@@ -181,7 +195,9 @@ export default function MarketingCoupons() {
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Expiration Date</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Expiration Date
+                </label>
                 <input
                   type="date"
                   name="expiresAt"
@@ -192,7 +208,9 @@ export default function MarketingCoupons() {
               </div>
 
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">Usage Limit (optional)</label>
+                <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                  Usage Limit (optional)
+                </label>
                 <input
                   type="number"
                   name="usageLimit"
@@ -218,8 +236,12 @@ export default function MarketingCoupons() {
           {/* Right: Active coupons list */}
           <div className="lg:col-span-8 bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-6">
             <div>
-              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">Active Coupons</h3>
-              <p className="text-[10px] text-neutral-400 uppercase font-semibold mt-1">Review active promotional codes and usage status</p>
+              <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
+                Active Coupons
+              </h3>
+              <p className="text-[10px] text-neutral-400 uppercase font-semibold mt-1">
+                Review active promotional codes and usage status
+              </p>
             </div>
 
             <div className="overflow-x-auto">
@@ -237,12 +259,19 @@ export default function MarketingCoupons() {
                 <tbody className="divide-y divide-neutral-50 dark:divide-neutral-800/50">
                   {coupons.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-neutral-400 italic">No coupons registered.</td>
+                      <td colSpan={6} className="py-8 text-center text-neutral-400 italic">
+                        No coupons registered.
+                      </td>
                     </tr>
                   ) : (
                     coupons.map((c) => (
-                      <tr key={c.id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
-                        <td className="py-4 font-bold text-neutral-900 dark:text-white font-mono">{c.code}</td>
+                      <tr
+                        key={c.id}
+                        className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors"
+                      >
+                        <td className="py-4 font-bold text-neutral-900 dark:text-white font-mono">
+                          {c.code}
+                        </td>
                         <td className="font-semibold text-neutral-800 dark:text-neutral-200">
                           {c.discountValue} {c.discountType === 'PERCENTAGE' ? '%' : 'GEL'} OFF
                         </td>
@@ -284,9 +313,7 @@ export default function MarketingCoupons() {
               </table>
             </div>
           </div>
-
         </div>
-
       </div>
     </AdminLayout>
   );

@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-
     const notifications = await prisma.notification.findMany({
       orderBy: { createdAt: 'desc' },
       take: 50,
@@ -18,7 +17,6 @@ export async function GET() {
 
 export async function PUT(req: Request) {
   try {
-
     const { id, isAll } = await req.json();
 
     if (isAll) {

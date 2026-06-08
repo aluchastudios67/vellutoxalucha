@@ -31,11 +31,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const body = await req.json();
 
     // Default to ADMIN role since auth is localStorage-based
-    const role = 'ADMIN';
+    const role = 'ADMIN' as string;
 
     if (role === 'STAFF') {
       const { inventory, variants } = body;
-      
+
       const updatedProduct = await prisma.product.update({
         where: { id },
         data: {
@@ -82,7 +82,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       seoTitle,
       seoDescription,
       images,
-      variants
+      variants,
     } = body;
 
     // Remove old variants/images and insert new ones or update them
@@ -109,20 +109,22 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         seoTitle,
         seoDescription,
         images: {
-          create: images?.map((url: string, idx: number) => ({
-            url,
-            isFeatured: idx === 0,
-          })) || [],
+          create:
+            images?.map((url: string, idx: number) => ({
+              url,
+              isFeatured: idx === 0,
+            })) || [],
         },
         variants: {
-          create: variants?.map((v: any) => ({
-            sku: v.sku,
-            size: v.size,
-            color: v.color,
-            metal: v.metal,
-            stock: Number(v.stock || 0),
-            priceAdjustment: Number(v.priceAdjustment || 0),
-          })) || [],
+          create:
+            variants?.map((v: any) => ({
+              sku: v.sku,
+              size: v.size,
+              color: v.color,
+              metal: v.metal,
+              stock: Number(v.stock || 0),
+              priceAdjustment: Number(v.priceAdjustment || 0),
+            })) || [],
         },
       },
       include: {

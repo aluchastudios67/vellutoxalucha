@@ -36,10 +36,7 @@ export async function GET(req: Request) {
     });
 
     const response = NextResponse.json(products);
-    response.headers.set(
-      'Cache-Control',
-      'public, s-maxage=120, stale-while-revalidate=600',
-    );
+    response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
     return response;
   } catch (e) {
     return NextResponse.json({ error: 'Failed to fetch products.' }, { status: 500 });

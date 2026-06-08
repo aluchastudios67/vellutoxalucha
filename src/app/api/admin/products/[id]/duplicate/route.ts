@@ -75,6 +75,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     return NextResponse.json(duplicatedProduct);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Failed to duplicate product.' }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || 'Failed to duplicate product.' },
+      { status: 500 }
+    );
   }
 }

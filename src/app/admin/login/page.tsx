@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 
 // Hardcoded admin credentials — change these as needed
@@ -32,16 +33,16 @@ export default function AdminLogin() {
     // Small delay for realism
     await new Promise((r) => setTimeout(r, 600));
 
-    if (
-      email.toLowerCase().trim() === ADMIN_EMAIL &&
-      password === ADMIN_PASSWORD
-    ) {
+    if (email.toLowerCase().trim() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       localStorage.setItem('velluto_admin_auth', 'true');
-      localStorage.setItem('velluto_admin_user', JSON.stringify({
-        name: 'Super Admin',
-        email: ADMIN_EMAIL,
-        role: 'SUPER_ADMIN',
-      }));
+      localStorage.setItem(
+        'velluto_admin_user',
+        JSON.stringify({
+          name: 'Super Admin',
+          email: ADMIN_EMAIL,
+          role: 'SUPER_ADMIN',
+        })
+      );
       router.replace('/admin/dashboard');
     } else {
       setError('Invalid email or password. Please try again.');
@@ -78,7 +79,10 @@ export default function AdminLogin() {
 
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+              <label
+                htmlFor="email"
+                className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5"
+              >
                 Email Address
               </label>
               <input
@@ -95,7 +99,10 @@ export default function AdminLogin() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5"
+              >
                 Password
               </label>
               <input
@@ -121,7 +128,10 @@ export default function AdminLogin() {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 bg-neutral-950 border-neutral-800 rounded text-white focus:ring-0 focus:ring-offset-0 cursor-pointer"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-[10px] font-bold uppercase tracking-wider text-neutral-400 cursor-pointer select-none">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-[10px] font-bold uppercase tracking-wider text-neutral-400 cursor-pointer select-none"
+                >
                   Remember me
                 </label>
               </div>
@@ -146,19 +156,25 @@ export default function AdminLogin() {
 
           {/* Hint box */}
           <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-center space-y-1">
-            <p className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Default Credentials</p>
-            <p className="text-[10px] text-neutral-400">Email: <span className="text-white">admin@velluto.com</span></p>
-            <p className="text-[10px] text-neutral-400">Password: <span className="text-white">Velluto2024!</span></p>
+            <p className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">
+              Default Credentials
+            </p>
+            <p className="text-[10px] text-neutral-400">
+              Email: <span className="text-white">admin@velluto.com</span>
+            </p>
+            <p className="text-[10px] text-neutral-400">
+              Password: <span className="text-white">Velluto2024!</span>
+            </p>
           </div>
 
           <div className="border-t border-neutral-800/80 pt-4 text-center">
-            <a
+            <Link
               href="/"
               className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-neutral-400 inline-flex items-center gap-1 transition-colors"
             >
               <Icon name="ArrowLeftIcon" size={12} />
               Return to Storefront
-            </a>
+            </Link>
           </div>
         </div>
       </div>

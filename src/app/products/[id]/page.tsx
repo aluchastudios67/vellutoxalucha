@@ -21,10 +21,10 @@ async function getProduct(id: string) {
     include: {
       category: true,
       images: {
-        orderBy: { isFeatured: 'desc' }
+        orderBy: { isFeatured: 'desc' },
       },
-      variants: true
-    }
+      variants: true,
+    },
   });
   return product;
 }
@@ -38,7 +38,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="relative min-h-screen text-neutral-900 font-sans selection:bg-amber-400 selection:text-neutral-950 flex flex-col justify-between" style={{ background: '#faf9f7' }}>
+    <div
+      className="relative min-h-screen text-neutral-900 font-sans selection:bg-amber-400 selection:text-neutral-950 flex flex-col justify-between"
+      style={{ background: '#faf9f7' }}
+    >
       <div>
         {/* Navigation Header */}
         <Navigation />
