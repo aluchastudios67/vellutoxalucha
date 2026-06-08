@@ -16,17 +16,22 @@ interface ProductPageProps {
 }
 
 async function getProduct(id: string) {
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: {
-      category: true,
-      images: {
-        orderBy: { isFeatured: 'desc' },
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        images: {
+          orderBy: { isFeatured: 'desc' },
+        },
+        variants: true,
       },
-      variants: true,
-    },
-  });
-  return product;
+    });
+    return product;
+  } catch (error) {
+    console.error("Prisma error in getProduct:", error);
+    return null;
+  }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

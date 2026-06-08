@@ -9,37 +9,42 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 async function getCollectionsData() {
-  const [categories, products] = await Promise.all([
-    prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    }),
-    prisma.product.findMany({
-      where: { status: 'ACTIVE' },
-      select: {
-        id: true,
-        name: true,
-        nameKa: true,
-        nameRu: true,
-        price: true,
-        tag: true,
-        description: true,
-        descriptionKa: true,
-        descriptionRu: true,
-        category: {
-          select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
+  try {
+    const [categories, products] = await Promise.all([
+      prisma.category.findMany({
+        orderBy: { name: 'asc' },
+      }),
+      prisma.product.findMany({
+        where: { status: 'ACTIVE' },
+        select: {
+          id: true,
+          name: true,
+          nameKa: true,
+          nameRu: true,
+          price: true,
+          tag: true,
+          description: true,
+          descriptionKa: true,
+          descriptionRu: true,
+          category: {
+            select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
+          },
+          images: {
+            select: { url: true, isFeatured: true },
+          },
+          variants: {
+            select: { size: true, color: true, stock: true },
+          },
         },
-        images: {
-          select: { url: true, isFeatured: true },
-        },
-        variants: {
-          select: { size: true, color: true, stock: true },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    }),
-  ]);
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
 
-  return { categories, products };
+    return { categories, products };
+  } catch (error) {
+    console.error("Prisma error in getCollectionsData:", error);
+    return { categories: [], products: [] };
+  }
 }
 
 export default async function CollectionsPage() {
