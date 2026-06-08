@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client';
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 function buildDatabaseUrl() {
-  const base = process.env.DATABASE_URL || 'postgresql://postgres:TavaTanaTikiTaka99@db.tqahugftssvxudwwdnkn.supabase.co:5432/postgres';
+  const base = process.env.DATABASE_URL || 'postgresql://postgres:TavaTanaTikiTaka99@db.tqahugftssvxudwwdnkn.supabase.co:6543/postgres?pgbouncer=true';
   // Avoid appending duplicate params if already present
   const separator = base.includes('?') ? '&' : '?';
-  return base + separator + 'connection_limit=10&pool_timeout=20&connect_timeout=15';
+  return base + separator + 'connection_limit=1';
 }
 
 export const prisma =
