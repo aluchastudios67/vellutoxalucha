@@ -7,7 +7,7 @@ import ProductDetailsClient from './ProductDetailsClient';
 import { prisma } from '@/lib/prisma';
 
 // Always SSR — product data fetched on each request
-export const dynamic = 'force-dynamic';
+export const revalidate = 30;
 
 interface ProductPageProps {
   params: Promise<{

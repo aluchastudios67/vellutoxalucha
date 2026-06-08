@@ -6,7 +6,7 @@ import CollectionsClient from '@/app/components/CollectionsClient';
 import { prisma } from '@/lib/prisma';
 
 // Always server-rendered on demand — never prerendered at build time
-export const dynamic = 'force-dynamic';
+export const revalidate = 30;
 
 async function getCollectionsData() {
   try {
