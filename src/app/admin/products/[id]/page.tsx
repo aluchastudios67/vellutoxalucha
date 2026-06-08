@@ -622,6 +622,9 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
                   onChange={handleChange}
                   className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none disabled:bg-neutral-100 dark:disabled:bg-neutral-800"
                 >
+                  <option value="" disabled>
+                    Select a Category
+                  </option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
