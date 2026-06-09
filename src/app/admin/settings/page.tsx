@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function StoreSettings() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -121,14 +123,14 @@ export default function StoreSettings() {
       });
 
       if (res.ok) {
-        alert('Global store configurations saved successfully.');
+        alert(t('admin_settings_success'));
         // Clean up preview URLs
         pendingBanners.forEach(item => URL.revokeObjectURL(item.previewUrl));
         setPendingBanners([]);
         loadSettings();
       } else {
         const err = await res.json();
-        throw new Error(err.error || 'Failed to update store settings.');
+        throw new Error(err.error || t('admin_settings_fail'));
       }
     } catch (err: any) {
       alert(err.message || 'Error saving settings.');
@@ -144,9 +146,9 @@ export default function StoreSettings() {
       <AdminLayout>
         <div className="text-center py-20">
           <Icon name="ExclamationTriangleIcon" size={32} className="mx-auto text-red-500 mb-4" />
-          <h3 className="text-lg font-bold">Access Denied</h3>
+          <h3 className="text-lg font-bold">{t('admin_settings_access_denied')}</h3>
           <p className="text-xs text-neutral-400 mt-1">
-            Only Super Administrators have access to modify global store settings.
+            {t('admin_settings_access_desc')}
           </p>
         </div>
       </AdminLayout>
@@ -159,7 +161,7 @@ export default function StoreSettings() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Configuration Profiles...
+            {t('admin_settings_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -173,10 +175,10 @@ export default function StoreSettings() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Store Settings
+              {t('admin_settings_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Configure taxes, local delivery costs, boutique details, and banking information
+              {t('admin_settings_subtitle')}
             </p>
           </div>
           <button
@@ -184,7 +186,7 @@ export default function StoreSettings() {
             disabled={isSubmitting}
             className="bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-md disabled:opacity-50"
           >
-            {isSubmitting ? 'Saving...' : 'Save Settings'}
+            {isSubmitting ? t('admin_settings_saving') : t('admin_settings_save')}
           </button>
         </div>
 
@@ -195,13 +197,13 @@ export default function StoreSettings() {
             {/* General Boutique info */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Boutique Details
+                {t('admin_settings_boutique')}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Store Display Name
+                    {t('admin_settings_store_name')}
                   </label>
                   <input
                     type="text"
@@ -212,7 +214,7 @@ export default function StoreSettings() {
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Contact Email Address
+                    {t('admin_settings_contact_email')}
                   </label>
                   <input
                     type="email"
@@ -223,7 +225,7 @@ export default function StoreSettings() {
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Showroom Contact Phone
+                    {t('admin_settings_contact_phone')}
                   </label>
                   <input
                     type="text"
@@ -234,7 +236,7 @@ export default function StoreSettings() {
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Showroom Address
+                    {t('admin_settings_address')}
                   </label>
                   <input
                     type="text"
@@ -249,7 +251,7 @@ export default function StoreSettings() {
             {/* Payment Integration details */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Payment Integrations
+                {t('admin_settings_payments')}
               </h3>
 
               <div className="grid grid-cols-3 gap-3">
@@ -261,7 +263,7 @@ export default function StoreSettings() {
                     className="rounded"
                   />
                   <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                    Cash on Delivery
+                    {t('admin_settings_cod')}
                   </span>
                 </label>
                 <label className="flex items-center gap-2 border border-neutral-200 dark:border-neutral-800 p-3 rounded-xl cursor-pointer">
@@ -272,7 +274,7 @@ export default function StoreSettings() {
                     className="rounded"
                   />
                   <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                    Card on Delivery
+                    {t('admin_settings_card')}
                   </span>
                 </label>
                 <label className="flex items-center gap-2 border border-neutral-200 dark:border-neutral-800 p-3 rounded-xl cursor-pointer">
@@ -283,14 +285,14 @@ export default function StoreSettings() {
                     className="rounded"
                   />
                   <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                    Bank Transfer
+                    {t('admin_settings_bank')}
                   </span>
                 </label>
               </div>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Showroom Bank Accounts (Details printed on Invoices)
+                  {t('admin_settings_bank_details')}
                 </label>
                 <textarea
                   value={settings.payments.bankDetails}
@@ -304,10 +306,10 @@ export default function StoreSettings() {
             {/* Hero Banner Images */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Hero Banner Images
+                {t('admin_settings_hero')}
               </h3>
               <p className="text-[10px] text-neutral-500 font-medium">
-                Upload images to display in the main landing page hero carousel.
+                {t('admin_settings_hero_desc')}
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -334,7 +336,7 @@ export default function StoreSettings() {
                   >
                     <img src={item.previewUrl} alt={`Pending Hero ${idx}`} className="w-full h-full object-cover opacity-70" />
                     <span className="absolute bottom-1 left-1 bg-blue-500 text-[8px] text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
-                      Draft
+                      {t('admin_settings_draft')}
                     </span>
                     <button
                       type="button"
@@ -353,7 +355,7 @@ export default function StoreSettings() {
                     <>
                       <Icon name="PlusIcon" size={16} className="text-neutral-400" />
                       <span className="text-[9px] font-bold uppercase tracking-wider text-neutral-400">
-                        Add
+                        {t('admin_settings_add')}
                       </span>
                     </>
                   )}
@@ -372,13 +374,13 @@ export default function StoreSettings() {
             {/* Social Links */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Social Network Coordinates
+                {t('admin_settings_social')}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Instagram Page Link
+                    {t('admin_settings_ig')}
                   </label>
                   <input
                     type="text"
@@ -389,7 +391,7 @@ export default function StoreSettings() {
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Facebook Page Link
+                    {t('admin_settings_fb')}
                   </label>
                   <input
                     type="text"
@@ -400,7 +402,7 @@ export default function StoreSettings() {
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Pinterest Coordinates
+                    {t('admin_settings_pin')}
                   </label>
                   <input
                     type="text"
@@ -418,12 +420,12 @@ export default function StoreSettings() {
             {/* Delivery Cost variables */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Shipping Logistics
+                {t('admin_settings_logistics')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Tbilisi Local Delivery Fee (GEL)
+                  {t('admin_settings_tbilisi_fee')}
                 </label>
                 <input
                   type="number"
@@ -436,7 +438,7 @@ export default function StoreSettings() {
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Regional/Out-of-Town Delivery Fee (GEL)
+                  {t('admin_settings_regional_fee')}
                 </label>
                 <input
                   type="number"
@@ -449,7 +451,7 @@ export default function StoreSettings() {
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Min Order value for Free Delivery (GEL)
+                  {t('admin_settings_min_free')}
                 </label>
                 <input
                   type="number"
@@ -466,12 +468,12 @@ export default function StoreSettings() {
             {/* Taxes & VAT configs */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Tax Settings
+                {t('admin_settings_tax_title')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  VAT Tax Rate (%)
+                  {t('admin_settings_vat')}
                 </label>
                 <input
                   type="number"
@@ -491,7 +493,7 @@ export default function StoreSettings() {
                   className="rounded"
                 />
                 <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                  Taxes are included in displayed pricing
+                  {t('admin_settings_tax_included')}
                 </span>
               </label>
             </div>

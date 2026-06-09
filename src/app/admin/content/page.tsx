@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface BlogPost {
   id: string;
@@ -13,6 +14,7 @@ interface BlogPost {
 }
 
 export default function ContentEditor() {
+  const { t } = useLanguage();
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [config, setConfig] = useState<any>({
     hero: { title: '', subtitle: '', description: '' },
@@ -24,7 +26,6 @@ export default function ContentEditor() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // New Blog form state
   const [newBlog, setNewBlog] = useState({
     title: '',
     titleKa: '',
@@ -76,12 +77,12 @@ export default function ContentEditor() {
         body: JSON.stringify({ config }),
       });
       if (res.ok) {
-        alert('Storefront landing configuration saved successfully.');
+        alert(t('admin_content_save_succ'));
       } else {
-        alert('Failed to save settings.');
+        alert(t('admin_content_save_fail'));
       }
     } catch (e) {
-      alert('Network error saving config.');
+      alert(t('admin_content_save_net'));
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +91,7 @@ export default function ContentEditor() {
   const handleSaveBlog = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newBlog.title || !newBlog.content || !newBlog.slug) {
-      alert('Please fill out all blog details.');
+      alert(t('admin_content_blog_req'));
       return;
     }
 
@@ -102,7 +103,7 @@ export default function ContentEditor() {
         body: JSON.stringify({ newBlogPost: newBlog }),
       });
       if (res.ok) {
-        alert('Blog entry published successfully.');
+        alert(t('admin_content_blog_succ'));
         setNewBlog({
           title: '',
           titleKa: '',
@@ -115,10 +116,10 @@ export default function ContentEditor() {
         });
         loadContent();
       } else {
-        alert('Failed to publish blog.');
+        alert(t('admin_content_blog_fail'));
       }
     } catch (e) {
-      alert('Error publishing blog.');
+      alert(t('admin_content_blog_err'));
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +131,7 @@ export default function ContentEditor() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Content Editor...
+            {t('admin_content_load')}
           </p>
         </div>
       </AdminLayout>
@@ -144,10 +145,10 @@ export default function ContentEditor() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Content Editor
+              {t('admin_content_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Modify banner texts, FAQ database, and write blog articles
+              {t('admin_content_sub')}
             </p>
           </div>
         </div>
@@ -161,7 +162,7 @@ export default function ContentEditor() {
               <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
                 <div className="flex justify-between items-center border-b border-neutral-150 dark:border-neutral-800 pb-2">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-                    Top Header Promo Banner
+                    {t('admin_content_top_header')}
                   </h3>
                   <label className="flex items-center cursor-pointer select-none">
                     <input
@@ -174,13 +175,13 @@ export default function ContentEditor() {
                     />
                     <div className="w-9 h-5 bg-neutral-250 dark:bg-neutral-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neutral-900 dark:peer-checked:bg-neutral-300 relative" />
                     <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                      Active
+                      {t('admin_content_active')}
                     </span>
                   </label>
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Banner Notification Text
+                    {t('admin_content_banner_text')}
                   </label>
                   <input
                     type="text"
@@ -194,13 +195,13 @@ export default function ContentEditor() {
               {/* Homepage Hero overlays */}
               <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                  Hero Section Branding
+                  {t('admin_content_hero')}
                 </h3>
 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                      Hero Title
+                      {t('admin_content_hero_title')}
                     </label>
                     <input
                       type="text"
@@ -211,7 +212,7 @@ export default function ContentEditor() {
                   </div>
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                      Hero Subtitle
+                      {t('admin_content_hero_sub')}
                     </label>
                     <input
                       type="text"
@@ -222,7 +223,7 @@ export default function ContentEditor() {
                   </div>
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                      Branding Short Description
+                      {t('admin_content_hero_desc')}
                     </label>
                     <textarea
                       value={config.hero?.description}
@@ -241,7 +242,7 @@ export default function ContentEditor() {
                   disabled={isSubmitting}
                   className="bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-semibold px-6 py-2.5 rounded-full text-xs uppercase tracking-wider hover:opacity-90 shadow-md disabled:opacity-50"
                 >
-                  Save Store Configurations
+                  {t('admin_content_save_config')}
                 </button>
               </div>
             </form>
@@ -255,12 +256,12 @@ export default function ContentEditor() {
               className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
             >
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Publish Blog Entry
+                {t('admin_content_pub_blog')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Blog Title (English) *
+                  {t('admin_content_blog_title_en')}
                 </label>
                 <input
                   type="text"
@@ -284,7 +285,7 @@ export default function ContentEditor() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Title (Georgian)
+                    {t('admin_content_blog_title_ka')}
                   </label>
                   <input
                     type="text"
@@ -308,7 +309,7 @@ export default function ContentEditor() {
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Blog Url Slug *
+                  {t('admin_content_blog_slug')}
                 </label>
                 <input
                   type="text"
@@ -321,7 +322,7 @@ export default function ContentEditor() {
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Blog Image Cover Path
+                  {t('admin_content_blog_img')}
                 </label>
                 <input
                   type="text"
@@ -333,7 +334,7 @@ export default function ContentEditor() {
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Blog Body Content (Markdown supported) *
+                  {t('admin_content_blog_body')}
                 </label>
                 <textarea
                   required
@@ -351,7 +352,7 @@ export default function ContentEditor() {
                   disabled={isSubmitting}
                   className="bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-semibold px-5 py-2.5 rounded-lg text-xs uppercase tracking-wider hover:opacity-90 disabled:opacity-50"
                 >
-                  Publish Article
+                  {t('admin_content_pub_art')}
                 </button>
               </div>
             </form>
@@ -359,13 +360,13 @@ export default function ContentEditor() {
             {/* List of active published blogs */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-150 dark:border-neutral-800 pb-2">
-                Active Articles
+                {t('admin_content_act_art')}
               </h3>
 
               <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
                 {blogs.length === 0 ? (
                   <p className="text-xs text-neutral-400 italic py-4 text-center">
-                    No articles written yet.
+                    {t('admin_content_no_art')}
                   </p>
                 ) : (
                   blogs.map((blog) => (

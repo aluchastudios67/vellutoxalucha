@@ -15,7 +15,9 @@ async function getCollectionsData() {
         orderBy: { name: 'asc' },
       }),
       prisma.product.findMany({
-        where: { status: 'ACTIVE' },
+        where: { 
+          status: 'ACTIVE',
+        },
         select: {
           id: true,
           name: true,
@@ -53,21 +55,15 @@ export default async function CollectionsSection() {
   return (
     <section id="collections" className="py-28 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16 space-y-3">
-          <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-400">
-            Curated Collections
-          </span>
-          <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-neutral-900">
-            The Collection
-          </h2>
-          <p className="text-neutral-400 font-light text-sm sm:text-base max-w-xl mx-auto">
-            Carefully selected statement pieces from our latest season, photographed as worn.
-          </p>
-        </div>
-
-        {/* Interactive part (filters, hover, cart) handled client-side */}
-        <CollectionsClient products={products as any} categories={categories} />
+        {/* Interactive part (filters, hover, cart, plus dynamic headers/footers) handled client-side */}
+        <CollectionsClient 
+          products={products as any} 
+          categories={categories} 
+          hideFilters={true} 
+          limit={4} 
+          showHeader={true} 
+          showFooter={true} 
+        />
       </div>
     </section>
   );

@@ -4,7 +4,7 @@ import MiniCart from '@/components/MiniCart';
 import HeroSection from '@/app/components/HeroSection';
 import EditorialIntro from '@/app/components/EditorialIntro';
 import EditorialStrip from '@/app/components/EditorialStrip';
-import NewArrivals from '@/app/components/NewArrivals';
+
 import CollectionsSection from '@/app/components/CollectionsSection';
 import ShopTheLook from '@/app/components/ShopTheLook';
 // import LocationStrip from '@/app/components/LocationStrip';
@@ -70,9 +70,6 @@ export default async function Home() {
 
         {/* Full Collections with category filter */}
         <CollectionsSection />
-
-        {/* New Arrivals spotlight */}
-        <NewArrivals products={products as any} />
 
         {/* Interactive Lookbook */}
         <ShopTheLook products={products as any} />

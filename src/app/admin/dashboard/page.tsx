@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AdminLayout from '../components/AdminLayout';
 import StatCard from '../components/StatCard';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   AreaChart,
   Area,
@@ -36,6 +37,7 @@ interface AnalyticsData {
 
 export default function DashboardOverview() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,7 +120,7 @@ export default function DashboardOverview() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Dashboard Metrics...
+            {t('admin_dashboard_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -134,7 +136,7 @@ export default function DashboardOverview() {
             onClick={loadData}
             className="px-4 py-2 bg-neutral-950 text-white text-xs font-bold rounded-xl"
           >
-            Retry
+            {t('admin_dashboard_retry')}
           </button>
         </div>
       </AdminLayout>
@@ -150,10 +152,10 @@ export default function DashboardOverview() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Overview
+              {t('admin_dashboard_overview')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Store activities and metric charts
+              {t('admin_dashboard_subtitle')}
             </p>
           </div>
           <button
@@ -161,14 +163,14 @@ export default function DashboardOverview() {
             className="inline-flex items-center gap-1.5 border border-neutral-300 dark:border-neutral-800 hover:border-neutral-950 dark:hover:border-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 transition-colors shadow-sm"
           >
             <Icon name="ArrowPathIcon" size={14} />
-            Refresh
+            {t('admin_dashboard_refresh')}
           </button>
         </div>
 
         {/* Statistical Metrics */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
-            title="Total Revenue"
+            title={t('admin_stat_revenue')}
             value={`${data.metrics.totalRevenue.toLocaleString()} GEL`}
             change="+18.4%"
             changeType="positive"
@@ -176,7 +178,7 @@ export default function DashboardOverview() {
             trendData={[3000, 4200, 3800, 5600, 7800, data.metrics.totalRevenue]}
           />
           <StatCard
-            title="Orders Completed"
+            title={t('admin_stat_orders')}
             value={data.metrics.totalOrdersCount}
             change="+5.2%"
             changeType="positive"
@@ -184,7 +186,7 @@ export default function DashboardOverview() {
             trendData={[8, 12, 10, 15, 18, data.metrics.totalOrdersCount]}
           />
           <StatCard
-            title="Average Order Value"
+            title={t('admin_stat_aov')}
             value={`${data.metrics.averageOrderValue.toLocaleString()} GEL`}
             change="-2.1%"
             changeType="negative"
@@ -192,7 +194,7 @@ export default function DashboardOverview() {
             trendData={[500, 550, 480, 520, 510, data.metrics.averageOrderValue]}
           />
           <StatCard
-            title="Low Stock Alerts"
+            title={t('admin_stat_low_stock')}
             value={data.metrics.lowStockCount}
             changeType="neutral"
             iconName="ExclamationTriangleIcon"
@@ -204,10 +206,10 @@ export default function DashboardOverview() {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                Monthly Sales Analytics
+                {t('admin_chart_title')}
               </h3>
               <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                Revenue generation timeline
+                {t('admin_chart_subtitle')}
               </p>
             </div>
             <div className="flex items-center gap-1.5 bg-neutral-50 dark:bg-neutral-800 p-1.5 rounded-lg border border-neutral-100 dark:border-neutral-700/50">
@@ -266,7 +268,7 @@ export default function DashboardOverview() {
               </ResponsiveContainer>
             ) : (
               <div className="w-full h-full bg-neutral-50 dark:bg-neutral-950 rounded-xl animate-pulse flex items-center justify-center text-xs text-neutral-400">
-                Rendering Chart...
+                {t('admin_chart_rendering')}
               </div>
             )}
           </div>
@@ -279,17 +281,17 @@ export default function DashboardOverview() {
             <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
               <div>
                 <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                  Recent Orders
+                  {t('admin_recent_orders')}
                 </h3>
                 <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                  Latest incoming catalog sales
+                  {t('admin_recent_orders_sub')}
                 </p>
               </div>
               <Link
                 href="/admin/orders"
                 className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
               >
-                View All Orders →
+                {t('admin_view_all_orders')}
               </Link>
             </div>
 
@@ -297,18 +299,18 @@ export default function DashboardOverview() {
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="text-neutral-400 dark:text-neutral-500 font-bold uppercase text-[9px] border-b border-neutral-100 dark:border-neutral-800">
-                    <th className="py-2.5">ID</th>
-                    <th>Customer</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th className="text-right">Total</th>
+                    <th className="py-2.5">{t('admin_table_id')}</th>
+                    <th>{t('admin_table_customer')}</th>
+                    <th>{t('admin_table_payment')}</th>
+                    <th>{t('admin_table_status')}</th>
+                    <th className="text-right">{t('admin_table_total')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-50 dark:divide-neutral-800/50">
                   {recentOrders.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="py-8 text-center text-neutral-400 italic">
-                        No recent orders.
+                        {t('admin_no_recent_orders')}
                       </td>
                     </tr>
                   ) : (
@@ -368,17 +370,17 @@ export default function DashboardOverview() {
             <section className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-4">
               <div>
                 <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                  Best Selling Products
+                  {t('admin_best_sellers')}
                 </h3>
                 <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                  Top sales item performance
+                  {t('admin_best_sellers_sub')}
                 </p>
               </div>
 
               <div className="space-y-3">
                 {data.bestSellers.length === 0 ? (
                   <p className="text-xs text-neutral-400 italic py-4 text-center">
-                    No sales recorded yet.
+                    {t('admin_no_sales')}
                   </p>
                 ) : (
                   data.bestSellers.map((item, idx) => (
@@ -391,7 +393,7 @@ export default function DashboardOverview() {
                           {item.name}
                         </p>
                         <p className="text-[10px] text-neutral-400 mt-0.5 font-light">
-                          Quantity sold: {item.qty}
+                          {t('admin_qty_sold')}{item.qty}
                         </p>
                       </div>
                       <span className="text-xs font-bold text-neutral-900 dark:text-white">
@@ -407,17 +409,17 @@ export default function DashboardOverview() {
             <section className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-4">
               <div>
                 <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                  Low Stock Warning
+                  {t('admin_low_stock_warning')}
                 </h3>
                 <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                  Items requiring inventory refill
+                  {t('admin_low_stock_sub')}
                 </p>
               </div>
 
               <div className="space-y-3">
                 {data.lowStockAlerts.length === 0 ? (
                   <p className="text-xs text-green-600 dark:text-green-400 italic py-4 text-center">
-                    All inventory levels healthy.
+                    {t('admin_all_inventory_healthy')}
                   </p>
                 ) : (
                   data.lowStockAlerts.map((item) => (
@@ -435,7 +437,7 @@ export default function DashboardOverview() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded dark:bg-red-950/40 dark:text-red-400">
-                          {item.inventory} left
+                          {item.inventory} {t('admin_left')}
                         </span>
                         <button
                           onClick={() => handleRestock(item.id, item.inventory)}

@@ -179,7 +179,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Vertical thumbnail strip */}
           {product.images && product.images.length > 1 && (
-            <div className="flex sm:flex-col gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 sm:pt-0 sm:w-[72px] flex-shrink-0">
+            <div className="flex sm:flex-col gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-visible p-1.5 sm:p-0 pb-2 sm:pb-0 sm:pt-0 sm:w-[72px] flex-shrink-0">
               {product.images.map((img, idx) => (
                 <button
                   key={img.id}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import DataTable from '../components/DataTable';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Customer {
   id: string;
@@ -19,6 +20,7 @@ interface Customer {
 }
 
 export default function CustomersManagement() {
+  const { t } = useLanguage();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -70,11 +72,11 @@ export default function CustomersManagement() {
       });
 
       if (res.ok) {
-        alert('Customer profile updated successfully.');
+        alert(t('admin_customers_update_success'));
         setEditingCustomer(null);
         loadCustomers();
       } else {
-        alert('Failed to update customer profile.');
+        alert(t('admin_customers_update_fail'));
       }
     } catch (e) {
       alert('Error updating customer profile.');
@@ -85,7 +87,7 @@ export default function CustomersManagement() {
 
   const columns = [
     {
-      header: 'Customer Name',
+      header: t('admin_customers_col_name'),
       accessor: (c: Customer) => (
         <span className="font-semibold text-neutral-900 dark:text-white">{c.name}</span>
       ),
@@ -93,7 +95,7 @@ export default function CustomersManagement() {
       sortKey: 'name',
     },
     {
-      header: 'Contact details',
+      header: t('admin_customers_col_contact'),
       accessor: (c: Customer) => (
         <div>
           <p className="font-medium text-neutral-800 dark:text-neutral-200">{c.phone}</p>
@@ -104,13 +106,13 @@ export default function CustomersManagement() {
       sortKey: 'phone',
     },
     {
-      header: 'Delivery Address',
+      header: t('admin_customers_col_address'),
       accessor: (c: Customer) => (
         <span className="font-light text-neutral-500 dark:text-neutral-400">{c.address}</span>
       ),
     },
     {
-      header: 'Segment',
+      header: t('admin_customers_col_segment'),
       accessor: (c: Customer) => (
         <span
           className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
@@ -128,14 +130,14 @@ export default function CustomersManagement() {
       sortKey: 'segment',
     },
     {
-      header: 'Orders placed',
+      header: t('admin_customers_col_orders'),
       accessor: (c: Customer) => <span className="font-semibold">{c.ordersCount}</span>,
       sortable: true,
       sortKey: 'ordersCount',
       className: 'text-center',
     },
     {
-      header: 'Total Spent',
+      header: t('admin_customers_col_spent'),
       accessor: (c: Customer) => (
         <span className="font-bold text-neutral-900 dark:text-white">
           {c.totalSpent.toLocaleString()} GEL
@@ -153,7 +155,7 @@ export default function CustomersManagement() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Client Database...
+            {t('admin_customers_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -167,10 +169,10 @@ export default function CustomersManagement() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Customer Database
+              {t('admin_customers_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              View client purchase history, segmentation, and add notes
+              {t('admin_customers_subtitle')}
             </p>
           </div>
         </div>
@@ -179,10 +181,10 @@ export default function CustomersManagement() {
         <DataTable
           columns={columns}
           data={customers}
-          searchPlaceholder="Search customers by name, phone..."
+          searchPlaceholder={t('admin_customers_search')}
           searchKey="name"
           onRowClick={handleRowClick}
-          emptyMessage="No customer records logged yet."
+          emptyMessage={t('admin_customers_empty')}
         />
 
         {/* Customer Edit Sidebar / Modal */}
@@ -195,10 +197,10 @@ export default function CustomersManagement() {
                 <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-4">
                   <div>
                     <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                      Edit Customer Profile
+                      {t('admin_customers_edit_title')}
                     </h3>
                     <p className="text-[10px] text-neutral-400 uppercase mt-0.5 font-semibold">
-                      Metadata editor
+                      {t('admin_customers_edit_subtitle')}
                     </p>
                   </div>
                   <button
@@ -212,25 +214,25 @@ export default function CustomersManagement() {
                 {/* Details info */}
                 <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-150 dark:border-neutral-800/80 space-y-2 text-xs">
                   <p className="flex justify-between">
-                    <span className="text-neutral-400">Client Name:</span>
+                    <span className="text-neutral-400">{t('admin_customers_client_name')}</span>
                     <strong className="text-neutral-900 dark:text-white">
                       {editingCustomer.name}
                     </strong>
                   </p>
                   <p className="flex justify-between">
-                    <span className="text-neutral-400">Phone Number:</span>
+                    <span className="text-neutral-400">{t('admin_customers_phone')}</span>
                     <strong className="text-neutral-900 dark:text-white">
                       {editingCustomer.phone}
                     </strong>
                   </p>
                   <p className="flex justify-between">
-                    <span className="text-neutral-400">Orders Placed:</span>
+                    <span className="text-neutral-400">{t('admin_customers_orders_placed')}</span>
                     <strong className="text-neutral-900 dark:text-white">
                       {editingCustomer.ordersCount}
                     </strong>
                   </p>
                   <p className="flex justify-between">
-                    <span className="text-neutral-400">Total Spent:</span>
+                    <span className="text-neutral-400">{t('admin_customers_total_spent')}</span>
                     <strong className="text-neutral-900 dark:text-white">
                       {editingCustomer.totalSpent.toLocaleString()} GEL
                     </strong>
@@ -241,29 +243,29 @@ export default function CustomersManagement() {
                   {/* Segment selection */}
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                      Customer Segment
+                      {t('admin_customers_segment_label')}
                     </label>
                     <select
                       value={segment}
                       onChange={(e) => setSegment(e.target.value as Customer['segment'])}
                       className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
                     >
-                      <option value="New">New</option>
-                      <option value="Regular">Regular</option>
-                      <option value="VIP">VIP</option>
+                      <option value="New">{t('admin_customers_segment_new')}</option>
+                      <option value="Regular">{t('admin_customers_segment_regular')}</option>
+                      <option value="VIP">{t('admin_customers_segment_vip')}</option>
                     </select>
                   </div>
 
                   {/* Customer Comments/Notes */}
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                      Special Comments / Sizing Details
+                      {t('admin_customers_comments_label')}
                     </label>
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={5}
-                      placeholder="e.g. Blazer size M, prefers wool blends, preferred courier..."
+                      placeholder={t('admin_customers_comments_placeholder')}
                       className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none resize-none"
                     />
                   </div>
@@ -274,14 +276,14 @@ export default function CustomersManagement() {
                       onClick={() => setEditingCustomer(null)}
                       className="flex-1 border border-neutral-300 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 py-2.5 rounded-lg text-xs uppercase tracking-wider"
                     >
-                      Cancel
+                      {t('admin_customers_cancel')}
                     </button>
                     <button
                       type="submit"
                       disabled={isUpdating}
                       className="flex-[2] bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-semibold py-2.5 rounded-lg text-xs uppercase tracking-wider hover:opacity-90 disabled:opacity-50"
                     >
-                      {isUpdating ? 'Saving...' : 'Save Profile'}
+                      {isUpdating ? t('admin_customers_saving') : t('admin_customers_save')}
                     </button>
                   </div>
                 </form>

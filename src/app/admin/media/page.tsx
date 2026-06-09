@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MediaItem {
   id: string;
@@ -15,6 +16,7 @@ interface MediaItem {
 }
 
 export default function MediaLibrary() {
+  const { t } = useLanguage();
   const [media, setMedia] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFolder, setActiveFolder] = useState('All');
@@ -56,13 +58,13 @@ export default function MediaLibrary() {
       });
 
       if (res.ok) {
-        alert('File uploaded successfully.');
+        alert(t('admin_media_upload_success'));
         loadMedia();
       } else {
-        alert('Failed to upload file.');
+        alert(t('admin_media_upload_fail'));
       }
     } catch (e) {
-      alert('Error communicating with media API.');
+      alert(t('admin_media_upload_error'));
     } finally {
       setUploading(false);
     }
@@ -71,7 +73,7 @@ export default function MediaLibrary() {
   const handleCopyUrl = (url: string) => {
     if (typeof navigator !== 'undefined') {
       navigator.clipboard.writeText(url);
-      alert('Media URL copied to clipboard: ' + url);
+      alert(t('admin_media_copied') + url);
     }
   };
 
@@ -91,10 +93,10 @@ export default function MediaLibrary() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Media Library
+              {t('admin_media_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Store, organize, and copy image links for products and content
+              {t('admin_media_subtitle')}
             </p>
           </div>
           <div>
@@ -111,7 +113,7 @@ export default function MediaLibrary() {
               className="inline-flex items-center gap-1.5 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-md disabled:opacity-50"
             >
               <Icon name="ArrowUpTrayIcon" size={14} />
-              {uploading ? 'Uploading...' : 'Upload File'}
+              {uploading ? t('admin_media_uploading') : t('admin_media_upload_btn')}
             </button>
           </div>
         </div>
@@ -121,7 +123,7 @@ export default function MediaLibrary() {
           {/* Left: Folders list */}
           <div className="lg:col-span-3 bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-              Library Directories
+              {t('admin_media_dirs')}
             </h3>
             <div className="flex flex-col gap-1.5">
               {folders.map((folder) => (
@@ -136,7 +138,7 @@ export default function MediaLibrary() {
                 >
                   <div className="flex items-center gap-2">
                     <Icon name="FolderIcon" size={16} />
-                    <span className="truncate max-w-[120px]">{folder}</span>
+                    <span className="truncate max-w-[120px]">{folder === 'All' ? t('admin_media_all') : folder}</span>
                   </div>
                   <span className="text-[10px] opacity-65">
                     {folder === 'All'
@@ -157,7 +159,7 @@ export default function MediaLibrary() {
               </span>
               <input
                 type="text"
-                placeholder="Search assets by file name..."
+                placeholder={t('admin_media_search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white rounded-xl focus:outline-none focus:border-neutral-950 dark:focus:border-white"
@@ -166,11 +168,11 @@ export default function MediaLibrary() {
 
             {isLoading ? (
               <div className="text-center py-20 text-neutral-400 text-xs italic">
-                Loading Media Vault...
+                {t('admin_media_loading')}
               </div>
             ) : filteredMedia.length === 0 ? (
               <div className="text-center py-20 bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 text-neutral-400 text-xs italic">
-                No media files matched your search.
+                {t('admin_media_empty')}
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -195,7 +197,7 @@ export default function MediaLibrary() {
                       <div className="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2 p-2 text-center">
                         <Icon name="LinkIcon" size={20} />
                         <span className="text-[9px] uppercase tracking-wider font-bold">
-                          Copy Link Path
+                          {t('admin_media_copy_link')}
                         </span>
                       </div>
                     </div>

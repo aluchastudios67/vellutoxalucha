@@ -6,6 +6,7 @@ import Image from 'next/image';
 import AdminLayout from '../components/AdminLayout';
 import DataTable from '../components/DataTable';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Product {
   id: string;
@@ -23,6 +24,7 @@ interface Product {
 }
 
 export default function ProductsCatalog() {
+  const { t, language } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,10 +53,10 @@ export default function ProductsCatalog() {
         method: 'POST',
       });
       if (res.ok) {
-        alert('Product duplicated successfully.');
+        alert(t('admin_product_dupe_success'));
         loadProducts();
       } else {
-        alert('Failed to duplicate product.');
+        alert(t('admin_product_dupe_fail'));
       }
     } catch (e) {
       alert('Error duplicating product.');
@@ -63,9 +65,7 @@ export default function ProductsCatalog() {
 
   const handleDelete = async (prodId: string) => {
     if (
-      !window.confirm(
-        'Are you sure you want to delete this product? This will remove all variants and images.'
-      )
+      !window.confirm(t('admin_product_del_confirm'))
     )
       return;
     try {
@@ -73,10 +73,10 @@ export default function ProductsCatalog() {
         method: 'DELETE',
       });
       if (res.ok) {
-        alert('Product deleted successfully.');
+        alert(t('admin_product_del_success'));
         loadProducts();
       } else {
-        alert('Failed to delete product.');
+        alert(t('admin_product_del_fail'));
       }
     } catch (e) {
       alert('Error deleting product.');
@@ -85,7 +85,7 @@ export default function ProductsCatalog() {
 
   const columns = [
     {
-      header: 'Image',
+      header: t('admin_products_image'),
       accessor: (p: Product) => (
         <div className="w-10 h-12 rounded bg-neutral-100 dark:bg-neutral-800 overflow-hidden relative shadow-sm">
           <Image
@@ -100,10 +100,12 @@ export default function ProductsCatalog() {
       className: 'w-16',
     },
     {
-      header: 'Name & SKU',
+      header: t('admin_products_name_sku'),
       accessor: (p: Product) => (
         <div>
-          <p className="font-semibold text-neutral-900 dark:text-white leading-tight">{p.name}</p>
+          <p className="font-semibold text-neutral-900 dark:text-white leading-tight">
+            {language === 'GE' && p.nameKa ? p.nameKa : language === 'RU' && p.nameRu ? p.nameRu : p.name}
+          </p>
           <p className="text-[10px] text-neutral-400 font-mono mt-0.5">{p.sku}</p>
         </div>
       ),
@@ -111,7 +113,7 @@ export default function ProductsCatalog() {
       sortKey: 'name',
     },
     {
-      header: 'Category',
+      header: t('admin_products_category'),
       accessor: (p: Product) => (
         <span className="text-neutral-600 dark:text-neutral-400 font-medium">
           {p.category?.name || '—'}
@@ -121,7 +123,7 @@ export default function ProductsCatalog() {
       sortKey: 'categoryId',
     },
     {
-      header: 'Price',
+      header: t('admin_products_price'),
       accessor: (p: Product) => (
         <span className="font-bold text-neutral-900 dark:text-white">{p.price} GEL</span>
       ),
@@ -129,7 +131,7 @@ export default function ProductsCatalog() {
       sortKey: 'price',
     },
     {
-      header: 'Inventory',
+      header: t('admin_products_inventory'),
       accessor: (p: Product) => (
         <span
           className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
@@ -140,14 +142,14 @@ export default function ProductsCatalog() {
                 : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
           }`}
         >
-          {p.inventory <= 0 ? 'Out of Stock' : `${p.inventory} units`}
+          {p.inventory <= 0 ? t('admin_out_of_stock') : `${p.inventory} ${t('admin_units')}`}
         </span>
       ),
       sortable: true,
       sortKey: 'inventory',
     },
     {
-      header: 'Status',
+      header: t('admin_products_status'),
       accessor: (p: Product) => (
         <span
           className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
@@ -165,7 +167,7 @@ export default function ProductsCatalog() {
       sortKey: 'status',
     },
     {
-      header: 'Actions',
+      header: t('admin_products_actions'),
       accessor: (p: Product) => {
         const canWrite = true;
         return (
@@ -208,7 +210,7 @@ export default function ProductsCatalog() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Products Catalog...
+            {t('admin_products_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -224,10 +226,10 @@ export default function ProductsCatalog() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Product Catalog
+              {t('admin_products_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Browse, search, edit, and duplicate products
+              {t('admin_products_subtitle')}
             </p>
           </div>
           {canWrite && (
@@ -236,7 +238,7 @@ export default function ProductsCatalog() {
               className="inline-flex items-center gap-1.5 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-md"
             >
               <Icon name="PlusIcon" size={14} />
-              Add Product
+              {t('admin_products_add')}
             </Link>
           )}
         </div>
@@ -245,9 +247,9 @@ export default function ProductsCatalog() {
         <DataTable
           columns={columns}
           data={products}
-          searchPlaceholder="Search products by title, SKU code..."
+          searchPlaceholder={t('admin_products_search')}
           searchKey="name"
-          emptyMessage="No products found in database catalog. Try seeding or adding new items."
+          emptyMessage={t('admin_products_empty')}
         />
       </div>
     </AdminLayout>

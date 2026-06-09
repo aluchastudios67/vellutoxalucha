@@ -23,16 +23,16 @@ export default function ShopTheLook({ products: initialProducts = [] }: { produc
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   const mappedInitial =
-    Array.isArray(initialProducts) && initialProducts.length >= 2
-      ? initialProducts.slice(0, 2).map((p: any, idx: number) => ({
+    Array.isArray(initialProducts) && initialProducts.length >= 1
+      ? initialProducts.slice(0, 1).map((p: any, idx: number) => ({
           id: p.id,
           name: p.name,
           nameKa: p.nameKa,
           nameRu: p.nameRu,
           price: p.price,
           img: p.images?.[0]?.url || '/assets/images/no_image.png',
-          top: idx === 0 ? '45%' : '72%',
-          left: idx === 0 ? '42%' : '55%',
+          top: '45%',
+          left: '42%',
         }))
       : [];
 
@@ -127,10 +127,14 @@ export default function ShopTheLook({ products: initialProducts = [] }: { produc
 
               {/* Hotspots */}
               {lookItems.map((item) => (
-                <div key={item.id} className="absolute" style={{ top: item.top, left: item.left }}>
+                <div
+                  key={item.id}
+                  className="absolute"
+                  style={{ top: item.top, left: item.left }}
+                  onMouseEnter={() => setActiveHotspot(item.id)}
+                  onMouseLeave={() => setActiveHotspot(null)}
+                >
                   <button
-                    onMouseEnter={() => setActiveHotspot(item.id)}
-                    onMouseLeave={() => setActiveHotspot(null)}
                     onClick={() => setActiveHotspot(activeHotspot === item.id ? null : item.id)}
                     className="relative w-6 h-6 flex items-center justify-center bg-white text-neutral-950 font-bold rounded-full border border-neutral-900 focus:outline-none transition-transform hover:scale-110 shadow-lg"
                     aria-label={`Hotspot for ${getItemName(item)}`}

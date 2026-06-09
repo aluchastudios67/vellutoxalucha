@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 const FASHION_COLORS: { name: string; hex: string }[] = [
   { name: 'Midnight Onyx', hex: '#111111' },
@@ -49,6 +50,7 @@ interface VariantInput {
 
 export default function NewProduct() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -69,10 +71,10 @@ export default function NewProduct() {
     status: 'ACTIVE',
     tag: '',
     rating: 5,
-    categoryId: '',
     description: '',
     descriptionKa: '',
     descriptionRu: '',
+    categoryId: '',
     seoTitle: '',
     seoDescription: '',
   });
@@ -272,10 +274,10 @@ const CLIENT_FALLBACK_CATEGORIES = [
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Add New Product
+              {t('admin_new_product_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Define pricing, description, variants, and SEO meta
+              {t('admin_new_product_subtitle')}
             </p>
           </div>
           <div className="flex gap-2">
@@ -283,14 +285,14 @@ const CLIENT_FALLBACK_CATEGORIES = [
               href="/admin/products"
               className="border border-neutral-300 dark:border-neutral-800 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 hover:border-neutral-950 dark:hover:border-white transition-colors"
             >
-              Cancel
+              {t('admin_cancel')}
             </Link>
             <button
               type="submit"
               disabled={isSubmitting}
               className="bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-md disabled:opacity-50"
             >
-              {isSubmitting ? 'Saving...' : 'Add Product'}
+              {isSubmitting ? t('admin_saving') : t('admin_add_product')}
             </button>
           </div>
         </div>
@@ -302,13 +304,13 @@ const CLIENT_FALLBACK_CATEGORIES = [
             {/* Title / Description Translations */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Product Translations
+                {t('admin_prod_translations')}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Product Name (EN) *
+                    {t('admin_prod_name_en')}
                   </label>
                   <input
                     type="text"
@@ -322,7 +324,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Product Name (KA) *
+                    {t('admin_prod_name_ka')}
                   </label>
                   <input
                     type="text"
@@ -336,7 +338,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Product Name (RU) *
+                    {t('admin_prod_name_ru')}
                   </label>
                   <input
                     type="text"
@@ -353,7 +355,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
               <div className="space-y-4 pt-2">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Description (EN)
+                    {t('admin_desc_en')}
                   </label>
                   <textarea
                     name="description"
@@ -366,7 +368,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Description (KA)
+                    {t('admin_desc_ka')}
                   </label>
                   <textarea
                     name="descriptionKa"
@@ -379,7 +381,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Description (RU)
+                    {t('admin_desc_ru')}
                   </label>
                   <textarea
                     name="descriptionRu"
@@ -396,13 +398,13 @@ const CLIENT_FALLBACK_CATEGORIES = [
             {/* Inventory & Pricing */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Pricing & Logistics
+                {t('admin_pricing_logistics')}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Base Price (GEL) *
+                    {t('admin_base_price')}
                   </label>
                   <input
                     type="number"
@@ -417,7 +419,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    SKU Code *
+                    {t('admin_sku')}
                   </label>
                   <input
                     type="text"
@@ -431,7 +433,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                    Inventory Stock level
+                    {t('admin_inventory')}
                   </label>
                   <input
                     type="number"
@@ -449,20 +451,20 @@ const CLIENT_FALLBACK_CATEGORIES = [
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
               <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-                  Product Variants
+                  {t('admin_variants_title')}
                 </h3>
                 <button
                   type="button"
                   onClick={handleAddVariant}
                   className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white px-3 py-1.5 rounded-lg transition-colors"
                 >
-                  <Icon name="PlusIcon" size={12} /> Add Variant
+                  <Icon name="PlusIcon" size={12} /> {t('admin_add_variant')}
                 </button>
               </div>
 
               {variants.length === 0 ? (
                 <p className="text-xs text-neutral-400 dark:text-neutral-500 italic py-4">
-                  No variants defined. Add size or color choices if applicable.
+                  {t('admin_no_variants')}
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -474,7 +476,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 flex-1">
                         <div>
                           <label className="block text-[8px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                            Variant SKU
+                            {t('admin_variant_sku')}
                           </label>
                           <input
                             type="text"
@@ -486,7 +488,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                            Size
+                            {t('admin_size')}
                           </label>
                           <select
                             value={variant.size}
@@ -501,7 +503,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                            Color
+                            {t('admin_color')}
                           </label>
                           <div className="relative">
                             <input
@@ -530,7 +532,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                            Stock
+                            {t('admin_stock')}
                           </label>
                           <input
                             type="number"
@@ -544,7 +546,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                            Price Adj (+/-)
+                            {t('admin_price_adj')}
                           </label>
                           <input
                             type="number"
@@ -575,10 +577,10 @@ const CLIENT_FALLBACK_CATEGORIES = [
               <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-2">
                 <div>
                   <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-                    Image Gallery
+                    {t('admin_gallery_title')}
                   </h3>
                   <p className="text-[10px] text-neutral-400 mt-1">
-                    Select one or more catalog assets stored in your media vault
+                    {t('admin_gallery_subtitle')}
                   </p>
                 </div>
                 <div>
@@ -594,14 +596,14 @@ const CLIENT_FALLBACK_CATEGORIES = [
                     className="cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white px-3 py-1.5 rounded-lg transition-colors"
                   >
                     <Icon name="ArrowUpTrayIcon" size={12} />{' '}
-                    {isUploading ? 'Uploading...' : 'Upload Image'}
+                    {isUploading ? t('admin_uploading') : t('admin_upload_image')}
                   </label>
                 </div>
               </div>
 
               {mediaItems.length === 0 ? (
                 <p className="text-xs text-neutral-400 dark:text-neutral-500 italic py-4">
-                  No images uploaded in Media Library yet.
+                  {t('admin_no_images')}
                 </p>
               ) : (
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
@@ -641,12 +643,12 @@ const CLIENT_FALLBACK_CATEGORIES = [
             {/* Status & Categorization */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Status & Taxonomy
+                {t('admin_status_tax')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Product ID (optional)
+                  {t('admin_prod_id')}
                 </label>
                 <input
                   type="text"
@@ -660,7 +662,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Store Category *
+                  {t('admin_category')}
                 </label>
                 {categoriesLoading ? (
                   <div className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 px-3 py-2.5 rounded-lg text-neutral-400 animate-pulse">
@@ -692,7 +694,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Visibility Status
+                  {t('admin_visibility')}
                 </label>
                 <select
                   name="status"
@@ -708,7 +710,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Promotional Tag
+                  {t('admin_promo_tag')}
                 </label>
                 <input
                   type="text"
@@ -722,7 +724,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Initial Star Rating
+                  {t('admin_initial_rating')}
                 </label>
                 <select
                   name="rating"
@@ -742,12 +744,12 @@ const CLIENT_FALLBACK_CATEGORIES = [
             {/* SEO Metadata */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                SEO Configurations
+                {t('admin_seo_config')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  SEO Meta Title
+                  {t('admin_seo_title')}
                 </label>
                 <input
                   type="text"
@@ -761,7 +763,7 @@ const CLIENT_FALLBACK_CATEGORIES = [
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  SEO Meta Description
+                  {t('admin_seo_desc')}
                 </label>
                 <textarea
                   name="seoDescription"

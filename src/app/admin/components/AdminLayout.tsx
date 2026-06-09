@@ -4,24 +4,25 @@ import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage, Language } from '@/context/LanguageContext';
 
 interface SidebarItem {
-  name: string;
+  key: string;
   path: string;
   iconName: string;
 }
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
-  { name: 'Dashboard', path: '/admin/dashboard', iconName: 'ChartBarIcon' },
-  { name: 'Products', path: '/admin/products', iconName: 'ShoppingBagIcon' },
-  { name: 'Orders', path: '/admin/orders', iconName: 'ClipboardDocumentListIcon' },
-  { name: 'Customers', path: '/admin/customers', iconName: 'UsersIcon' },
-  { name: 'Content Editor', path: '/admin/content', iconName: 'DocumentTextIcon' },
-  { name: 'Media Library', path: '/admin/media', iconName: 'PhotoIcon' },
-  { name: 'Marketing', path: '/admin/marketing', iconName: 'TagIcon' },
-  { name: 'Analytics', path: '/admin/analytics', iconName: 'PresentationChartLineIcon' },
-  { name: 'Notifications', path: '/admin/notifications', iconName: 'BellIcon' },
-  { name: 'Settings', path: '/admin/settings', iconName: 'Cog6ToothIcon' },
+  { key: 'admin_dashboard', path: '/admin/dashboard', iconName: 'ChartBarIcon' },
+  { key: 'admin_products', path: '/admin/products', iconName: 'ShoppingBagIcon' },
+  { key: 'admin_orders', path: '/admin/orders', iconName: 'ClipboardDocumentListIcon' },
+  { key: 'admin_customers', path: '/admin/customers', iconName: 'UsersIcon' },
+  { key: 'admin_content', path: '/admin/content', iconName: 'DocumentTextIcon' },
+  { key: 'admin_media', path: '/admin/media', iconName: 'PhotoIcon' },
+  { key: 'admin_marketing', path: '/admin/marketing', iconName: 'TagIcon' },
+  { key: 'admin_analytics', path: '/admin/analytics', iconName: 'PresentationChartLineIcon' },
+  { key: 'admin_notifications', path: '/admin/notifications', iconName: 'BellIcon' },
+  { key: 'admin_settings', path: '/admin/settings', iconName: 'Cog6ToothIcon' },
 ];
 
 function handleLogout(router: ReturnType<typeof useRouter>) {
@@ -35,13 +36,14 @@ function handleLogout(router: ReturnType<typeof useRouter>) {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { language, setLanguage, t } = useLanguage();
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(
-    null
-  );
+  const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(null);
 
   useEffect(() => {
     // Auth guard
@@ -86,7 +88,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return parts.map((part, index) => {
       const path = '/' + parts.slice(0, index + 1).join('/');
       const isLast = index === parts.length - 1;
-      const formattedName = part.charAt(0).toUpperCase() + part.slice(1).replace('-', ' ');
+      
+      // Try to find if this part matches a sidebar item to translate it
+      let formattedName = part.charAt(0).toUpperCase() + part.slice(1).replace('-', ' ');
+      const matchedItem = SIDEBAR_ITEMS.find(item => item.path === path);
+      if (matchedItem) {
+        formattedName = t(matchedItem.key);
+      } else if (part === 'admin') {
+        formattedName = 'Admin';
+      }
 
       return (
         <React.Fragment key={path}>
@@ -109,7 +119,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const userInitials = adminUser?.name?.slice(0, 2).toUpperCase() || 'AD';
-  const userRole = adminUser?.role?.replace('_', ' ') || 'SUPER ADMIN';
+  const userRole = adminUser?.role?.replace('_', ' ') || t('admin_super_admin');
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-950 dark:text-white flex">
@@ -158,7 +168,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 }`}
               >
                 <Icon name={item.iconName} size={18} />
-                {isSidebarOpen && <span>{item.name}</span>}
+                {isSidebarOpen && <span>{t(item.key)}</span>}
               </Link>
             );
           })}
@@ -171,7 +181,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-neutral-400 hover:bg-red-950/20 hover:text-red-400 transition-colors text-xs font-semibold uppercase tracking-wider"
           >
             <Icon name="ArrowLeftOnRectangleIcon" size={18} />
-            {isSidebarOpen && <span>Logout</span>}
+            {isSidebarOpen && <span>{t('admin_logout')}</span>}
           </button>
         </div>
       </aside>
@@ -212,7 +222,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     }`}
                   >
                     <Icon name={item.iconName} size={18} />
-                    <span>{item.name}</span>
+                    <span>{t(item.key)}</span>
                   </Link>
                 );
               })}
@@ -223,7 +233,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 className="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-neutral-400 hover:bg-red-950/20 hover:text-red-400 transition-colors text-xs font-semibold uppercase tracking-wider"
               >
                 <Icon name="ArrowLeftOnRectangleIcon" size={18} />
-                <span>Logout</span>
+                <span>{t('admin_logout')}</span>
               </button>
             </div>
           </aside>
@@ -248,6 +258,41 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Quick Actions */}
             <div className="flex items-center gap-4">
+              
+              {/* Language Switcher */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+                  className="p-2.5 text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-white rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1"
+                >
+                  <Icon name="GlobeAltIcon" size={18} />
+                  <span className="text-[10px] font-bold uppercase">{language}</span>
+                </button>
+                {isLanguageOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsLanguageOpen(false)} />
+                    <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl py-1 z-50">
+                      {(['EN', 'GE'] as Language[]).map((lang) => (
+                        <button
+                          key={lang}
+                          onClick={() => {
+                            setLanguage(lang);
+                            setIsLanguageOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-xs font-semibold ${
+                            language === lang
+                              ? 'text-neutral-950 dark:text-white bg-neutral-50 dark:bg-neutral-800'
+                              : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-800/50'
+                          }`}
+                        >
+                          {lang === 'EN' ? 'English' : 'ქართული'}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
               {/* Light/Dark Toggle */}
               <button
                 onClick={toggleDarkMode}
@@ -303,14 +348,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           className="flex items-center gap-2.5 px-4 py-2 text-xs text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white transition-colors"
                         >
                           <Icon name="Cog6ToothIcon" size={14} />
-                          Store Settings
+                          {t('admin_settings')}
                         </Link>
                         <Link
                           href="/"
                           className="flex items-center gap-2.5 px-4 py-2 text-xs text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white transition-colors"
                         >
                           <Icon name="HomeIcon" size={14} />
-                          View Storefront
+                          {t('admin_view_storefront')}
                         </Link>
                       </div>
                       <div className="border-t border-neutral-100 dark:border-neutral-800 py-1">
@@ -319,7 +364,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors text-left"
                         >
                           <Icon name="ArrowLeftOnRectangleIcon" size={14} />
-                          Sign Out
+                          {t('admin_logout')}
                         </button>
                       </div>
                     </div>

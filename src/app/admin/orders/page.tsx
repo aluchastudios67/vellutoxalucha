@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import DataTable from '../components/DataTable';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Order {
   id: string;
@@ -28,6 +29,7 @@ interface Order {
 }
 
 export default function OrdersLog() {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('All');
@@ -54,21 +56,21 @@ export default function OrdersLog() {
 
   const handleExportCSV = () => {
     if (orders.length === 0) {
-      alert('No orders available to export.');
+      alert(t('admin_orders_no_export'));
       return;
     }
 
     const headers = [
-      'Order ID',
-      'Customer Name',
-      'Phone',
-      'Address',
-      'Delivery Date',
-      'Delivery Time',
-      'Payment Method',
-      'Status',
-      'Payment Status',
-      'Total',
+      t('admin_orders_col_id'),
+      t('admin_orders_col_customer'),
+      t('admin_orders_col_phone'),
+      t('admin_orders_col_address'),
+      t('admin_orders_col_date'),
+      t('admin_orders_col_time'),
+      t('admin_orders_col_method'),
+      t('admin_orders_col_status'),
+      t('admin_orders_col_pay_status'),
+      t('admin_orders_col_total'),
     ];
     const rows = orders.map((o) => [
       o.id,
@@ -98,7 +100,7 @@ export default function OrdersLog() {
 
   const columns = [
     {
-      header: 'Order ID',
+      header: t('admin_orders_col_id'),
       accessor: (o: Order) => (
         <a
           href={`/admin/orders/${o.id}`}
@@ -112,7 +114,7 @@ export default function OrdersLog() {
       className: 'w-24',
     },
     {
-      header: 'Customer Details',
+      header: t('admin_orders_col_customer'),
       accessor: (o: Order) => (
         <div>
           <p className="font-semibold text-neutral-900 dark:text-white">{o.customerName}</p>
@@ -123,7 +125,7 @@ export default function OrdersLog() {
       sortKey: 'customerName',
     },
     {
-      header: 'Ordered Items',
+      header: t('admin_orders_col_items'),
       accessor: (o: Order) => (
         <div className="max-w-xs truncate font-light text-neutral-500 dark:text-neutral-400">
           {o.items.map((item) => `${item.productName} (x${item.qty})`).join(', ')}
@@ -131,7 +133,7 @@ export default function OrdersLog() {
       ),
     },
     {
-      header: 'Delivery Schedule',
+      header: t('admin_orders_col_date'),
       accessor: (o: Order) => (
         <div>
           <p className="font-semibold text-neutral-800 dark:text-neutral-200">{o.deliveryDate}</p>
@@ -142,7 +144,7 @@ export default function OrdersLog() {
       sortKey: 'deliveryDate',
     },
     {
-      header: 'Method',
+      header: t('admin_orders_col_method'),
       accessor: (o: Order) => (
         <span className="bg-neutral-100 dark:bg-neutral-800 text-[10px] px-2 py-0.5 rounded font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider">
           {o.paymentMethod}
@@ -152,7 +154,7 @@ export default function OrdersLog() {
       sortKey: 'paymentMethod',
     },
     {
-      header: 'Payment Status',
+      header: t('admin_orders_col_pay_status'),
       accessor: (o: Order) => (
         <span
           className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
@@ -170,7 +172,7 @@ export default function OrdersLog() {
       sortKey: 'paymentStatus',
     },
     {
-      header: 'Order Status',
+      header: t('admin_orders_col_status'),
       accessor: (o: Order) => (
         <span
           className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
@@ -190,7 +192,7 @@ export default function OrdersLog() {
       sortKey: 'status',
     },
     {
-      header: 'Total Price',
+      header: t('admin_orders_col_total'),
       accessor: (o: Order) => (
         <span className="font-bold text-neutral-900 dark:text-white">{o.total} GEL</span>
       ),
@@ -206,7 +208,7 @@ export default function OrdersLog() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Orders Log...
+            {t('admin_orders_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -220,13 +222,13 @@ export default function OrdersLog() {
         onChange={(e) => setStatusFilter(e.target.value)}
         className="text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2 rounded-xl focus:outline-none"
       >
-        <option value="All">All Order Statuses</option>
-        <option value="PENDING">Pending</option>
-        <option value="PROCESSING">Processing</option>
-        <option value="SHIPPED">Shipped</option>
-        <option value="DELIVERED">Delivered</option>
-        <option value="CANCELLED">Cancelled</option>
-        <option value="REFUNDED">Refunded</option>
+        <option value="All">{t('admin_orders_filter_all_status')}</option>
+        <option value="PENDING">{t('admin_orders_filter_pending')}</option>
+        <option value="PROCESSING">{t('admin_orders_filter_processing')}</option>
+        <option value="SHIPPED">{t('admin_orders_filter_shipped')}</option>
+        <option value="DELIVERED">{t('admin_orders_filter_delivered')}</option>
+        <option value="CANCELLED">{t('admin_orders_filter_cancelled')}</option>
+        <option value="REFUNDED">{t('admin_orders_filter_refunded')}</option>
       </select>
 
       <select
@@ -234,10 +236,10 @@ export default function OrdersLog() {
         onChange={(e) => setPaymentFilter(e.target.value)}
         className="text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2 rounded-xl focus:outline-none"
       >
-        <option value="All">All Payment Methods</option>
-        <option value="Cash">Cash</option>
-        <option value="Card">Card</option>
-        <option value="Bank">Bank</option>
+        <option value="All">{t('admin_orders_filter_all_pay')}</option>
+        <option value="Cash">{t('admin_orders_filter_cash')}</option>
+        <option value="Card">{t('admin_orders_filter_card')}</option>
+        <option value="Bank">{t('admin_orders_filter_bank')}</option>
       </select>
     </div>
   );
@@ -249,10 +251,10 @@ export default function OrdersLog() {
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Orders Log
+              {t('admin_orders_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Track sales status, payments, and export transaction tables
+              {t('admin_orders_subtitle')}
             </p>
           </div>
           <button
@@ -260,7 +262,7 @@ export default function OrdersLog() {
             className="inline-flex items-center gap-1.5 border border-neutral-300 dark:border-neutral-800 hover:border-neutral-950 dark:hover:border-white px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 transition-colors shadow-sm"
           >
             <Icon name="ArrowDownTrayIcon" size={14} />
-            Export CSV
+            {t('admin_orders_export')}
           </button>
         </div>
 
@@ -268,10 +270,10 @@ export default function OrdersLog() {
         <DataTable
           columns={columns}
           data={orders}
-          searchPlaceholder="Search orders by customer name, order ID, phone..."
+          searchPlaceholder={t('admin_orders_search')}
           searchKey="customerName"
           filterComponent={filters}
-          emptyMessage="No orders matched the filter criteria."
+          emptyMessage={t('admin_orders_empty')}
         />
       </div>
     </AdminLayout>

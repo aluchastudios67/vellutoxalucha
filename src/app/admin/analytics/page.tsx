@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   AreaChart,
   Area,
@@ -39,6 +40,7 @@ interface AnalyticsData {
 const CATEGORY_COLORS = ['#171717', '#404040', '#737373', '#a3a3a3'];
 
 export default function BusinessAnalytics() {
+  const { t } = useLanguage();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
@@ -104,7 +106,7 @@ export default function BusinessAnalytics() {
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Business Analytics...
+            {t('admin_analytics_load')}
           </p>
         </div>
       </AdminLayout>
@@ -141,10 +143,10 @@ export default function BusinessAnalytics() {
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center border-b border-neutral-100 dark:border-neutral-800 pb-5 gap-4">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Business Analytics
+              {t('admin_analytics_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Store traffic statistics, best sellers, and conversion parameters
+              {t('admin_analytics_sub')}
             </p>
           </div>
           <div className="flex gap-2.5 items-center justify-end">
@@ -153,16 +155,16 @@ export default function BusinessAnalytics() {
               onChange={(e) => setTimeRange(e.target.value)}
               className="text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-xl focus:outline-none"
             >
-              <option value="30days">Last 30 Days</option>
-              <option value="6months">Last 6 Months</option>
-              <option value="year">Last Year</option>
+              <option value="30days">{t('admin_analytics_30d')}</option>
+              <option value="6months">{t('admin_analytics_6m')}</option>
+              <option value="year">{t('admin_analytics_1y')}</option>
             </select>
             <button
               onClick={handleDownloadReport}
               className="inline-flex items-center gap-1.5 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider hover:opacity-90 shadow-md"
             >
               <Icon name="ArrowDownTrayIcon" size={14} />
-              Download Report
+              {t('admin_analytics_dl')}
             </button>
           </div>
         </div>
@@ -173,10 +175,10 @@ export default function BusinessAnalytics() {
           <div className="lg:col-span-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
             <div>
               <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                Revenue Generation & Order Volume
+                {t('admin_analytics_rev_vol')}
               </h3>
               <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">
-                Compare monthly orders vs revenue
+                {t('admin_analytics_rev_sub')}
               </p>
             </div>
 
@@ -233,10 +235,10 @@ export default function BusinessAnalytics() {
           <div className="lg:col-span-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between">
             <div>
               <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                Sales by Category
+                {t('admin_analytics_cat')}
               </h3>
               <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold mb-6">
-                Revenue distribution per category
+                {t('admin_analytics_cat_sub')}
               </p>
             </div>
 
@@ -291,34 +293,34 @@ export default function BusinessAnalytics() {
           <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-6">
             <div>
               <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                Storefront Traffic
+                {t('admin_analytics_traffic')}
               </h3>
               <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                Mocked visitors and browser views overview
+                {t('admin_analytics_traffic_sub')}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-6 text-center">
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
-                <p className="text-[10px] uppercase font-bold text-neutral-400">Total Visitors</p>
+                <p className="text-[10px] uppercase font-bold text-neutral-400">{t('admin_analytics_visitors')}</p>
                 <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
                   {data.trafficOverview.visitors}
                 </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
-                <p className="text-[10px] uppercase font-bold text-neutral-400">Page Views</p>
+                <p className="text-[10px] uppercase font-bold text-neutral-400">{t('admin_analytics_pageviews')}</p>
                 <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
                   {data.trafficOverview.pageViews}
                 </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
-                <p className="text-[10px] uppercase font-bold text-neutral-400">Conversion Rate</p>
+                <p className="text-[10px] uppercase font-bold text-neutral-400">{t('admin_analytics_conv')}</p>
                 <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
                   {data.trafficOverview.conversionRate}%
                 </h4>
               </div>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-100 dark:border-neutral-850">
-                <p className="text-[10px] uppercase font-bold text-neutral-400">Bounce Rate</p>
+                <p className="text-[10px] uppercase font-bold text-neutral-400">{t('admin_analytics_bounce')}</p>
                 <h4 className="text-2xl font-bold mt-2 text-neutral-900 dark:text-white">
                   {data.trafficOverview.bounceRate}%
                 </h4>
@@ -330,10 +332,10 @@ export default function BusinessAnalytics() {
           <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm space-y-6">
             <div>
               <h3 className="font-display font-bold text-lg text-neutral-900 dark:text-white">
-                Channel Performance
+                {t('admin_analytics_channel')}
               </h3>
               <p className="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
-                Incoming traffic channels breakdown
+                {t('admin_analytics_channel_sub')}
               </p>
             </div>
 

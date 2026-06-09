@@ -3,46 +3,46 @@ import Navigation from '@/components/Navigation';
 import MiniCart from '@/components/MiniCart';
 import Footer from '@/components/Footer';
 import CollectionsClient from '@/app/components/CollectionsClient';
-import { prisma } from '@/lib/prisma';
 
-// Always server-rendered on demand — never prerendered at build time
+// Ensure the client is created properly for SSR. Ideally imported from a dedicated lib/supabase.ts
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY! // Use service key for server-side read, or anon key if RLS allows
+);
+
 export const revalidate = 30;
 
 async function getCollectionsData() {
   try {
-    const [categories, products] = await Promise.all([
-      prisma.category.findMany({
-        orderBy: { name: 'asc' },
-      }),
-      prisma.product.findMany({
-        where: { status: 'ACTIVE' },
-        select: {
-          id: true,
-          name: true,
-          nameKa: true,
-          nameRu: true,
-          price: true,
-          tag: true,
-          description: true,
-          descriptionKa: true,
-          descriptionRu: true,
-          category: {
-            select: { id: true, name: true, nameKa: true, nameRu: true, slug: true },
-          },
-          images: {
-            select: { url: true, isFeatured: true },
-          },
-          variants: {
-            select: { size: true, color: true, stock: true },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-      }),
+    // Promise.all enforces concurrent execution of independent DB requests
+    const [categoriesResult, productsResult] = await Promise.all([
+      supabase
+        .from('Category')
+        .select('id, name, nameKa, nameRu, slug')
+        .order('name', { ascending: true }),
+      supabase
+        .from('Product')
+        // PostgREST Aliasing avoids O(N) Array.map computations on the server
+        .select(`
+          id, name, nameKa, nameRu, price, tag, description, descriptionKa, descriptionRu,
+          category:Category!inner(id, name, nameKa, nameRu, slug),
+          images:ProductImage(url, isFeatured),
+          variants:ProductVariant(size, color, stock)
+        `)
+        .eq('status', 'ACTIVE')
+        .order('createdAt', { ascending: false }),
     ]);
 
-    return { categories, products };
+    if (categoriesResult.error) throw categoriesResult.error;
+    if (productsResult.error) throw productsResult.error;
+
+    return { 
+      categories: categoriesResult.data, 
+      products: productsResult.data 
+    };
   } catch (error) {
-    console.error("Prisma error in getCollectionsData:", error);
+    console.error("Supabase error in getCollectionsData:", error);
     return { categories: [], products: [] };
   }
 }
@@ -51,17 +51,12 @@ export default async function CollectionsPage() {
   const { categories, products } = await getCollectionsData();
 
   return (
-    <div className="relative min-h-screen bg-white text-neutral-900 font-sans selection:bg-amber-400 selection:text-neutral-950">
-      {/* Navigation Header */}
+    <div className="relative min-h-screen bg-white text-neutral-900 font-sans selection:bg-amber-400 selection:text-neutral-950 animate-in fade-in duration-1000 ease-out">
       <Navigation />
-
-      {/* Cart Drawer */}
       <MiniCart />
-
-      {/* Collections Content */}
+      
       <main className="pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
           <div className="text-center mb-16 space-y-3">
             <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-400">
               Velluto Catalog
@@ -75,12 +70,10 @@ export default async function CollectionsPage() {
             </p>
           </div>
 
-          {/* Interactive grid and filters */}
-          <CollectionsClient products={products as any} categories={categories} />
+          <CollectionsClient products={products as any} categories={categories as any} />
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

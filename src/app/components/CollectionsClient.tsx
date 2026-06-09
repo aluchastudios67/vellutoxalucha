@@ -42,6 +42,10 @@ interface Product {
 interface CollectionsClientProps {
   products: Product[];
   categories: Category[];
+  hideFilters?: boolean;
+  limit?: number;
+  showHeader?: boolean;
+  showFooter?: boolean;
 }
 
 const COLOR_MAP: Record<string, string> = {
@@ -60,15 +64,19 @@ const COLOR_MAP: Record<string, string> = {
   'Soft Horizon': '#89CFF0',
 };
 
-export default function CollectionsClient({ products, categories }: CollectionsClientProps) {
+export default function CollectionsClient({ products, categories, hideFilters, limit, showHeader, showFooter }: CollectionsClientProps) {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const filtered =
+  let filtered =
     activeCategory === 'All'
       ? products
       : products.filter((p) => p.category?.slug === activeCategory);
+
+  if (limit) {
+    filtered = filtered.slice(0, limit);
+  }
 
   const getName = (item: Product) => {
     if (language === 'GE') return item.nameKa;
@@ -101,32 +109,53 @@ export default function CollectionsClient({ products, categories }: CollectionsC
 
   return (
     <>
+      {/* Dynamic Translated Header */}
+      {showHeader && (
+        <div className="text-center mb-16 space-y-3">
+          <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-400">
+            {language === 'GE' ? 'რჩეული კოლექციები' : language === 'RU' ? 'Избранные коллекции' : 'Curated Collections'}
+          </span>
+          <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-neutral-900">
+            {language === 'GE' ? 'კოლექცია' : language === 'RU' ? 'Коллекция' : 'The Collection'}
+          </h2>
+          <p className="text-neutral-400 font-light text-sm sm:text-base max-w-xl mx-auto">
+            {language === 'GE' 
+              ? 'ჩვენი უახლესი სეზონის საგულდაგულოდ შერჩეული სამოსი.'
+              : language === 'RU' 
+              ? 'Тщательно отобранные вещи из нашего последнего сезона.'
+              : 'Carefully selected statement pieces from our latest season, photographed as worn.'}
+          </p>
+        </div>
+      )}
+
       {/* Category Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-14">
-        <button
-          onClick={() => setActiveCategory('All')}
-          className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-all duration-300 ${
-            activeCategory === 'All'
-              ? 'bg-neutral-950 text-white border-neutral-950'
-              : 'bg-transparent text-neutral-500 border-neutral-200 hover:border-neutral-400 hover:text-neutral-900'
-          }`}
-        >
-          {language === 'GE' ? 'ყველა' : language === 'RU' ? 'Все' : 'All'}
-        </button>
-        {categories.map((cat) => (
+      {!hideFilters && (
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-14">
           <button
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.slug)}
+            onClick={() => setActiveCategory('All')}
             className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-all duration-300 ${
-              activeCategory === cat.slug
+              activeCategory === 'All'
                 ? 'bg-neutral-950 text-white border-neutral-950'
                 : 'bg-transparent text-neutral-500 border-neutral-200 hover:border-neutral-400 hover:text-neutral-900'
             }`}
           >
-            {getCatName(cat)}
+            {language === 'GE' ? 'ყველა' : language === 'RU' ? 'Все' : 'All'}
           </button>
-        ))}
-      </div>
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.slug)}
+              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-all duration-300 ${
+                activeCategory === cat.slug
+                  ? 'bg-neutral-950 text-white border-neutral-950'
+                  : 'bg-transparent text-neutral-500 border-neutral-200 hover:border-neutral-400 hover:text-neutral-900'
+              }`}
+            >
+              {getCatName(cat)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Empty State */}
       {filtered.length === 0 && (
@@ -236,6 +265,18 @@ export default function CollectionsClient({ products, categories }: CollectionsC
               </Link>
             </article>
           ))}
+        </div>
+      )}
+
+      {/* Dynamic Translated Footer */}
+      {showFooter && (
+        <div className="mt-16 flex justify-center">
+          <Link
+            href="/collections"
+            className="px-8 py-4 bg-neutral-950 text-white text-sm font-bold tracking-widest uppercase rounded-full hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-neutral-950/20"
+          >
+            {language === 'GE' ? 'სრული კოლექცია' : language === 'RU' ? 'Вся коллекция' : 'See Full Collection'}
+          </Link>
         </div>
       )}
     </>

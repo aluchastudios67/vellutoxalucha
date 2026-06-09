@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface OrderItem {
   id: string;
@@ -56,6 +57,7 @@ interface Order {
 export default function OrderDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,7 +78,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
         setStatus(data.status);
         setPaymentStatus(data.paymentStatus);
       } else {
-        alert('Order details could not be found.');
+        alert(t('admin_order_not_found'));
         router.push('/admin/orders');
       }
     } catch (e) {
@@ -99,10 +101,10 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
         body: JSON.stringify({ status, paymentStatus }),
       });
       if (res.ok) {
-        alert('Order updated successfully.');
+        alert(t('admin_order_update_success'));
         loadOrderDetails();
       } else {
-        alert('Failed to update order.');
+        alert(t('admin_order_update_fail'));
       }
     } catch (e) {
       alert('Network error updating order.');
@@ -123,7 +125,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
           <div className="w-10 h-10 border-4 border-neutral-900 border-t-transparent dark:border-white dark:border-t-transparent rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest font-semibold text-neutral-400">
-            Loading Order Profile...
+            {t('admin_order_loading')}
           </p>
         </div>
       </AdminLayout>
@@ -146,10 +148,10 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
         <div className="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-5 print:hidden">
           <div>
             <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">
-              Order Details
+              {t('admin_order_title')}
             </h2>
             <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider font-semibold">
-              Manage client delivery profiles, status transitions, and issue invoices
+              {t('admin_order_subtitle')}
             </p>
           </div>
           <div className="flex gap-2">
@@ -158,13 +160,13 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
               className="border border-neutral-300 dark:border-neutral-800 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 hover:border-neutral-950 dark:hover:border-white transition-colors flex items-center gap-1.5 shadow-sm"
             >
               <Icon name="DocumentTextIcon" size={14} />
-              View Invoice
+              {t('admin_order_view_invoice')}
             </button>
             <Link
               href="/admin/orders"
               className="border border-neutral-300 dark:border-neutral-800 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 hover:border-neutral-950 dark:hover:border-white transition-colors"
             >
-              Back to List
+              {t('admin_order_back')}
             </Link>
           </div>
         </div>
@@ -176,7 +178,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
             {/* Products catalog list */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-5">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Ordered Items
+                {t('admin_order_items')}
               </h3>
 
               <div className="divide-y divide-neutral-100 dark:divide-neutral-800/80">
@@ -191,7 +193,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                       </p>
                       {item.variantSelected && (
                         <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-light mt-0.5">
-                          Selected options: {item.variantSelected}
+                          {t('admin_order_options')}{item.variantSelected}
                         </p>
                       )}
                     </div>
@@ -200,7 +202,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                         {item.productPrice} GEL
                       </p>
                       <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">
-                        Quantity: x{item.qty}
+                        {t('admin_order_qty')}{item.qty}
                       </p>
                     </div>
                   </div>
@@ -210,21 +212,21 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
               {/* Total calculations */}
               <div className="border-t border-neutral-150 dark:border-neutral-800 pt-4 space-y-2.5 text-xs">
                 <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                  <span>Subtotal</span>
+                  <span>{t('admin_order_subtotal')}</span>
                   <span>{subtotal} GEL</span>
                 </div>
                 {order.coupon && (
                   <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                    <span>Discount Code ({order.coupon.code})</span>
+                    <span>{t('admin_order_discount')} ({order.coupon.code})</span>
                     <span className="text-red-500 font-medium">-{discountAmount} GEL</span>
                   </div>
                 )}
                 <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                  <span>VAT (18% Included)</span>
+                  <span>{t('admin_order_vat')}</span>
                   <span>{vat} GEL</span>
                 </div>
                 <div className="flex justify-between border-t border-neutral-100 dark:border-neutral-800 pt-3 text-neutral-900 dark:text-white text-sm font-bold">
-                  <span>Grand Total</span>
+                  <span>{t('admin_order_grand_total')}</span>
                   <span>{order.total} GEL</span>
                 </div>
               </div>
@@ -233,10 +235,10 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
             {/* Gift notes or special instructions */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Gift Note / Notes
+                {t('admin_order_notes')}
               </h3>
               <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-150 dark:border-neutral-800 italic text-xs text-neutral-600 dark:text-neutral-300 font-light leading-relaxed">
-                {order.notes ? `"${order.notes}"` : 'No custom note requests added to this order.'}
+                {order.notes ? `"${order.notes}"` : t('admin_order_no_notes')}
               </div>
             </div>
           </div>
@@ -246,40 +248,40 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
             {/* Status Manager widget */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Log Status Actions
+                {t('admin_order_actions')}
               </h3>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Order Status
+                  {t('admin_order_status_label')}
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as Order['status'])}
                   className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
                 >
-                  <option value="PENDING">Pending</option>
+                  <option value="PENDING">{t('admin_orders_filter_pending')}</option>
                   <option value="CONFIRMED">Confirmed</option>
-                  <option value="PROCESSING">Processing</option>
-                  <option value="SHIPPED">Shipped</option>
-                  <option value="DELIVERED">Delivered</option>
-                  <option value="CANCELLED">Cancelled</option>
-                  <option value="REFUNDED">Refunded</option>
+                  <option value="PROCESSING">{t('admin_orders_filter_processing')}</option>
+                  <option value="SHIPPED">{t('admin_orders_filter_shipped')}</option>
+                  <option value="DELIVERED">{t('admin_orders_filter_delivered')}</option>
+                  <option value="CANCELLED">{t('admin_orders_filter_cancelled')}</option>
+                  <option value="REFUNDED">{t('admin_orders_filter_refunded')}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
-                  Payment Status
+                  {t('admin_order_payment_label')}
                 </label>
                 <select
                   value={paymentStatus}
                   onChange={(e) => setPaymentStatus(e.target.value as Order['paymentStatus'])}
                   className="w-full text-xs border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 py-2.5 rounded-lg focus:outline-none"
                 >
-                  <option value="UNPAID">Unpaid</option>
-                  <option value="PAID">Paid</option>
-                  <option value="REFUNDED">Refunded</option>
+                  <option value="UNPAID">{t('admin_order_unpaid')}</option>
+                  <option value="PAID">{t('admin_order_paid')}</option>
+                  <option value="REFUNDED">{t('admin_orders_filter_refunded')}</option>
                 </select>
               </div>
 
@@ -289,7 +291,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                   disabled={isUpdating}
                   className="w-full bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-semibold py-3 rounded-lg text-xs uppercase tracking-wider hover:opacity-90 disabled:opacity-50 transition-opacity flex justify-center"
                 >
-                  {isUpdating ? 'Updating Log...' : 'Update Log Status'}
+                  {isUpdating ? t('admin_order_updating') : t('admin_order_update_btn')}
                 </button>
               </div>
             </div>
@@ -297,13 +299,13 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
             {/* Customer specs card */}
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 pb-2">
-                Client Profile
+                {t('admin_order_client')}
               </h3>
 
               <div className="space-y-3 text-xs">
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
-                    Name
+                    {t('admin_order_name')}
                   </span>
                   <span className="font-semibold text-neutral-900 dark:text-white">
                     {order.customerName}
@@ -311,7 +313,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
-                    Phone
+                    {t('admin_order_phone')}
                   </span>
                   <span className="font-semibold text-neutral-900 dark:text-white hover:underline">
                     <a href={`tel:${order.phone}`}>{order.phone}</a>
@@ -319,7 +321,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
-                    Delivery Address
+                    {t('admin_order_delivery_address')}
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400 font-light">
                     {order.address}
@@ -327,7 +329,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
-                    Delivery Schedule
+                    {t('admin_order_delivery_schedule')}
                   </span>
                   <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                     {order.deliveryDate} @ {order.deliveryTime}
@@ -335,7 +337,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold">
-                    Payment Option
+                    {t('admin_order_payment_option')}
                   </span>
                   <span className="font-bold uppercase bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded text-[10px] text-neutral-600 dark:text-neutral-300 w-max">
                     {order.paymentMethod}
@@ -359,7 +361,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                   onClick={handlePrint}
                   className="bg-neutral-950 hover:bg-neutral-800 text-white font-semibold px-4 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1 transition-colors"
                 >
-                  <Icon name="PrinterIcon" size={14} /> Print Invoice
+                  <Icon name="PrinterIcon" size={14} /> {t('admin_invoice_print')}
                 </button>
                 <button
                   onClick={() => setIsInvoiceOpen(false)}
@@ -382,7 +384,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                     </p>
                   </div>
                   <div className="text-right text-xs">
-                    <h2 className="font-bold text-lg uppercase tracking-wider">Invoice</h2>
+                    <h2 className="font-bold text-lg uppercase tracking-wider">{t('admin_invoice_title')}</h2>
                     <p className="text-neutral-500 font-mono mt-0.5">#{order.id}</p>
                     <p className="text-neutral-400 mt-1">
                       {new Date(order.createdAt).toLocaleDateString()}
@@ -394,7 +396,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 <div className="grid grid-cols-2 gap-8 text-xs border-b border-neutral-100 pb-6">
                   <div>
                     <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                      Billed To:
+                      {t('admin_invoice_billed_to')}
                     </h4>
                     <p className="font-bold text-sm text-neutral-900">{order.customerName}</p>
                     <p className="text-neutral-600 mt-1">Phone: {order.phone}</p>
@@ -402,7 +404,7 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                   </div>
                   <div className="text-right">
                     <h4 className="font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                      Boutique Details:
+                      {t('admin_invoice_boutique')}
                     </h4>
                     <p className="font-semibold text-neutral-900">Velluto Tbilisi Showroom</p>
                     <p className="text-neutral-500 mt-1">Email: boutique@velluto.com</p>
@@ -414,11 +416,11 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-neutral-900 text-neutral-400 font-bold uppercase text-[9px] pb-2">
-                      <th className="py-2.5">Item Name</th>
-                      <th>Variant Details</th>
-                      <th className="text-center">Quantity</th>
-                      <th className="text-right">Unit Price</th>
-                      <th className="text-right">Subtotal</th>
+                      <th className="py-2.5">{t('admin_invoice_item_name')}</th>
+                      <th>{t('admin_invoice_variant_det')}</th>
+                      <th className="text-center">{t('admin_order_qty').replace(': x', '')}</th>
+                      <th className="text-right">{t('admin_invoice_unit_price')}</th>
+                      <th className="text-right">{t('admin_order_subtotal')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
@@ -442,21 +444,21 @@ export default function OrderDetails({ params }: { params: Promise<{ id: string 
                 <div className="flex justify-end pt-4 border-t border-neutral-900/10 text-xs">
                   <div className="w-64 space-y-2">
                     <div className="flex justify-between text-neutral-500">
-                      <span>Subtotal</span>
+                      <span>{t('admin_order_subtotal')}</span>
                       <span>{subtotal} GEL</span>
                     </div>
                     {order.coupon && (
                       <div className="flex justify-between text-neutral-500">
-                        <span>Coupon ({order.coupon.code})</span>
+                        <span>{t('admin_invoice_coupon')} ({order.coupon.code})</span>
                         <span className="text-red-500">-{discountAmount} GEL</span>
                       </div>
                     )}
                     <div className="flex justify-between text-neutral-500">
-                      <span>VAT (18% Included)</span>
+                      <span>{t('admin_order_vat')}</span>
                       <span>{vat} GEL</span>
                     </div>
                     <div className="flex justify-between border-t-2 border-neutral-900 pt-2 font-bold text-sm text-neutral-900">
-                      <span>Grand Total</span>
+                      <span>{t('admin_order_grand_total')}</span>
                       <span>{order.total} GEL</span>
                     </div>
                   </div>

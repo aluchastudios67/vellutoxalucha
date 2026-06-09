@@ -1,9 +1,89 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useCart } from '@/context/CartContext';
 import Icon from '@/components/ui/AppIcon';
 import { useLanguage } from '@/context/LanguageContext';
+
+// ─── Georgian Phone Number Regex ───
+// Matches exactly 9 digits, grouped as: XXX XXX XXX
+const GE_PHONE_REGEX = /^[0-9]{3}\s[0-9]{3}\s[0-9]{3}$/;
+
+/**
+ * Strips all non-digits, enforces max 9 digits,
+ * and applies the mask: XXX XXX XXX
+ */
+function formatGeorgianPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, '');
+
+  // Remove leading 995 if user pasted the full number
+  let local = digits;
+  if (local.startsWith('995') && local.length > 9) {
+    local = local.slice(3);
+  }
+
+  // Cap at 9 digits
+  local = local.slice(0, 9);
+
+  // Build formatted string
+  let formatted = '';
+  if (local.length > 0) formatted += local.slice(0, 3);
+  if (local.length > 3) formatted += ' ' + local.slice(3, 6);
+  if (local.length > 6) formatted += ' ' + local.slice(6, 9);
+
+  return formatted;
+}
+
+// ─── Delivery Date Generation ───
+interface DateOption {
+  value: string; // ISO YYYY-MM-DD
+  label: string; // e.g. "Today, Jun 10"
+}
+
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+const MONTH_SHORT_GE = ['იან','თებ','მარ','აპრ','მაი','ივნ','ივლ','აგვ','სექ','ოქტ','ნოე','დეკ'];
+const DAY_NAMES_GE = ['კვირა','ორშაბათი','სამშაბათი','ოთხშაბათი','ხუთშაბათი','პარასკევი','შაბათი'];
+
+const MONTH_SHORT_RU = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+const DAY_NAMES_RU = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+
+function generateDeliveryDates(lang: string): DateOption[] {
+  const options: DateOption[] = [];
+  const now = new Date();
+
+  const months = lang === 'GE' ? MONTH_SHORT_GE : lang === 'RU' ? MONTH_SHORT_RU : MONTH_SHORT;
+  const days = lang === 'GE' ? DAY_NAMES_GE : lang === 'RU' ? DAY_NAMES_RU : DAY_NAMES;
+  const todayLabel = lang === 'GE' ? 'დღეს' : lang === 'RU' ? 'Сегодня' : 'Today';
+  const tomorrowLabel = lang === 'GE' ? 'ხვალ' : lang === 'RU' ? 'Завтра' : 'Tomorrow';
+
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() + i);
+
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const isoValue = `${yyyy}-${mm}-${dd}`;
+
+    const monthName = months[d.getMonth()];
+    const dayNum = d.getDate();
+
+    let label: string;
+    if (i === 0) {
+      label = `${todayLabel}, ${monthName} ${dayNum}`;
+    } else if (i === 1) {
+      label = `${tomorrowLabel}, ${monthName} ${dayNum}`;
+    } else {
+      label = `${days[d.getDay()]}, ${monthName} ${dayNum}`;
+    }
+
+    options.push({ value: isoValue, label });
+  }
+
+  return options;
+}
 
 export default function CheckoutForm() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -17,7 +97,11 @@ export default function CheckoutForm() {
     message: '',
     payment: 'Cash',
   });
+  const [phoneError, setPhoneError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Memoize delivery date options — regenerated only when language changes
+  const deliveryDates = useMemo(() => generateDeliveryDates(language), [language]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -25,11 +109,42 @@ export default function CheckoutForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ─── Controlled phone input handler ───
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatGeorgianPhone(e.target.value);
+    setFormData({ ...formData, phone: formatted });
+
+    // Live validation feedback
+    if (formatted.length > 4 && !GE_PHONE_REGEX.test(formatted)) {
+      setPhoneError(
+        language === 'GE'
+          ? 'ფორმატი: 5XX XXX XXX'
+          : language === 'RU'
+            ? 'Формат: 5XX XXX XXX'
+            : 'Format: 5XX XXX XXX'
+      );
+    } else {
+      setPhoneError('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (cart.length === 0) {
       alert(t('cart_empty'));
+      return;
+    }
+
+    // Validate phone
+    if (!GE_PHONE_REGEX.test(formData.phone)) {
+      setPhoneError(
+        language === 'GE'
+          ? 'გთხოვთ შეიყვანოთ სწორი ნომერი: 5XX XXX XXX'
+          : language === 'RU'
+            ? 'Введите корректный номер: 5XX XXX XXX'
+            : 'Please enter a valid Georgian number: 5XX XXX XXX'
+      );
       return;
     }
 
@@ -43,6 +158,10 @@ export default function CheckoutForm() {
           : '';
       itemsText += `${index + 1}. ${itemName}${variantDesc} x${item.qty} - ${item.price * item.qty} GEL\n`;
     });
+
+    // Find the label for the selected date
+    const selectedDateLabel =
+      deliveryDates.find((d) => d.value === formData.date)?.label || formData.date;
 
     const tHeader =
       language === 'GE'
@@ -64,9 +183,9 @@ export default function CheckoutForm() {
     const messageText =
       `${tHeader}\n\n` +
       `👤 *${tName}:* ${formData.name}\n` +
-      `📞 *${tPhone}:* ${formData.phone}\n` +
+      `📞 *${tPhone}:* +995 ${formData.phone}\n` +
       `📍 *${tAddress}:* ${formData.address}\n` +
-      `📅 *${tDate}:* ${formData.date}\n` +
+      `📅 *${tDate}:* ${selectedDateLabel}\n` +
       `🕐 *${tTime}:* ${formData.time}\n` +
       `💳 *${tPayment}:* ${formData.payment}\n` +
       `✉️ *${tMsg}:* ${formData.message ? formData.message : '—'}\n\n` +
@@ -86,7 +205,7 @@ export default function CheckoutForm() {
           id: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
           dateCreated: new Date().toISOString(),
           customerName: formData.name,
-          phone: formData.phone,
+          phone: `+995 ${formData.phone}`,
           address: formData.address,
           deliveryDate: formData.date,
           deliveryTime: formData.time,
@@ -152,6 +271,7 @@ export default function CheckoutForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
+        {/* ── Full Name ── */}
         <div>
           <label
             htmlFor="name"
@@ -175,6 +295,7 @@ export default function CheckoutForm() {
           />
         </div>
 
+        {/* ── Georgian Phone Input ── */}
         <div>
           <label
             htmlFor="phone"
@@ -186,18 +307,34 @@ export default function CheckoutForm() {
                 ? 'Номер телефона *'
                 : 'Phone Number *'}
           </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            required
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="+995 5XX XX XX XX"
-            className="w-full border border-neutral-200 focus:border-neutral-950 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors"
-          />
+          <div className="relative">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none select-none">
+              <span className="text-base leading-none">🇬🇪</span>
+              <span className="text-sm font-medium text-neutral-500">+995</span>
+              <div className="w-px h-4 bg-neutral-200 ml-1"></div>
+            </div>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              placeholder="5XX XXX XXX"
+              maxLength={11}
+              className={`w-full border rounded-xl pl-20 pr-4 py-3 text-sm focus:outline-none transition-colors ${
+                phoneError
+                  ? 'border-red-400 focus:border-red-500'
+                  : 'border-neutral-200 focus:border-neutral-950'
+              }`}
+            />
+          </div>
+          {phoneError && (
+            <p className="text-[11px] text-red-500 mt-1.5 font-medium">{phoneError}</p>
+          )}
         </div>
 
+        {/* ── Delivery Address ── */}
         <div>
           <label
             htmlFor="address"
@@ -216,12 +353,20 @@ export default function CheckoutForm() {
             required
             value={formData.address}
             onChange={handleChange}
-            placeholder="Tbilisi, Street, House, Apt"
+            placeholder={
+              language === 'GE'
+                ? 'თბილისი, ქუჩა, სახლი, ბინა'
+                : language === 'RU'
+                  ? 'Тбилиси, улица, дом, кв.'
+                  : 'Tbilisi, Street, House, Apt'
+            }
             className="w-full border border-neutral-200 focus:border-neutral-950 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors"
           />
         </div>
 
+        {/* ── Date & Time Row ── */}
         <div className="grid grid-cols-2 gap-4">
+          {/* Delivery Date Dropdown */}
           <div>
             <label
               htmlFor="date"
@@ -233,16 +378,35 @@ export default function CheckoutForm() {
                   ? 'Дата доставки *'
                   : 'Delivery Date *'}
             </label>
-            <input
-              type="date"
+            <select
               id="date"
               name="date"
               required
               value={formData.date}
               onChange={handleChange}
-              className="w-full border border-neutral-200 focus:border-neutral-950 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors"
-            />
+              className="w-full border border-neutral-200 focus:border-neutral-950 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors bg-white appearance-none cursor-pointer"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 14px center',
+              }}
+            >
+              <option value="" disabled>
+                {language === 'GE'
+                  ? 'აირჩიეთ თარიღი'
+                  : language === 'RU'
+                    ? 'Выберите дату'
+                    : 'Select date'}
+              </option>
+              {deliveryDates.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
           </div>
+
+          {/* Delivery Time */}
           <div>
             <label
               htmlFor="time"
@@ -266,12 +430,13 @@ export default function CheckoutForm() {
           </div>
         </div>
 
+        {/* ── Order Notes ── */}
         <div>
           <label
             htmlFor="message"
             className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2"
           >
-            {t('order_notes')} (Optional)
+            {t('order_notes')} ({language === 'GE' ? 'არასავალდებულო' : language === 'RU' ? 'Необязательно' : 'Optional'})
           </label>
           <textarea
             id="message"
@@ -284,6 +449,7 @@ export default function CheckoutForm() {
           />
         </div>
 
+        {/* ── Payment Method ── */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-3">
             {language === 'GE'
